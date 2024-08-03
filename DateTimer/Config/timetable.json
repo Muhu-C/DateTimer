@@ -1,0 +1,364 @@
+{
+  "timetables": [
+    {
+      "date": "GENERAL",
+      "weekday": 1,
+      "tables": [
+        {
+          "name": "早饭",
+          "start": "07 00",
+          "end": "08 30",
+          "notice": "2/3在邻里中心吃饭"
+        },
+        {
+          "name": "作业(文)",
+          "start": "08 30",
+          "end": "09 30",
+          "notice": "途中休息 1 次 5 分钟"
+        },
+        {
+          "name": "作业(理)",
+          "start": "09 30",
+          "end": "10 30",
+          "notice": "途中休息 1 次 5 分钟"
+        },
+        {
+          "name": "练琴",
+          "start": "10 30",
+          "end": "11 20",
+          "notice": "NULL"
+        },
+        {
+          "name": "午饭",
+          "start": "11 30",
+          "end": "12 30",
+          "notice": "饭后休息"
+        },
+        {
+          "name": "作业(历道)",
+          "start": "12 30",
+          "end": "13 30",
+          "notice": "途中休息 1 次 5 分钟"
+        },
+        {
+          "name": "编程课",
+          "start": "14 00",
+          "end": "17 00",
+          "notice": "课后作业完成"
+        },
+        {
+          "name": "自由活动",
+          "start": "17 00",
+          "end": "18 00",
+          "notice": "NULL"
+        },
+        {
+          "name": "晚饭",
+          "start": "18 00",
+          "end": "18 30",
+          "notice": "NULL"
+        },
+        {
+          "name": "编程课",
+          "start": "19 00",
+          "end": "20 30",
+          "notice": "NULL"
+        },
+        {
+          "name": "名著阅读",
+          "start": "20 30",
+          "end": "21 30",
+          "notice": "NULL"
+        }
+      ]
+    },
+    {
+      "date": "GENERAL",
+      "weekday": 3,
+      "tables": [
+        {
+          "name": "早饭",
+          "start": "07 00",
+          "end": "08 30",
+          "notice": "2/3在邻里中心吃饭"
+        },
+        {
+          "name": "作业(文)",
+          "start": "08 30",
+          "end": "09 30",
+          "notice": "途中休息 1 次 5 分钟"
+        },
+        {
+          "name": "作业(理)",
+          "start": "09 30",
+          "end": "10 30",
+          "notice": "途中休息 1 次 5 分钟"
+        },
+        {
+          "name": "练琴",
+          "start": "10 30",
+          "end": "11 20",
+          "notice": "NULL"
+        },
+        {
+          "name": "午饭",
+          "start": "11 30",
+          "end": "12 30",
+          "notice": "饭后休息"
+        },
+        {
+          "name": "作业(历道)",
+          "start": "12 30",
+          "end": "13 30",
+          "notice": "途中休息 1 次 5 分钟"
+        },
+        {
+          "name": "编程课",
+          "start": "14 00",
+          "end": "17 00",
+          "notice": "课后作业完成"
+        },
+        {
+          "name": "自由活动",
+          "start": "17 00",
+          "end": "18 00",
+          "notice": "NULL"
+        },
+        {
+          "name": "晚饭",
+          "start": "18 00",
+          "end": "18 30",
+          "notice": "NULL"
+        },
+        {
+          "name": "编程课",
+          "start": "19 00",
+          "end": "20 30",
+          "notice": "NULL"
+        },
+        {
+          "name": "名著阅读",
+          "start": "20 30",
+          "end": "21 30",
+          "notice": "NULL"
+        }
+      ]
+    },
+    {
+      "date": "GENERAL",
+      "weekday": 5,
+      "tables": [
+        {
+          "name": "早饭",
+          "start": "07 00",
+          "end": "08 30",
+          "notice": "2/3在邻里中心吃饭"
+        },
+        {
+          "name": "作业(文)",
+          "start": "08 30",
+          "end": "09 30",
+          "notice": "途中休息 1 次 5 分钟"
+        },
+        {
+          "name": "作业(理)",
+          "start": "09 30",
+          "end": "10 30",
+          "notice": "途中休息 1 次 5 分钟"
+        },
+        {
+          "name": "练琴",
+          "start": "10 30",
+          "end": "11 20",
+          "notice": "NULL"
+        },
+        {
+          "name": "午饭",
+          "start": "11 30",
+          "end": "12 30",
+          "notice": "饭后休息"
+        },
+        {
+          "name": "作业(历道)",
+          "start": "12 30",
+          "end": "13 30",
+          "notice": "途中休息 1 次 5 分钟"
+        },
+        {
+          "name": "编程课",
+          "start": "14 00",
+          "end": "17 00",
+          "notice": "课后作业完成"
+        },
+        {
+          "name": "自由活动",
+          "start": "17 00",
+          "end": "18 00",
+          "notice": "NULL"
+        },
+        {
+          "name": "晚饭",
+          "start": "18 00",
+          "end": "18 30",
+          "notice": "NULL"
+        },
+        {
+          "name": "编程课",
+          "start": "19 00",
+          "end": "20 30",
+          "notice": "NULL"
+        },
+        {
+          "name": "名著阅读",
+          "start": "20 30",
+          "end": "21 30",
+          "notice": "NULL"
+        }
+      ]
+    },
+    {
+      "date": "GENERAL",
+      "weekday": 2,
+      "tables": [
+        {
+          "name": "早饭",
+          "start": "07 00",
+          "end": "08 30",
+          "notice": "2/3在邻里中心吃饭"
+        },
+        {
+          "name": "作业(文)",
+          "start": "08 30",
+          "end": "09 30",
+          "notice": "途中休息 1 次 5 分钟"
+        },
+        {
+          "name": "作业(理)",
+          "start": "09 30",
+          "end": "10 30",
+          "notice": "途中休息 1 次 5 分钟"
+        },
+        {
+          "name": "练琴",
+          "start": "10 30",
+          "end": "11 20",
+          "notice": "NULL"
+        },
+        {
+          "name": "午饭",
+          "start": "11 30",
+          "end": "12 30",
+          "notice": "饭后休息"
+        },
+        {
+          "name": "作业(历道)",
+          "start": "12 30",
+          "end": "13 30",
+          "notice": "途中休息 1 次 5 分钟"
+        },
+        {
+          "name": "自由活动",
+          "start": "14 00",
+          "end": "17 00",
+          "notice": "可外出"
+        },
+        {
+          "name": "自由活动",
+          "start": "17 00",
+          "end": "18 00",
+          "notice": "NULL"
+        },
+        {
+          "name": "晚饭,练琴",
+          "start": "18 00",
+          "end": "19 30",
+          "notice": "NULL"
+        },
+        {
+          "name": "名著阅读",
+          "start": "19 30",
+          "end": "21 30",
+          "notice": "NULL"
+        }
+      ]
+    },
+    {
+      "date": "GENERAL",
+      "weekday": 4,
+      "tables": [
+        {
+          "name": "早饭",
+          "start": "07 00",
+          "end": "08 30",
+          "notice": "2/3在邻里中心吃饭"
+        },
+        {
+          "name": "作业(文)",
+          "start": "08 30",
+          "end": "09 30",
+          "notice": "途中休息 1 次 5 分钟"
+        },
+        {
+          "name": "作业(理)",
+          "start": "09 30",
+          "end": "10 30",
+          "notice": "途中休息 1 次 5 分钟"
+        },
+        {
+          "name": "练琴",
+          "start": "10 30",
+          "end": "11 20",
+          "notice": "NULL"
+        },
+        {
+          "name": "午饭",
+          "start": "11 30",
+          "end": "12 30",
+          "notice": "饭后休息"
+        },
+        {
+          "name": "作业(历道)",
+          "start": "12 30",
+          "end": "13 30",
+          "notice": "途中休息 1 次 5 分钟"
+        },
+        {
+          "name": "自由活动",
+          "start": "14 00",
+          "end": "17 00",
+          "notice": "可外出"
+        },
+        {
+          "name": "自由活动",
+          "start": "17 00",
+          "end": "18 00",
+          "notice": "NULL"
+        },
+        {
+          "name": "晚饭,练琴",
+          "start": "18 00",
+          "end": "19 30",
+          "notice": "NULL"
+        },
+        {
+          "name": "名著阅读",
+          "start": "19 30",
+          "end": "21 30",
+          "notice": "NULL"
+        }
+      ]
+    },
+    {
+      "date": "2024 08 03",
+      "weekday": 0,
+      "tables": [
+        {
+          "name": "时间表",
+          "start": "07 00",
+          "end": "22 30",
+          "notice": "测试"
+        }
+      ]
+    }
+  ]
+}

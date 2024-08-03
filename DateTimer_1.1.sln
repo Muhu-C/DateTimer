@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DateTimer", "DateTimer\DateTimer.csproj", "{B507BB25-247C-4E22-B019-EF33023E69C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DT_Lib", "DT_Lib\DT_Lib.csproj", "{9441F0E4-EE45-4DA9-BB77-76C45562B96F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "说明", "说明", "{A23E413C-9694-462D-B8A3-7E8E71592BA9}"
+	ProjectSection(SolutionItems) = preProject
+		更新说明.txt = 更新说明.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B507BB25-247C-4E22-B019-EF33023E69C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B507BB25-247C-4E22-B019-EF33023E69C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B507BB25-247C-4E22-B019-EF33023E69C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B507BB25-247C-4E22-B019-EF33023E69C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9441F0E4-EE45-4DA9-BB77-76C45562B96F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9441F0E4-EE45-4DA9-BB77-76C45562B96F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9441F0E4-EE45-4DA9-BB77-76C45562B96F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9441F0E4-EE45-4DA9-BB77-76C45562B96F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6BB1ACFE-D01F-4995-A4FF-4D8BAF39DC9D}
+	EndGlobalSection
+EndGlobal

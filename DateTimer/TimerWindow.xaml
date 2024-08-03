@@ -1,0 +1,28 @@
+﻿<ui:Window x:Class="DateTimer.TimerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DateTimer"
+        xmlns:ui="https://handyorg.github.io/handycontrol"
+        ui:Theme.Skin="Dark"
+        mc:Ignorable="d"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
+        Title="DateTimer - 窗口" MinHeight="450" Height="700" MaxHeight="700" MinWidth="400" MaxWidth="400">
+    <Grid>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0,20,0,0" VerticalAlignment="Top">
+            <TextBlock HorizontalAlignment="Center" x:Name="CountdownText" FontWeight="Bold" FontSize="20" Text="距目标 0 年 0 天 00 时 00 分 00 秒" />
+            <ListView MaxHeight="590" MaxWidth="360" d:Width="360" d:Height="590" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible" x:Name="TimetableListView" Margin="20,20,20,20" ItemsSource="{Binding TableEntries}" d:ItemsSource="{d:SampleData ItemCount=5}">
+                <!--当天时间表的内容-->
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Time}" Header="时间段" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="事件" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Notice}" Header="提醒" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
+    </Grid>
+</ui:Window>
