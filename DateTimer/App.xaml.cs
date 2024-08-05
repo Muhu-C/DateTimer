@@ -71,6 +71,7 @@ namespace DateTimer
 
         public static HomePage Home = new HomePage();
         public static SettingPage Setting = new SettingPage();
+        public static TimerPage TimerPg = new TimerPage();
         public static TimerWindow Timer = new TimerWindow();
         public static appconfig ConfigData;
         public static string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config", "config.json");

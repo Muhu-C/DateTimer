@@ -1,0 +1,96 @@
+﻿<Page x:Class="DateTimer.TimerPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ui="https://handyorg.github.io/handycontrol"
+      xmlns:local="clr-namespace:DateTimer"
+      mc:Ignorable="d" 
+      d:DesignHeight="400" d:DesignWidth="600"
+      d:Background="White"
+      Loaded="Page_Loaded"
+      Title="TimerPage">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid TextBlock.Foreground="{Binding TextColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="36"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock VerticalAlignment="Bottom" Margin="0,0,0,5" Grid.Row="0" HorizontalAlignment="Center" Text="编辑时间表" FontWeight="Bold" FontSize="24"/>
+        <Grid Margin="20,0,20,0" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <TextBlock FontSize="14" VerticalAlignment="Center" Text="时间表位置"/>
+                <TextBlock FontSize="14" VerticalAlignment="Center" d:Text="C:/awd/awd/awd/table.json" Margin="20,0,0,0"/>
+            </StackPanel>
+            <Button Grid.Column="1" Style="{DynamicResource ButtonPrimary.Small}" Content="更改"/>
+        </Grid>
+        <Grid Grid.Row="2" Margin="16,0,16,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <ListView Grid.Column="0" ItemsSource="{Binding TableEntries}" SelectionChanged="ListView_SelectionChanged">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Time}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Grid Grid.Column="1" TextBlock.Foreground="{Binding TextColor}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="48"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Margin="10,0,6,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="76"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="星期日/日期"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="选中时间段"/>
+                    <ui:SplitButton Name="PickDate" Click="PickDate_Click" Grid.Row="0" Grid.Column="1" Width="120" Style="{DynamicResource SplitButtonDefault}"/>
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="34"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock VerticalAlignment="Center" Text="开始" Grid.Row="0" Grid.Column="0" Margin="0,3,0,0"/>
+                        <ui:TimePicker Name="TPStart" SelectedTimeChanged="TPStart_SelectedTimeChanged" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Width="80" TimeFormat="HH:mm" Style="{DynamicResource TimePickerBaseStyle}"/>
+                        <TextBlock VerticalAlignment="Center" Text="结束" Grid.Row="1" Grid.Column="0" Margin="0,0,0,2"/>
+                        <ui:TimePicker Name="TPEnd" SelectedTimeChanged="TPEnd_SelectedTimeChanged" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" Width="80" TimeFormat="HH:mm" Style="{DynamicResource TimePickerBaseStyle}"/>
+                    </Grid>
+                </Grid>
+                <StackPanel Grid.Row="1" Margin="6" Orientation="Vertical">
+                    <TextBlock/>
+                    <TextBlock/>
+                    <TextBlock/>
+                    <TextBlock/>
+                </StackPanel>
+                <Grid Grid.Row="2">
+                    <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,10" Content="检验并保存" Style="{DynamicResource ButtonSuccess}"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

@@ -11,13 +11,18 @@
         Title="控制台" MinHeight="450" MaxHeight="450" MinWidth="700" MaxWidth="700">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="90"/><!--菜单-->
+            <ColumnDefinition Width="100"/><!--菜单-->
             <ColumnDefinition/><!--内容-->
         </Grid.ColumnDefinitions>
         <ui:SideMenu SelectionChanged="SideMenu_SelectionChanged" Name="Menu" x:FieldModifier="public" AutoSelect="True">
             <ui:SideMenuItem Header="主页" Tag="Home" IsSelected="True" x:FieldModifier="public" Name="HomeButton">
                 <ui:SideMenuItem.Icon>
                     <TextBlock Text="&#xE80F;" FontFamily="Segoe Fluent Icons" FontSize="18"/>
+                </ui:SideMenuItem.Icon>
+            </ui:SideMenuItem>
+            <ui:SideMenuItem Header="时间表" Tag="Edit" IsSelected="True" x:FieldModifier="public" Name="TableButton">
+                <ui:SideMenuItem.Icon>
+                    <TextBlock Text="&#xE70F;" FontFamily="Segoe Fluent Icons" FontSize="18"/>
                 </ui:SideMenuItem.Icon>
             </ui:SideMenuItem>
             <ui:SideMenuItem Header="设置" Tag="Setting" x:FieldModifier="public" Name="SettingButton">

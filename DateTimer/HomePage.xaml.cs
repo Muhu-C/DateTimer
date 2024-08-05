@@ -33,13 +33,13 @@ namespace DateTimer
         {
             InitializeComponent();
         }
-        public static MyViewModel viewModel = new MyViewModel();
+        public static BindContent viewModel = new BindContent(); // HomePage , TimerPage , SettingPage 共用
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            viewModel.MyVariable = Brushes.Black;
+            viewModel.TextColor = Brushes.Black;
             DataContext = viewModel;
             if (Theme.GetSkin(MainWindow.Cur) == HandyControl.Data.SkinType.Dark)
-                viewModel.MyVariable = Brushes.White; // 检测主题并更改文字颜色
+                viewModel.TextColor = Brushes.White; // 检测主题并更改文字颜色
             Theme.SetSkin(this, Theme.GetSkin(MainWindow.Cur));
             Reload();
             
@@ -125,28 +125,22 @@ namespace DateTimer
         }
         #endregion
     }
-    public class MyViewModel : INotifyPropertyChanged // 通过 Foreground Binding 实时设置页面文本颜色
+    public class BindContent : INotifyPropertyChanged // 通过 Foreground Binding 实时设置页面文本颜色
     {
-        private Brush myVariable;
-
-        public Brush MyVariable
+        private Brush textColor;
+        public Brush TextColor
         {
-            get { return myVariable; }
+            get { return textColor; }
             set
             {
-                if (myVariable != value)
+                if (textColor != value)
                 {
-                    myVariable = value;
-                    OnPropertyChanged("MyVariable");
+                    textColor = value;
+                    OnPropertyChanged("TextColor");
                 }
             }
         }
-
         public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        protected void OnPropertyChanged(string propertyName) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); }
     }
 }

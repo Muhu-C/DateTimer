@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -9,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -115,10 +117,17 @@ namespace DateTimer
                         case "Home":
                             ContentFrame.Navigate(App.Home);
                             SettingButton.IsSelected = false;
+                            TableButton.IsSelected = false;
                             break;
                         case "Setting":
                             ContentFrame.Navigate(App.Setting);
                             HomeButton.IsSelected = false;
+                            TableButton.IsSelected = false;
+                            break;
+                        case "Edit":
+                            ContentFrame.Navigate(App.TimerPg);
+                            HomeButton.IsSelected = false;
+                            SettingButton.IsSelected = false;
                             break;
                         default: // 这选的不对
                             App.Error("选中内容为 "+tag,App.ErrorType.ProgramError,false);

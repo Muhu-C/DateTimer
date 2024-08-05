@@ -352,6 +352,8 @@ namespace DT_Lib
         /// <returns>索引</returns>
         public static int GetTodayList(List<Timetables> timetables)
         {
+            if (timetables == null) return -1;
+            if (timetables.Count == 0) return -1;
             int l = -1,i = 0; // index
             int weekday = Convert.ToInt16(DateTime.Now.DayOfWeek); // 0 为周日
             int curday = Convert.ToInt16(DateTime.Now.Day);

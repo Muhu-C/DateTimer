@@ -34,7 +34,7 @@ namespace DateTimer
         public SettingPage()
         {
             InitializeComponent();
-            DataContext = HomePage.viewModel;
+            DataContext = HomePage.viewModel; // 使用 HomePage 的 BindingContent
         }
         private void Page_Loaded(object sender, RoutedEventArgs e) // 页面加载
         {
@@ -52,7 +52,6 @@ namespace DateTimer
             catch { TTime.SelectedDate = DateTime.Now; } // 错误时将时间设为当天
             if (App.ConfigData.Target_Type != "NULL") TName.Text = App.ConfigData.Target_Type; // 设置目标事件名
         }
-
 
         private void ChangeTheme_Click(object sender, RoutedEventArgs e) // 更改主题并重启程序
         {
