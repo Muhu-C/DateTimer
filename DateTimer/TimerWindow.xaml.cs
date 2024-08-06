@@ -30,8 +30,6 @@ namespace DateTimer
     /// </summary>
     public partial class TimerWindow : HandyControl.Controls.Window
     {
-        public bool isExist = true;
-        public TimerWindowViewModel model = new TimerWindowViewModel();
         public List<TimeTable.Table> tables = new List<TimeTable.Table>();
         public TimerWindow()
         {
@@ -47,7 +45,7 @@ namespace DateTimer
                 TimeTable.TimeTableFile a = TimeTable.GetTimetables(App.ConfigData.Timetable_File); // 获取时间表
                 if (a != null) // 显示时间表
                 {
-                    DataContext = model;
+                    DataContext = CurrentTableEntry.model;
                     ObservableCollection<TimeTable.TableEntry> converted = new ObservableCollection<TimeTable.TableEntry>();
                     int ind = TimeTable.GetTodayList(a.timetables);
                     if (ind != -1)
@@ -55,26 +53,31 @@ namespace DateTimer
                         tables = a.timetables[ind].tables; // 当天所在的时间表
                         foreach (TimeTable.Table t in tables)
                             converted.Add(TimeTable.Table2Entry(t));
-                        model.TableEntries = converted;
+                        CurrentTableEntry.model.TableEntries = converted;
                         GetTime(); // 获取当前所在时间段，获取当前倒计时，并显示当前时间段
                     }
                     else
                     {
                         ObservableCollection<TimeTable.TableEntry> nullentry = new ObservableCollection<TimeTable.TableEntry> { new TimeTable.TableEntry { Time = "无时间安排", Name = "未找到当天时间表" } };
-                        model.TableEntries = nullentry;
+                        CurrentTableEntry.model.TableEntries = nullentry;
                         GetTime(); // 获取当前所在时间段，获取当前倒计时，并显示当前时间段
                     }
                 }
             }
             catch (Exception ex)
             {
-                DataContext = model;
+                DataContext = CurrentTableEntry.model;
                 ObservableCollection<TimeTable.TableEntry> errorentry = new ObservableCollection<TimeTable.TableEntry> { new TimeTable.TableEntry { Name = "错误", Time = "加载时间表失败", Notice = ex.Message } };
-                model.TableEntries = errorentry;
+                CurrentTableEntry.model.TableEntries = errorentry;
                 GetTime(); // 获取当前所在时间段，获取当前倒计时，并显示当前时间段
             }
         }
-        private void Window_Closing(object sender, CancelEventArgs e) { isExist = false; }
+        private void Window_Closing(object sender, CancelEventArgs e) 
+        {
+            e.Cancel = true; Hide(); 
+            App.Home.ShowTimeTable.Style = FindResource("ButtonSuccess") as Style;
+            App.Home.ShowTimeTable.Content = "显示时间表";
+        }
 
         /// <summary>
         /// 重复执行获取时间
@@ -83,7 +86,7 @@ namespace DateTimer
         {
             await Task.Run(() =>
             {
-                while (isExist)
+                while (true)
                 {
                     if (IsVisible)
                     {
@@ -111,25 +114,12 @@ namespace DateTimer
                             catch (Exception ex) { App.Error(ex.Message, App.ErrorType.ProgramError, false, true, true); }
                         }
                         catch { App.Error("时间格式不正确", App.ErrorType.ProgresError, false, true, false); return; }
+                        Console.WriteLine("TimerWindow: GetTime");
                     }
-                    Console.WriteLine("TimerWindow: GetTime");
                     System.Threading.Thread.Sleep(1000);
                 }
             });
             Console.WriteLine("结束 TimerWindow");
-        }
-    }
-    public class TimerWindowViewModel : TimeTable.ViewModelBase // 实现实时更改时间表内容
-    {
-        private ObservableCollection<TimeTable.TableEntry> tables;
-        public ObservableCollection<TimeTable.TableEntry> TableEntries
-        {
-            get { return tables; }
-            set 
-            {
-                tables = value;
-                RaisePropertyChangedEvent("TableEntries");
-            }
         }
     }
 }

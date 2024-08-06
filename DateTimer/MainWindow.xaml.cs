@@ -42,11 +42,9 @@ namespace DateTimer
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) // 关闭或隐藏
         {
-            App.Timer.isExist = false;
-            App.Timer.Close();
             MessageBoxResult messageBoxResult = MsgBox.Show("是否关闭程序\n按\"是\"关闭程序\n按\"否\"隐藏到任务栏", "提示", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
             if (messageBoxResult == MessageBoxResult.Yes) Environment.Exit(0);
-            else if(messageBoxResult == MessageBoxResult.No)
+            else if (messageBoxResult == MessageBoxResult.No)
             {
                 e.Cancel = true;
                 this.Hide();
@@ -54,14 +52,7 @@ namespace DateTimer
             }
             else e.Cancel = true;
         }
-        private void Window_Loaded(object sender, RoutedEventArgs e) 
-        {
-            Reload();
-            NotifyIcon notifyIcon = new NotifyIcon();
-            notifyIcon.Icon = Icon;
-            notifyIcon.Visibility = Visibility.Visible;
-            notifyIcon.Show();
-        }
+        private void Window_Loaded(object sender, RoutedEventArgs e) { Reload(); }
         public static void Reload() // 主窗口重载
         {
             try
@@ -72,7 +63,7 @@ namespace DateTimer
                     else Theme.SetSkin(Cur, HandyControl.Data.SkinType.Default);
                 }
             }
-            catch(Exception ex){ App.Error("主窗口重载时发现未知错误\n"+ex.Message,App.ErrorType.UnknownError,true); }
+            catch(Exception ex){ App.Error("主窗口重载时发生错误\n"+ex.Message,App.ErrorType.UnknownError,true); }
         }
         #endregion
         #region 任务栏图标事件
@@ -94,12 +85,17 @@ namespace DateTimer
         private void MenuItemB_Click(object sender, RoutedEventArgs e) { Environment.Exit(0); } // 关闭程序
         private void notifyIcon_Click(object sender, RoutedEventArgs e) 
         {
-            if (App.Timer.IsVisible) App.Timer.Hide();
-            else if(App.Timer.Visibility == Visibility.Hidden) App.Timer.Show();
-            else
+            if (!App.Timer.IsVisible)
             {
-                App.Timer = new TimerWindow();
                 App.Timer.Show();
+                App.Home.ShowTimeTable.Style = FindResource("ButtonWarning") as Style;
+                App.Home.ShowTimeTable.Content = "隐藏时间表";
+            }
+            else if (App.Timer.IsVisible)
+            {
+                App.Timer.Hide();
+                App.Home.ShowTimeTable.Style = FindResource("ButtonSuccess") as Style;
+                App.Home.ShowTimeTable.Content = "显示时间表";
             }
         } // 显示或者隐藏时间表窗口
         #endregion

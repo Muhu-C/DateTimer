@@ -16,6 +16,7 @@ using System.Net;
 using System.Text;
 using System.Windows.Threading;
 using static System.Net.WebRequestMethods;
+using System.Collections.ObjectModel;
 
 namespace DateTimer
 {
@@ -153,5 +154,24 @@ namespace DateTimer
         public string Target_Time { get; set; }
         public string Target_Type {  get; set; }
         public string Timetable_File { get; set; }
+    }
+    public class TimerWindowViewModel : TimeTable.ViewModelBase // 实现实时更改时间表内容
+    {
+        private ObservableCollection<TimeTable.TableEntry> tables;
+        public ObservableCollection<TimeTable.TableEntry> TableEntries
+        {
+            get { return tables; }
+            set { tables = value; RaisePropertyChangedEvent("TableEntries"); }
+        }
+    }
+    /// <summary>
+    /// 静态类，显示整个程序中所有时间表的 ViewModel
+    /// </summary>
+    public static class CurrentTableEntry
+    {
+        /// <summary>
+        /// [公用]当前时间表
+        /// </summary>
+        public static TimerWindowViewModel model = new TimerWindowViewModel();
     }
 }

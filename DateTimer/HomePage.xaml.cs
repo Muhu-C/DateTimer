@@ -20,6 +20,7 @@ using HandyControl.Tools;
 using MsgBox = HandyControl.Controls.MessageBox;
 using DT_Lib;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Collections.ObjectModel;
 
 namespace DateTimer
 {
@@ -32,6 +33,7 @@ namespace DateTimer
         public HomePage()
         {
             InitializeComponent();
+            GetTime();
         }
         public static BindContent viewModel = new BindContent(); // HomePage , TimerPage , SettingPage 共用
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -42,17 +44,15 @@ namespace DateTimer
                 viewModel.TextColor = Brushes.White; // 检测主题并更改文字颜色
             Theme.SetSkin(this, Theme.GetSkin(MainWindow.Cur));
             Reload();
-            
-            GetTime();
         }
         public void Reload() // 重载
         {
-            try 
+            try
             {
                 string t = DateTime.ParseExact(App.ConfigData.Target_Time, "yyyy MM dd", null).ToString("yyyy/MM/dd");
                 TargetText.Text = t;
             }
-            catch { TargetText.Text = "未配置"; }
+            catch (FormatException) { TargetText.Text = "未配置"; }
             LoadNotice();
         }
         /// <summary>
@@ -60,15 +60,15 @@ namespace DateTimer
         /// </summary>
         public void LoadNotice()
         {
-            try 
-            { 
-                Dispatcher.Invoke(new Action(() => 
+            try
+            {
+                Dispatcher.Invoke(new Action(() =>
                 {
                     Notice.Text = App.Notice_Text;
                     LinkAdd.Text = App.FNoticeUrl;
                 }));
             }
-            catch(Exception ex) { App.Error(ex.Message, App.ErrorType.UnknownError, false); }
+            catch (Exception ex) { App.Error(ex.Message, App.ErrorType.UnknownError, false); }
         }
 
         /// <summary>
@@ -95,32 +95,19 @@ namespace DateTimer
         }
         #endregion
         #region 显示/隐藏窗口
-        private void HideTimeTable_Click(object sender, RoutedEventArgs e)
-        {
-            if (App.Timer.IsVisible)
-                App.Timer.Hide();
-            else if (App.Timer.Visibility == Visibility.Hidden) return;
-            else
-            {
-                App.Timer = new TimerWindow();
-                App.Timer.Hide();
-            }
-        }
         private void ShowTimeTable_Click(object sender, RoutedEventArgs e)
         {
-            if (App.Timer.Visibility == Visibility.Hidden || App.Timer.IsVisible)
+            if (!App.Timer.IsVisible)
             {
-                try { App.Timer.Show(); }
-                catch
-                {
-                    App.Timer = new TimerWindow();
-                    App.Timer.Show();
-                }
-            }
-            else
-            {
-                App.Timer = new TimerWindow();
                 App.Timer.Show();
+                ShowTimeTable.Style = FindResource("ButtonWarning") as Style;
+                ShowTimeTable.Content = "隐藏时间表";
+            }
+            else if (App.Timer.IsVisible)
+            {
+                App.Timer.Hide();
+                ShowTimeTable.Style = FindResource("ButtonSuccess") as Style;
+                ShowTimeTable.Content = "显示时间表";
             }
         }
         #endregion
@@ -131,14 +118,13 @@ namespace DateTimer
         public Brush TextColor
         {
             get { return textColor; }
-            set
-            {
-                if (textColor != value)
-                {
-                    textColor = value;
-                    OnPropertyChanged("TextColor");
-                }
-            }
+            set { if (textColor != value) { textColor = value; OnPropertyChanged("TextColor"); } }
+        }
+        private ObservableCollection<TimeTable.TableEntry> tables;
+        public ObservableCollection<TimeTable.TableEntry> TableEntries
+        {
+            get { return tables; }
+            set { tables = value; OnPropertyChanged("TableEntries"); }
         }
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); }

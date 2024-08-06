@@ -166,6 +166,19 @@ namespace DT_Lib
             string[] a = time.Split(' ');
             return int.Parse(a[0]).ToString() + ":" + a[1];
         }
+
+        public static string NumToTime(string num)
+        {
+            string numStr = "123456789";
+            string chineseStr = "一二三四五六七八九";
+            string result = "";
+            int numIndex = numStr.IndexOf(num);
+            if (numIndex > -1)
+            {
+                result = chineseStr.Substring(numIndex, 1);
+            }
+            return result;
+        }
     }
     /// <summary>
     /// 文件流处理
@@ -256,7 +269,7 @@ namespace DT_Lib
         public class Timetables // json第二层
         {
             public string date { get; set; }
-            public int weekday { get; set; }
+            public string weekday { get; set; }
             public List<Table> tables { get; set; } // 第三层
         }
         /// <summary>
@@ -364,8 +377,8 @@ namespace DT_Lib
             {
                 if (t.date == "GENERAL")
                 {
-                    int wd = t.weekday;
-                    if (wd == weekday) l = i;
+                    string wds = t.weekday;
+                    if (wds.Contains(weekday.ToString())) l = i;
                 }
                 else
                 {
@@ -376,6 +389,17 @@ namespace DT_Lib
                 i++;
             }
             return l;
+        }
+
+        public static string GetWeekday(string jsonweekday)
+        {
+            List<string> outstr = new List<string>();
+            string[] a = jsonweekday.Split(' ');
+            foreach (string str in a)
+            {
+                outstr.Add("周" + TimeConverter.NumToTime(str));
+            }
+            return String.Join(", ",outstr);
         }
     }
 
@@ -412,5 +436,61 @@ namespace DT_Lib
             return minlink;
         }
 
+    }
+
+    /// <summary>
+    /// 其他工具
+    /// </summary>
+    public class OtherTools
+    {
+        public static List<string> Duplicate_Removal(List<string> strings)
+        {
+            List<string> list = new List<string>();
+            int cnt = strings.Count;
+            if (strings != null &&cnt > 0)
+            {
+                strings = Class_Sort(strings);
+                for (int i = 0;i < cnt;i++)
+                {
+                    if (i != cnt - 1)
+                    {
+                        string[] new1 = strings[i].Split('%');
+                        string strA = new1[0] + '%' + new1[1] + '%' + new1[2];
+                        string strB = new1[3];
+                        string[] new2 = strings[i + 1].Split('%');
+                        string strA2 = new2[0] + '%' + new2[1] + '%' + new2[2];
+                        string strB2 = new2[3];
+                        if (strA != strA2) list.Add(strA + "%" + strB);
+                    }
+                    else list.Add(strings[i]);
+                }
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 对列表进行分类排序
+        /// </summary>
+        /// <param name="strings">修改记录</param>
+        /// <returns>排序后的修改记录</returns>
+        public static List<string> Class_Sort(List<string> strings)
+        {
+            List<List<string>> list2f = new List<List<string>>();
+            List<string> list1f = new List<string>();
+            foreach (string str in strings)
+            {
+                string[] new1 = str.Split('%');
+                string strA = new1[0] + '%' + new1[1] + '%' + new1[2];
+                string strB = new1[3];
+                bool a = false;
+                for(int i = 0;i < list2f.Count;i++)
+                    if (list2f[i][0].StartsWith(strA)) { list2f[i].Add(strA + "%" + strB); a = true; }
+                if(a == false) list2f.Add(new List<string> { strA + "%" + strB });
+            }
+            for(int i = 0;i < list2f.Count;i++)
+                for(int j = 0;j < list2f[i].Count;j++)
+                    list1f.Add(list2f[i][j]);
+            return list1f;
+        }
     }
 }
