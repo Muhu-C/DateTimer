@@ -63,7 +63,7 @@ namespace DateTimer
                     else Theme.SetSkin(Cur, HandyControl.Data.SkinType.Default);
                 }
             }
-            catch(Exception ex){ App.Error("主窗口重载时发生错误\n"+ex.Message,App.ErrorType.UnknownError,true); }
+            catch(Exception ex){ App.Error(ex.Message + '\n' + ex.Source, App.ErrorType.UnknownError,true); }
         }
         #endregion
         #region 任务栏图标事件
@@ -126,11 +126,11 @@ namespace DateTimer
                             SettingButton.IsSelected = false;
                             break;
                         default: // 这选的不对
-                            App.Error("选中内容为 "+tag,App.ErrorType.ProgramError,false);
+                            App.Error("你选了什么?\n选中内容为 "+tag,App.ErrorType.ProgramError,false);
                             break;
                     }
                 }
-                catch (Exception ex) { App.Error( "切换页面时出现错误\n"+ex.ToString(), App.ErrorType.UnknownError, true); } // 未知错误的处理
+                catch (Exception ex) { App.Error(ex.Message + '\n' + ex.Source, App.ErrorType.UnknownError, true); } // 未知错误的处理
             }
             else // 错误时
             {

@@ -1,26 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using MsgBox = HandyControl.Controls.MessageBox;
-using System.Threading;
-using HandyControl.Controls;
-using HandyControl.Tools.Extension;
 using DT_Lib;
 using Newtonsoft.Json;
-using System.Collections.Specialized;
-using System.Timers;
 using HandyControl.Themes;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 
@@ -66,8 +51,7 @@ namespace DateTimer
                 Target_Type = App.ConfigData.Target_Type,
                 Timetable_File = App.ConfigData.Timetable_File
             };
-            string newJson = JsonConvert.SerializeObject(NewConfig); // 转为 json 字符串
-            FileProcess.WriteFile(newJson, App.configPath); // 流写入 json 文件
+            FileProcess.WriteFile(TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
             System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
             Environment.Exit(0);
         }
@@ -92,8 +76,7 @@ namespace DateTimer
                         try
                         {
                             TimeTable.GetTimetables(a);
-                            string newJson = JsonConvert.SerializeObject(NewConfig); // 转为 json 字符串
-                            FileProcess.WriteFile(newJson, App.configPath); // 流写入 json 文件
+                            FileProcess.WriteFile(TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
                             App.LoadConfig(); // 重新加载 json
                             MainWindow.Reload();
                             TimeTipIcon.Text = "\uE73E";
@@ -131,8 +114,7 @@ namespace DateTimer
                 Target_Type = App.ConfigData.Target_Type,
                 Timetable_File = App.ConfigData.Timetable_File
             };
-            string newJson = JsonConvert.SerializeObject(NewConfig); // 转为 json 字符串
-            FileProcess.WriteFile(newJson,App.configPath); // 流写入 json 文件
+            FileProcess.WriteFile(TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
             App.LoadConfig(); // 重新加载 json
             MainWindow.Reload();
         }
@@ -150,8 +132,7 @@ namespace DateTimer
                     Target_Type = Name,
                     Timetable_File = App.ConfigData.Timetable_File
                 };
-                string newJson = JsonConvert.SerializeObject(NewConfig); // 转为 json 字符串
-                FileProcess.WriteFile(newJson, App.configPath); // 流写入 json 文件
+                FileProcess.WriteFile(TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
                 App.LoadConfig(); // 重新加载 json
                 MainWindow.Reload();
             }

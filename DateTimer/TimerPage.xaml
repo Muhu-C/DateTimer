@@ -44,7 +44,7 @@
             <ListView ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Column="0" Name="TimeList" ItemsSource="{Binding TableEntries}" Style="{DynamicResource ListView.Small}" SelectionChanged="ListView_SelectionChanged">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="时间段" DisplayMemberBinding="{Binding Time}"/>
+                        <GridViewColumn Width="200" Header="时间段" DisplayMemberBinding="{Binding Time}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
@@ -70,7 +70,7 @@
                     <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="选中时间段"/>
                     <ui:SplitButton Content="双击以新建日期" MouseDoubleClick="PickDate_Click" Name="PickDate" Grid.Row="0" Grid.Column="1" Width="180" Style="{DynamicResource SplitButtonDefault}">
                         <ui:SplitButton.DropDownContent>
-                            <StackPanel Width="180" Name="DropDownPanel"/>
+                            <StackPanel Width="Auto" Name="DropDownPanel"/>
                         </ui:SplitButton.DropDownContent>
                     </ui:SplitButton>
                     <Grid Grid.Row="2" Grid.Column="1">

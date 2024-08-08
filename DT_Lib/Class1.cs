@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using System.Text.RegularExpressions;
 
 namespace DT_Lib
 {
@@ -169,8 +165,8 @@ namespace DT_Lib
 
         public static string NumToTime(string num)
         {
-            string numStr = "123456789";
-            string chineseStr = "一二三四五六七八九";
+            string numStr = "1234567";
+            string chineseStr = "一二三四五六日";
             string result = "";
             int numIndex = numStr.IndexOf(num);
             if (numIndex > -1)
@@ -228,7 +224,7 @@ namespace DT_Lib
     {
         #region timetable-JSON
         /// <summary>
-        /// json反序列化的类
+        /// ViewModel基础类
         /// </summary>
         public abstract class ViewModelBase : INotifyPropertyChanged
         {
@@ -257,14 +253,14 @@ namespace DT_Lib
             }
         }
         /// <summary>
-        /// json反序列化的类
+        /// json 反序列化的类
         /// </summary>
         public class TimeTableFile // json第一层
         {
             public List<Timetables> timetables { get; set; } // 第二层
         }
         /// <summary>
-        /// json反序列化的类
+        /// 时间表列表类
         /// </summary>
         public class Timetables // json第二层
         {
@@ -273,7 +269,7 @@ namespace DT_Lib
             public List<Table> tables { get; set; } // 第三层
         }
         /// <summary>
-        /// json反序列化的类
+        /// 时间表类
         /// </summary>
         public class Table // json第三层
         {
@@ -283,7 +279,7 @@ namespace DT_Lib
             public string notice { get; set; }
         }
         /// <summary>
-        /// json反序列化后用于显示的类
+        /// 时间表显示类
         /// </summary>
         public class TableEntry
         {
@@ -292,7 +288,7 @@ namespace DT_Lib
             public string Notice {  get; set; }
         }
         #endregion
-
+        #region 处理
         /// <summary>
         /// 反序列化时间表 json 文件
         /// </summary>
@@ -316,7 +312,11 @@ namespace DT_Lib
             string timetablejson = JsonConvert.SerializeObject(table);
             FileProcess.WriteFile(timetablejson, Path);
         }
-
+        /// <summary>
+        /// 将时间表Table类转为显示时间表TableEntry类
+        /// </summary>
+        /// <param name="table">时间表Table类</param>
+        /// <returns>时间表TableEntry类</returns>
         public static TableEntry Table2Entry(Table table)
         {
             TableEntry entry = new TableEntry();
@@ -327,7 +327,6 @@ namespace DT_Lib
             entry.Time = time1 + "~" + time2;
             return entry;
         }
-
         /// <summary>
         /// 获取当前所在时间段
         /// </summary>
@@ -357,7 +356,6 @@ namespace DT_Lib
             }
             catch (Exception ex) { throw ex; }
         }
-
         /// <summary>
         /// 获取当天对应时间表
         /// </summary>
@@ -390,19 +388,59 @@ namespace DT_Lib
             }
             return l;
         }
-
+        /// <summary>
+        /// 将时间表json的星期日转为汉字文本
+        /// </summary>
+        /// <param name="jsonweekday">时间表json的星期日</param>
+        /// <returns>汉字文本</returns>
         public static string GetWeekday(string jsonweekday)
         {
             List<string> outstr = new List<string>();
             string[] a = jsonweekday.Split(' ');
             foreach (string str in a)
-            {
                 outstr.Add("周" + TimeConverter.NumToTime(str));
-            }
             return String.Join(", ",outstr);
         }
+        /// <summary>
+        /// 将 json 字符串格式化
+        /// </summary>
+        /// <param name="oldjson">单行 json 字符串</param>
+        /// <returns>格式化后的 json 字符串</returns>
+        public static string Json_Optimization(string oldjson)
+        {
+            int l = 0, k = 0;
+            bool isInString = false;
+            string newjson = string.Empty;
+            foreach (char c in oldjson)
+            {
+                if (c == '\"') { if (!isInString) isInString = true; else isInString = false; }
+                newjson += c;
+                if (c == '{' && !isInString)
+                {
+                    l++;
+                    newjson += '\n';
+                    for (int i = 1; i <= l; i++) newjson += "    ";
+                }
+                else if (oldjson.Length > k + 1 && oldjson[k + 1] == '}' && !isInString)
+                {
+                    l--;
+                    newjson += '\n';
+                    for (int i = 1; i <= l; i++) newjson += "    ";
+                }
+                else if (c == ',' && !isInString)
+                {
+                    newjson += '\n';
+                    for (int i = 1; i <= l; i++) newjson += "    ";
+                }
+                k++;
+            }
+            return newjson;
+        }
+        #endregion
     }
-
+    /// <summary>
+    /// 网络工具
+    /// </summary>
     public class NetTool
     {
         /// <summary>
@@ -437,12 +475,16 @@ namespace DT_Lib
         }
 
     }
-
     /// <summary>
     /// 其他工具
     /// </summary>
     public class OtherTools
     {
+        /// <summary>
+        /// 将修改列表去重
+        /// </summary>
+        /// <param name="strings">原修改列表</param>
+        /// <returns>去重后的修改列表</returns>
         public static List<string> Duplicate_Removal(List<string> strings)
         {
             List<string> list = new List<string>();
@@ -467,7 +509,6 @@ namespace DT_Lib
             }
             return list;
         }
-
         /// <summary>
         /// 对列表进行分类排序
         /// </summary>

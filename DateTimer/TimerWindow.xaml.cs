@@ -1,27 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Markup;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using HandyControl;
 using HandyControl.Themes;
-using HandyControl.Tools;
-using MsgBox = HandyControl.Controls.MessageBox;
 using DT_Lib;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using static DT_Lib.TimeTable;
+using MsgBox = HandyControl.Controls.MessageBox;
 
 namespace DateTimer
 {
@@ -80,18 +65,18 @@ namespace DateTimer
         }
 
         /// <summary>
-        /// 重复执行获取时间
+        /// 异步重复执行获取时间
         /// </summary>
         public async void GetTime()
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
-                while (true)
+                while (true) // 程序运行中重复执行
                 {
-                    if (IsVisible)
+                    if (IsVisible) // 显示时处理
                     {
-                        TimeSpan remainingTime = TimeConverter.Str2Date(App.ConfigData.Target_Time) - DateTime.Now;
-                        try
+                        TimeSpan remainingTime = TimeConverter.Str2Date(App.ConfigData.Target_Time) - DateTime.Now; // 目标剩余时间
+                        try // 获取时间表，获取当前时间所在时间段
                         {
                             List<int> inds = TimeTable.GetCurZone(tables);
                             int ind = -1;
@@ -102,13 +87,9 @@ namespace DateTimer
                                 if (App.ConfigData.Target_Type != "NULL") str = App.ConfigData.Target_Type;
                                 Dispatcher.Invoke(() =>
                                 {
-                                    if (remainingTime < TimeSpan.Zero) { CountdownText.Text = "剩余天数: 时间设置错误"; }
-                                    else
-                                    {
-                                        CountdownText.Text = "距 " + str + " " + remainingTime.Days + "天 " + remainingTime.Hours + "时 " + remainingTime.Minutes + "分 " + remainingTime.Seconds + "秒 ";
-                                    }
-                                    if (ind != TimetableListView.SelectedIndex && ind != -1)
-                                        TimetableListView.SelectedIndex = ind;
+                                    if (remainingTime < TimeSpan.Zero) CountdownText.Text = "已到达" + str + "时间";
+                                    else CountdownText.Text = "距 " + str + " " + remainingTime.Days + "天 " + remainingTime.Hours + "时 " + remainingTime.Minutes + "分 " + remainingTime.Seconds + "秒 ";
+                                    if (ind != TimetableListView.SelectedIndex && ind != -1) TimetableListView.SelectedIndex = ind;
                                 });
                             }
                             catch (Exception ex) { App.Error(ex.Message, App.ErrorType.ProgramError, false, true, true); }
@@ -116,7 +97,7 @@ namespace DateTimer
                         catch { App.Error("时间格式不正确", App.ErrorType.ProgresError, false, true, false); return; }
                         Console.WriteLine("TimerWindow: GetTime");
                     }
-                    System.Threading.Thread.Sleep(1000);
+                    await Task.Delay(1000);
                 }
             });
             Console.WriteLine("结束 TimerWindow");

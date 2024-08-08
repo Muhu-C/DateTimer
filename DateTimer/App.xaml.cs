@@ -2,21 +2,17 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json;
 using MsgBox = HandyControl.Controls.MessageBox;
-using System.Threading;
-using HandyControl.Controls;
 using DT_Lib;
 using System.Net;
 using System.Text;
-using System.Windows.Threading;
-using static System.Net.WebRequestMethods;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Media;
+using System.Reflection;
 
 namespace DateTimer
 {
@@ -25,23 +21,55 @@ namespace DateTimer
     /// </summary>
     public partial class App : Application
     {
+        #region 静态变量
+        /// <summary>
+        /// 反馈链接
+        /// </summary>
         public static string FeedBackUrl = "https://github.com/Muhu-C/DateTimer/issues"; // 错误反馈链接
+        /// <summary>
+        /// 公告链接
+        /// </summary>
         public static List<string> NoticeUrl = new List<string> 
         {
             "https://gitee.com/zzhkjf/NoticePage/raw/main/DATETIMER.NOTICE", // Gitee Raw 【首选】
             "https://raw.gitmirror.com/Muhu-C/NoticePage/main/DATETIMER.NOTICE", // Gitmirror(Github) Raw
             "https://mirror.ghproxy.com/https://raw.githubusercontent.com/Muhu-C/NoticePage/main/DATETIMER.NOTICE", // Gitproxy(Github) Raw
             "https://raw.githubusercontent.com/Muhu-C/NoticePage/main/DATETIMER.NOTICE" // Github Raw
-        }; // 公告链接
+        };
+        /// <summary>
+        /// 当前公告地址
+        /// </summary>
         public static string FNoticeUrl;
-        public static string About = "DateTimer 1.0.1 By MC118CN\n使用 C#(.NET Framework) WPF HandyControls 编写\n本软件使用 MIT LICENSE, 转载请标明出处!"; // 关于程序
-        #region 错误处理
+        /// <summary>
+        /// 关于程序的文本
+        /// </summary>
+        public static string About = "DateTimer " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " By MC118CN\n使用 C#(.NET Framework) WPF HandyControls 编写\n本软件使用 MIT LICENSE, 转载请标明出处!"; // 关于程序
+        #endregion
+        #region 错误文本显示以及处理
+        /// <summary>
+        /// 错误类型
+        /// </summary>
         public enum ErrorType
         {
+            /// <summary>
+            /// 程序运行错误
+            /// </summary>
             ProgramError = 0,
-            UnknownError = 1,
+            /// <summary>
+            /// 未知错误
+            /// </summary>
+            UnknownError = 1, 
+            /// <summary>
+            /// 运行时错误
+            /// </summary>
             RunTimeError = 2,
+            /// <summary>
+            /// 处理错误
+            /// </summary>
             ProgresError = 3,
+            /// <summary>
+            /// 灾难性错误
+            /// </summary>
             FatalError = 4
         };
         /// <summary>
@@ -50,10 +78,11 @@ namespace DateTimer
         /// <param name="ErrorMessage">正文错误信息</param>
         /// <param name="Type">错误类型</param>
         /// <param name="ShutDown">是否关闭程序</param>
+        /// <param name="WindowType">true 为程序运行中的错误, false 为程序运行前的错误</param>
         /// <param name="FeedBack">是否反馈作者</param>
         public static void Error(string ErrorMessage, ErrorType Type, bool ShutDown, bool WindowType = true, bool FeedBack = true)
         {
-            string ErrorText = "灾难性错误 - Fatal Error";
+            string ErrorText = "灾难性错误 - Fatal Error"; // 根据错误类型制定标题
             if (Type == ErrorType.ProgramError)
                 ErrorText = "程序运行错误 - Program Error";
             else if (Type == ErrorType.UnknownError)
@@ -63,26 +92,32 @@ namespace DateTimer
             else if (Type == ErrorType.ProgresError)
                 ErrorText = "处理错误 - Progress Error";
 
-            if (FeedBack) { System.Diagnostics.Process.Start(FeedBackUrl); ErrorMessage += "\n请告知程序作者"; }
-            if (WindowType) MsgBox.Error("错误原因: " + ErrorMessage, ErrorText);
-            else System.Windows.Forms.MessageBox.Show("错误原因: " + ErrorMessage, ErrorText, System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-            if (ShutDown) Environment.Exit(0);
+            if (FeedBack) { System.Diagnostics.Process.Start(FeedBackUrl); ErrorMessage += "\n请告知程序作者"; } // 反馈
+            if (WindowType) MsgBox.Error("错误原因: " + ErrorMessage, ErrorText); // 程序运行中发生错误
+            else System.Windows.Forms.MessageBox.Show("错误原因: " + ErrorMessage, ErrorText, System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);// 程序运行前发生错误
+            if (ShutDown) Environment.Exit(0); // 是否关闭程序
         }
         #endregion
-
+        #region 程序配置
         public static HomePage Home = new HomePage();
         public static SettingPage Setting = new SettingPage();
         public static TimerPage TimerPg = new TimerPage();
         public static TimerWindow Timer = new TimerWindow();
+        /// <summary>
+        /// 配置数据
+        /// </summary>
         public static appconfig ConfigData;
+        /// <summary>
+        /// 配置数据路径
+        /// </summary>
         public static string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config", "config.json");
-        public static string tablePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
-
+        #endregion
+        #region 加载配置
         public App()
         {
-            Console.WriteLine("程序开始运行");
-            LoadConfig();
-            LoadNotice();
+            Console.WriteLine("程序开始");
+            LoadConfig(); // 加载配置文件
+            LoadNotice(); // 加载公告
         }
         /// <summary>
         /// 加载Config/config.json文件
@@ -104,15 +139,15 @@ namespace DateTimer
                 Home.Reload();
                 Setting.Reload();
             }
-            catch(FileNotFoundException)
-            {
-                System.Windows.Forms.MessageBox.Show("未找到程序配置", "程序运行错误 - Program Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-                System.Diagnostics.Process.Start(FeedBackUrl);
-                Current.Shutdown();
-            }
+            catch(Exception) { Error("未找到程序配置，请检查下载文件是否完整", ErrorType.RunTimeError, true, false, false); } // 未找到文件时报错
         }
-
+        /// <summary>
+        /// 公告文本
+        /// </summary>
         public static string Notice_Text = string.Empty;
+        /// <summary>
+        /// 加载公告
+        /// </summary>
         public static async void LoadNotice()
         {
             try
@@ -144,10 +179,11 @@ namespace DateTimer
                     Home.LoadNotice();
                 });
             }
-            catch (Exception ex) { Notice_Text = "公告接收失败\n请检查网络\n或联系程序作者 MC118CN\n加载错误:" + ex.Message; 
-                Error(ex.Message+"公告接收失败\n请检查网络",App.ErrorType.ProgresError, false, true, true); }
+            catch (Exception ex) { Notice_Text = "公告接收失败\n请检查网络\n或联系程序作者 MC118CN\n加载错误:" + ex.Message; }
         }
+        #endregion
     }
+    #region 其他类
     public class appconfig // Config/config.json 解析内容
     {
         public int Theme { get; set; } // 0 黑 1 白
@@ -165,7 +201,7 @@ namespace DateTimer
         }
     }
     /// <summary>
-    /// 静态类，显示整个程序中所有时间表的 ViewModel
+    /// 静态类, 管理显示时间表的 ViewModel
     /// </summary>
     public static class CurrentTableEntry
     {
@@ -174,4 +210,25 @@ namespace DateTimer
         /// </summary>
         public static TimerWindowViewModel model = new TimerWindowViewModel();
     }
+    /// <summary>
+    /// HomePage 以及其他页面调用的 Binding ViewModel
+    /// </summary>
+    public class BindContent : INotifyPropertyChanged // 通过 Foreground Binding 实时设置页面文本颜色
+    {
+        private Brush textColor;
+        public Brush TextColor
+        {
+            get { return textColor; }
+            set { if (textColor != value) { textColor = value; OnPropertyChanged("TextColor"); } }
+        }
+        private ObservableCollection<TimeTable.TableEntry> tables;
+        public ObservableCollection<TimeTable.TableEntry> TableEntries
+        {
+            get { return tables; }
+            set { tables = value; OnPropertyChanged("TableEntries"); }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); }
+    }
+    #endregion
 }
