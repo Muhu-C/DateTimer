@@ -27,7 +27,13 @@
  - HandyControl  
  - Newtonsoft.Json  
  - DT_Lib by MC118CN  
-   
+
+### 1.0.2 版本特点  
+ - 初步添加"新建时间表"功能  
+ - 优化时间表 json 解析  
+ - 优化主页排版  
+ - 添加"按时间分类排序算法"功能
+  
 ### 1.0.1 版本特点  
 
  - DateTimer 公告源支持自动检测  
