@@ -65,4 +65,6 @@
 #### 如果遇到了 bug ，请在Github上提出Issue或联系
   
  - muhu-c@outlook.com  
- - [Bilibili 账号](https://space.bilibili.com/1469137723/)  
+ - [Bilibili 账号](https://space.bilibili.com/1469137723/)
+
+#### 本项目使用 MIT License，完全开源免费，禁止倒卖！
