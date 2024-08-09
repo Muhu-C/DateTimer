@@ -7,6 +7,7 @@ using System.Text;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Microsoft.Win32;
 
 namespace DT_Lib
 {
@@ -532,6 +533,33 @@ namespace DT_Lib
                 for(int j = 0;j < list2f[i].Count;j++)
                     list1f.Add(list2f[i][j]);
             return list1f;
+        }
+
+        public static string GetWinVer()
+        {
+            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion"))
+            {
+                string productName = key.GetValue("ProductName") as string;
+                int majorVersion = (int)key.GetValue("CurrentMajorVersionNumber");
+                var buildNumber = int.Parse(key.GetValue("CurrentBuildNumber").ToString());
+
+                if (!string.IsNullOrEmpty(productName) && productName.ToLower().Contains("windows"))
+                {
+                    if (majorVersion > 10 || majorVersion == 10 && buildNumber >= 22000)
+                    {
+                        return "Windows 11 Build "+buildNumber;
+                    }
+                    else if (majorVersion == 10 && buildNumber < 22000)
+                    {
+                        return "Windows 10 Build " + buildNumber;
+                    }
+                    else
+                    {
+                        return productName;
+                    }
+                }
+                else return "错误";
+            }
         }
     }
 }

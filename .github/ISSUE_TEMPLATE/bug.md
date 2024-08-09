@@ -1,0 +1,36 @@
+name: "Bug 反馈"
+description: "创建报告以帮助我们改进 DateTimer"
+title: "Bug: 补充文本"
+body:
+
+- type: dropdown
+  attributes:
+    label: "问题出现在哪里"
+    multiple: true
+    options:
+      - "DateTimer 控制台"
+      - "DateTimer 时间表"
+      - "启动中"
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: "系统报告"
+    description: "DateTimer 1.0.4 及以上可以在设置页面生程系统报告"
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: "具体描述"
+    description: "在这里描述问题或者报错的内容"
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: "引发方式"
+    placeholder: "描述这个问题是如何发生的"
+  validations:
+    required: true

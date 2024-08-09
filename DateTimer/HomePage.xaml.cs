@@ -5,6 +5,7 @@ using System.Windows.Media;
 using HandyControl.Themes;
 using MsgBox = HandyControl.Controls.MessageBox;
 using DT_Lib;
+using Microsoft.Win32;
 
 namespace DateTimer
 {
@@ -27,6 +28,7 @@ namespace DateTimer
             DataContext = viewModel;
             if (Theme.GetSkin(MainWindow.Cur) == HandyControl.Data.SkinType.Dark)
                 viewModel.TextColor = Brushes.White; // 检测主题并更改文字颜色
+            //MsgBox.Show(OtherTools.GetWinVer());
             Reload();
         }
         public void Reload() // 重载

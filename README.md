@@ -28,6 +28,15 @@
  - Newtonsoft.Json  
  - DT_Lib by MC118CN  
 
+### 1.0.3版本特点
+ - 完善"新建时间表"功能  
+ - 优化程序 Binding  
+ - 通过 Json_Optimization 优化写入后的 json, 使其更加美观  
+ - 代码注释优化  
+ - 为防止第一个 Issue 中的问题，将"关于"文本的软件版本直接链接到 AssemblyVersion  
+ - 修复了 HomePage 设置按钮在亮色主题下保持暗色的 bug
+ - 更改编辑时间"周日"显示为"周七"的问题
+  
 ### 1.0.2 版本特点  
  - 初步添加"新建时间表"功能  
  - 优化时间表 json 解析  
