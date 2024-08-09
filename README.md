@@ -27,7 +27,7 @@
    - [Gitproxy](https://mirror.ghproxy.com/https://raw.githubusercontent.com/Muhu-C/NoticePage/main/DATETIMER.NOTICE) 公告源(更新延迟)  
    - [Gitmirror_Raw](https://raw.gitmirror.com/Muhu-C/NoticePage/main/DATETIMER.NOTICE) 公告源(更新延迟)  
   
-### 用到的类库  
+### 用到的开源项目  
  - [HandyControl](https://github.com/ghost1372/HandyControl)  
  - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)  
  - [DT_Lib by MC118CN](https://github.com/Muhu-C/DateTimer/tree/master/DT_Lib)  
