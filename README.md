@@ -9,8 +9,11 @@
 ![Issues](https://img.shields.io/github/issues/Muhu-C/DateTimer?style=flat-square)
 ![GitHub](https://img.shields.io/github/downloads/Muhu-C/DateTimer/total?style=flat-square)  
   
--------
-
+-------  
+  
+## 即将推出紧急更新 1.0.4！  
+**在Windows 7 设备的测试中发现.NET Framework 4.8.1无法兼容，但是.NET Framework 4.8.0可以完全兼容，且此前版本没有Segoe Fluent Icons的提示，故即将推出1.0.4版本！**  
+  
 ## 为什么要做这个程序？  
 **作者 MC118CN 是一位学生，所以会在学生的角度下去做一款时间表，方便假期以及学期内对时间的管理**  
 
@@ -18,10 +21,10 @@
   
 ### 目前公告源  
   
- - <font color="#FFFF00">Gitee Raw</font> 公告源  
- - <font color="#FFFF00">Github Raw</font> 公告源（仅海外）  
-   - <font color="#FFFF00">Gitproxy</font> 公告源  
-   - <font color="#FFFF00">Gitmirror</font> Raw 公告源  
+ - Gitee Raw 公告源  
+ - Github Raw 公告源（仅海外）  
+   - Gitproxy 公告源  
+   - Gitmirror Raw 公告源  
   
 ### 用到的类库  
  - HandyControl  
@@ -49,9 +52,9 @@
  - 优化部分异步代码的执行  
  - 修正某些致命性错误的提示  
  - 统一错误提示  
- - 优化了 <font color="#FFFF00">HandyControls</font> 控件在 Page 类上的显示  
+ - 优化了 HandyControls 控件在 Page 类上的显示  
   
-### 1.0.0 <font color="#FF8800">Beta 2</font> 版本特点  
+### 1.0.0 Beta 2 版本特点  
   
  - 在小窗口上显示时间表以及离目标剩余的时间  
  - 在控制台设置中更改  
