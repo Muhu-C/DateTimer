@@ -22,15 +22,15 @@
   
 ### 目前公告源  
   
- - Gitee Raw 公告源  
- - Github Raw 公告源（仅海外）  
-   - Gitproxy 公告源  
-   - Gitmirror Raw 公告源  
+ - [Gitee_Raw](https://gitee.com/zzhkjf/NoticePage/raw/main/DATETIMER.NOTICE) 公告源  
+ - [Github_Raw](https://raw.githubusercontent.com/Muhu-C/NoticePage/main/DATETIMER.NOTICE) 公告源（仅海外）  
+   - [Gitproxy](https://mirror.ghproxy.com/https://raw.githubusercontent.com/Muhu-C/NoticePage/main/DATETIMER.NOTICE) 公告源(更新延迟)  
+   - [Gitmirror_Raw](https://raw.gitmirror.com/Muhu-C/NoticePage/main/DATETIMER.NOTICE) 公告源(更新延迟)  
   
 ### 用到的类库  
- - HandyControl  
- - Newtonsoft.Json  
- - DT_Lib by MC118CN  
+ - [HandyControl](https://github.com/ghost1372/HandyControl)  
+ - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)  
+ - [DT_Lib by MC118CN](https://github.com/Muhu-C/DateTimer/tree/master/DT_Lib)  
 
 ### 1.0.3版本特点
  - 完善"新建时间表"功能  
