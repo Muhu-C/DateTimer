@@ -1,1 +1,8 @@
 blank_issues_enabled: false
+contact_links:
+  - name: 建议
+    url: https://github.com/Muhu-C/DateTimer/discussions/new?category=%E5%BB%BA%E8%AE%AE
+    about: 建议程序的新功能、程序UI及其他改进等
+  - name: 提问
+    url: https://github.com/Muhu-C/DateTimer/discussions/new?category=%E9%97%AE%E7%AD%94
+    about: 非 Bug 反馈的提问
