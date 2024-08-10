@@ -28,9 +28,14 @@
 ### 用到的开源项目  
  - [HandyControl](https://github.com/ghost1372/HandyControl)  
  - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)  
- - [DT_Lib by MC118CN](https://github.com/Muhu-C/DateTimer/tree/master/DT_Lib)  
+ - [DT_Lib by MC118CN](https://github.com/Muhu-C/DateTimer/tree/master/DT_Lib)
 
-### 1.0.3版本特点
+### 1.0.4 版本特点
+ - 新增"系统报告"内容
+ - 优化"错误"窗口功能
+ - 新增未处理异常的处理
+
+### 1.0.3 版本特点
  - 完善"新建时间表"功能  
  - 优化程序 Binding  
  - 通过 Json_Optimization 优化写入后的 json, 使其更加美观  
