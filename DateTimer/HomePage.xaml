@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDark.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <FontFamily x:Key="IconFont">/DateTimer;Component/Icon/#Segoe Fluent Icons</FontFamily>
         </ResourceDictionary>
     </Page.Resources>
     <Grid TextBlock.Foreground="{Binding TextColor}">
@@ -48,7 +49,7 @@
                 <Button Style="{StaticResource ButtonInfo}" FontSize="16" Name="GoToSetting" Margin="0,190,0,0" HorizontalAlignment="Center" Width="200" Height="50" Click="GoToSetting_Click">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock VerticalAlignment="Center" FontFamily="Segoe Fluent Icons" Text="&#xF8B0;"/>
+                            <TextBlock VerticalAlignment="Center" FontFamily="{StaticResource IconFont}" Text="&#xF8B0;"/>
                             <TextBlock VerticalAlignment="Center" Margin="10,0,0,0" Text="设置"/>
                         </StackPanel>
                     </Button.Content>

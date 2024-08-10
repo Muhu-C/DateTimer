@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Net.NetworkInformation;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
@@ -574,7 +573,7 @@ namespace DT_Lib
         public static string GetEnvVer()
         {
             try { return RuntimeInformation.FrameworkDescription; }
-            catch (Exception e) { return e.Message; }
+            catch (Exception e) { throw e; }
         }
         /// <summary>
         /// 获取系统位数

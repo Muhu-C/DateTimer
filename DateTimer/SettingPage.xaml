@@ -15,6 +15,7 @@
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <FontFamily x:Key="IconFont">/DateTimer;Component/Icon/#Segoe Fluent Icons</FontFamily>
         </ResourceDictionary>
     </Page.Resources>
     <Grid TextBlock.Foreground="{Binding TextColor}">
@@ -39,7 +40,7 @@
                 <!--设置目标类型-->
                 <TextBlock VerticalAlignment="Center" FontSize="14" Text="目标事件名"/>
                 <TextBox Name="TName" Width="200" Height="35" Margin="40,0,0,0" TextChanged="TName_TextChanged"/>
-                <TextBlock VerticalAlignment="Center" FontSize="14" Name="TipIcon" FontFamily="Segoe Fluent Icons" Margin="20,0,0,0"/>
+                <TextBlock VerticalAlignment="Center" FontSize="14" Name="TipIcon" FontFamily="{StaticResource IconFont}" Margin="20,0,0,0"/>
                 <TextBlock VerticalAlignment="Center" FontSize="14" Name="Tip" Margin="5,0,0,0"/>
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
@@ -51,7 +52,7 @@
                 <!--设置配置文件地址-->
                 <TextBlock VerticalAlignment="Center" FontSize="14" Text="时间表配置文件"/>
                 <TextBlock VerticalAlignment="Center" Margin="40,0,0,0" FontSize="14" Text="未配置" Name="TBTimerConfig"/>
-                <TextBlock VerticalAlignment="Center" FontSize="14" Name="TimeTipIcon" FontFamily="Segoe Fluent Icons" Margin="20,0,0,0"/>
+                <TextBlock VerticalAlignment="Center" FontSize="14" Name="TimeTipIcon" FontFamily="{StaticResource IconFont}" Margin="20,0,0,0"/>
                 <TextBlock VerticalAlignment="Center" FontSize="14" Name="TimeTip" Margin="5,0,0,0"/>
             </StackPanel>
             <Button Name="BTTimerConfig" Grid.Row="2" Grid.Column="1" Content="选择" FontSize="14" Height="35" Click="BTTimerConfig_Click"/>

@@ -144,6 +144,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Resource Include="Resources\SegoeIcons.ttf" />
     <Resource Include="Icon\Segoe Fluent Icons.ttf" />
     <None Include="Config\config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

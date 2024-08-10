@@ -16,6 +16,7 @@
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <FontFamily x:Key="IconFont">/DateTimer;Component/Icon/#Segoe Fluent Icons</FontFamily>
         </ResourceDictionary>
     </Page.Resources>
     <Grid TextBlock.Foreground="{Binding TextColor}">
