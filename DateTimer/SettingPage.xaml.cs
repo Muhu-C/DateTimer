@@ -8,6 +8,7 @@ using DT_Lib;
 using Newtonsoft.Json;
 using HandyControl.Themes;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
+using System.Reflection;
 
 namespace DateTimer
 {
@@ -18,6 +19,7 @@ namespace DateTimer
     {
         public SettingPage()
         {
+            Console.WriteLine("SettingPage: Load");
             InitializeComponent();
             DataContext = HomePage.viewModel; // 使用 HomePage 的 BindingContent
         }
@@ -147,5 +149,16 @@ namespace DateTimer
         private void GotoGiteeIssue(object sender, RoutedEventArgs e) { System.Diagnostics.Process.Start("https://gitee.com/zzhkjf/DateTimer/issues"); }
         private void GotoGithub(object sender, RoutedEventArgs e) { System.Diagnostics.Process.Start("https://github.com/Muhu-C/"); }
         private void GotoBilibili(object sender, RoutedEventArgs e) { System.Diagnostics.Process.Start("https://space.bilibili.com/1469137723"); }
+        private void CopySystemReport(object sender, RoutedEventArgs e) // 生成系统报告
+        {
+            string Report = 
+                  "生成时间: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") 
+                + "\n系统版本: " + OtherTools.GetWinVer()
+                + "\n系统位数: " + OtherTools.GetBit().ToString() 
+                + "\n运行时版本: " + OtherTools.GetEnvVer()
+                + "\nDateTimer 版本: " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            MessageBoxResult r = MsgBox.Show(Report + "\n是否复制到剪贴板？", "系统报告", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.Yes);
+            if(r == MessageBoxResult.Yes) Clipboard.SetDataObject(Report);
+        }
     }
 }

@@ -97,6 +97,7 @@ namespace DateTimer
             if (ex != null) message = "报错信息: " + ex.Message + "\n报错位置: " + ex.Source + "\n报错代码: \n" + ex.StackTrace + "\n报错数据类型: " + ex.Data + "\n提示: " + ErrorMessage ;
             else message = ErrorMessage;
             Clipboard.SetDataObject(message);
+            Console.Write(message + "\n");
 
             if (FeedBack) { System.Diagnostics.Process.Start(FeedBackUrl); message += "\n请告知程序作者, "; Thread.Sleep(100); } // 反馈
             if (WindowType) MsgBox.Error(message + "已复制到剪贴板", ErrorText); // 程序运行中发生错误
@@ -131,6 +132,12 @@ namespace DateTimer
         #region 加载配置
         public App()
         {
+            Startup += App_Startup;
+            Console.WriteLine("程序开始");
+        }
+
+        private void App_Startup(object sender, StartupEventArgs e)
+        {
             Console.WriteLine("程序开始");
             LoadConfig(); // 加载配置文件
             LoadNotice(); // 加载公告
@@ -139,6 +146,7 @@ namespace DateTimer
             //当某个异常未被捕获时出现,Thread多线程和UI线程都可以捕获
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
+
         /// <summary>
         /// 加载Config/config.json文件
         /// </summary>
@@ -170,6 +178,7 @@ namespace DateTimer
         /// </summary>
         public static async void LoadNotice()
         {
+            Console.WriteLine("加载公告");
             try
             {
                 await Task.Run(() =>

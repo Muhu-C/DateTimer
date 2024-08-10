@@ -26,10 +26,10 @@
         <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="设置" FontWeight="Bold" FontSize="24"/>
         <Grid Grid.Row="1" Margin="20,0,20,20">
             <Grid.RowDefinitions>
-                <RowDefinition Height="45"/>
-                <RowDefinition Height="45"/>
-                <RowDefinition Height="45"/>
-                <RowDefinition Height="45"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -61,7 +61,7 @@
                 <TextBlock VerticalAlignment="Center"  FontSize="14" Text="主题"/>
             </StackPanel>
             <Button Name="ChangeTheme" Grid.Row="3" Grid.Column="1" Content="切换" FontSize="14" Height="35" Click="ChangeTheme_Click"/>
-            <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Height="185.714">
+            <StackPanel Grid.Row="4" Grid.ColumnSpan="2">
                 <TextBlock VerticalAlignment="Center" Margin="0,10,0,0" FontWeight="Bold" FontSize="24" Text="关于"/>
                 <TextBlock VerticalAlignment="Center" Height="65" FontSize="15" Margin="30,10,0,0" Name="AboutText" d:Text="About"/>
                 <StackPanel Orientation="Horizontal">
@@ -85,6 +85,11 @@
                             </StackPanel>
                         </Button.Content>
                     </Button>
+
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <TextBlock VerticalAlignment="Center" FontSize="15" Margin="30,0,0,0"  Text="系统报告"/>
+                    <Button Style="{DynamicResource ButtonWarning.Small}" Content="查看" Margin="15,0,0,0" Click="CopySystemReport"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

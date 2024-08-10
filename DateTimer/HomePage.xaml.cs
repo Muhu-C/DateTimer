@@ -5,8 +5,6 @@ using System.Windows.Media;
 using HandyControl.Themes;
 using MsgBox = HandyControl.Controls.MessageBox;
 using DT_Lib;
-using Microsoft.Win32;
-using System.Net.NetworkInformation;
 
 namespace DateTimer
 {
@@ -18,6 +16,7 @@ namespace DateTimer
         #region 初始化
         public HomePage()
         {
+            Console.WriteLine("HomePage: Load");
             InitializeComponent();
             GetTime();
         }
@@ -64,6 +63,7 @@ namespace DateTimer
             {
                 while (true)
                 {
+                    Console.WriteLine("HomePage: GetTime");
                     await Dispatcher.BeginInvoke(new Action(delegate { TimeText.Text = DateTime.Now.ToString("yyyy/MM/dd ddd"); }));
                     await Task.Delay(10000);
                 }
@@ -72,6 +72,7 @@ namespace DateTimer
 
         private void GoToSetting_Click(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine("HomePage.GoToSetting");
             MainWindow.Cur.ContentFrame.Navigate(App.Setting);
             MainWindow.Cur.SettingButton.IsSelected = true;
             MainWindow.Cur.HomeButton.IsSelected = false;
@@ -82,13 +83,15 @@ namespace DateTimer
         {
             if (!App.Timer.IsVisible)
             {
+                Console.WriteLine("TimeTable.Show");
                 App.Timer.Show();
-                //App.Timer.Reload();
+                App.Timer.Reload();
                 ShowTimeTable.Style = FindResource("ButtonWarning") as Style;
                 ShowTimeTable.Content = "隐藏时间表";
             }
             else if (App.Timer.IsVisible)
             {
+                Console.WriteLine("TimeTable.Hide");
                 App.Timer.Hide();
                 ShowTimeTable.Style = FindResource("ButtonSuccess") as Style;
                 ShowTimeTable.Content = "显示时间表";

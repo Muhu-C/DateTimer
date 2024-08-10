@@ -7,7 +7,6 @@ using DT_Lib;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using MsgBox = HandyControl.Controls.MessageBox;
-using System.Threading;
 
 namespace DateTimer
 {
@@ -21,6 +20,7 @@ namespace DateTimer
         public TimerWindow()
         {
             InitializeComponent();
+            Console.WriteLine("TimerWindow: Show");
         }
         /// <summary>
         /// 重新加载窗口

@@ -55,6 +55,7 @@ namespace DateTimer
         private void Window_Loaded(object sender, RoutedEventArgs e) { Reload(); }
         public static void Reload() // 主窗口重载
         {
+            Console.WriteLine("MainWindow: Reload");
             try
             {
                 if (Cur != null) // 判断主窗口是否存在
@@ -71,12 +72,14 @@ namespace DateTimer
         {
             if (Visibility == Visibility.Visible) // 隐藏
             {
+                Console.WriteLine("MainWindow.Hide");
                 Hide();
                 ShowHideButtonIcon.Text = "\uE737";
                 ShowWindowButton.Header = "显示主窗口";
             }
             else // 显示
             {
+                Console.WriteLine("MainWindow.Show");
                 Show();
                 ShowHideButtonIcon.Text = "\uE727";
                 ShowWindowButton.Header = "隐藏主窗口";
@@ -87,19 +90,21 @@ namespace DateTimer
         {
             if (!App.Timer.IsVisible)
             {
+                Console.WriteLine("TimeTable.Show");
                 App.Timer.Show();
+                App.Timer.Reload();
                 App.Home.ShowTimeTable.Style = FindResource("ButtonWarning") as Style;
                 App.Home.ShowTimeTable.Content = "隐藏时间表";
             }
             else if (App.Timer.IsVisible)
             {
+                Console.WriteLine("TimeTable.Hide");
                 App.Timer.Hide();
                 App.Home.ShowTimeTable.Style = FindResource("ButtonSuccess") as Style;
                 App.Home.ShowTimeTable.Content = "显示时间表";
             }
         } // 显示或者隐藏时间表窗口
         #endregion
-
         private void SideMenu_SelectionChanged(object sender, HandyControl.Data.FunctionEventArgs<object> e) // 选中菜单内容
         {
             SideMenuItem s = e.Info as SideMenuItem;

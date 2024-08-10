@@ -43,7 +43,7 @@ namespace DateTimer
         public static List<string> changes = new List<string>();
         #endregion
         #region TimerPage加载
-        public TimerPage() { InitializeComponent(); DataContext = HomePage.viewModel;/* 使用 HomePage 的 BindingContent */ }
+        public TimerPage() { Console.WriteLine("TimerPage: Load"); InitializeComponent(); DataContext = HomePage.viewModel;/* 使用 HomePage 的 BindingContent */ }
         private void Page_Loaded(object sender, RoutedEventArgs e) { Theme.SetSkin(this, Theme.GetSkin(MainWindow.Cur)); Reload(); }
         public void Reload() // 重载
         {
