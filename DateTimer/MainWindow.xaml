@@ -7,13 +7,8 @@
         xmlns:local="clr-namespace:DateTimer"
         xmlns:prop="clr-namespace:DateTimer.Properties"
         mc:Ignorable="d"
-        Loaded="Window_Loaded"
+        Closing="Window_Closing"
         Title="控制台" MinHeight="450" MaxHeight="450" MinWidth="700" MaxWidth="700">
-    <Window.Resources>
-        <ResourceDictionary>
-            <FontFamily x:Key="IconFont">/DateTimer;Component/Icon/#Segoe Fluent Icons</FontFamily>
-        </ResourceDictionary>
-    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/><!--菜单-->

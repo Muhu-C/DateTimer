@@ -11,15 +11,11 @@ using System.Runtime.InteropServices;
 
 namespace DT_Lib
 {
-    /// <summary>
-    /// 时间转换
-    /// </summary>
+    /// <summary> 时间转换 </summary>
     public class TimeConverter // 时间转换
     {
         #region 字符串与年月日列表互转
-        /// <summary>
-        /// 把时间转为年月日8位字符串
-        /// </summary>
+        /// <summary> 把时间转为年月日8位字符串 </summary>
         /// <param name="year">年(返回4位)</param>
         /// <param name="month">月(返回2位)</param>
         /// <param name="day">日(返回2位)</param>
@@ -31,14 +27,9 @@ namespace DT_Lib
             a = yearQ + ' ' + monthQ + ' ' + dayQ; //按照格式拼接字符串
             return a;
         }
-        /// <summary>
-        /// 把年月日转为列表
-        /// </summary>
-        /// <param name="date">格式需为"YYYY MM DD"</param>
-        /// <returns>
-        /// Int类型列表
-        /// [0]:年 [1]:月 [2]:日
-        /// </returns>
+        /// <summary> 把年月日转为列表 </summary>
+        /// <param name="date">格式需为"yyyy MM dd"</param>
+        /// <returns> Int类型列表 [0]:年 [1]:月 [2]:日 </returns>
         public static List<int> Str2DateInt(string date)
         {
             string[] time = date.Split(' '); // 0 年 1 月 2 日
@@ -59,11 +50,9 @@ namespace DT_Lib
         #endregion
 
         #region 字符串与DateTime互转
-        /// <summary>
-        /// 字符串转DateTime类型
-        /// </summary>
+        /// <summary> 字符串转DateTime类型 </summary>
         /// <param name="dtstr">格式: yyyy MM dd</param>
-        /// <returns>DateTime类</returns>
+        /// <returns> DateTime 类 </returns>
         public static DateTime Str2Date(string dtstr)
         {
             DateTime dt = DateTime.Now;
@@ -72,36 +61,24 @@ namespace DT_Lib
                 dt = DateTime.ParseExact(dtstr,"yyyy MM dd", null);
                 return dt;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("运行错误",ex.Message);
-                return dt;
-            }
+            catch (Exception ex) { throw ex; }
         }
-        /// <summary>
-        /// DateTime类型转string
-        /// </summary>
+        /// <summary> DateTime 类型转 string </summary>
         /// <param name="dateTime"></param>
-        /// <returns></returns>
+        /// <returns> 格式: yyyy MM dd </returns>
         public static string Date2Str(DateTime dateTime)
         {
-            string a = string.Empty;
-            try { a = dateTime.Year.ToString("0000") + " " + dateTime.Month.ToString("00") + " " + dateTime.Day.ToString("00"); }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
-            return a;
+            try { return dateTime.Year.ToString("0000") + " " + dateTime.Month.ToString("00") + " " + dateTime.Day.ToString("00"); }
+            catch (Exception ex) { throw ex; }
         }
 
         #endregion
 
         #region 列表和时分字符串互转
-        /// <summary>
-        /// 把时间4位字符串转为列表
-        /// </summary>
+
+        /// <summary> 把时间4位字符串转为列表 </summary>
         /// <param name="str">格式须为 "HH MM"</param>
-        /// <returns>
-        /// Int类型列表
-        /// [0]:时 [1]:分
-        /// </returns>
+        /// <returns> Int类型列表 [0]:时 [1]:分 </returns>
         public static List<int> Str2TimeInt(string time, char split = ' ')
         {
             string[] times = time.Split(split); // times[0]为时 times[1]为分
@@ -113,20 +90,19 @@ namespace DT_Lib
             }
             return TimeList;
         }
-        /// <summary>
-        /// 把列表转为时间4位字符串
-        /// </summary>
+
+        /// <summary> 把列表转为时间4位字符串 </summary>
         /// <param name="list">格式需为 [0]:时 [1]:分</param>
         /// <returns>字符串 "HH MM"</returns>
         public static string TimeInt2Str(List<int> list, char Insert = ' ')
         {
-            string HH = list[0].ToString("00");
-            string MM = list[1].ToString("00");
-            return HH + Insert + MM;
+            return list[0].ToString("00") + Insert + list[1].ToString("00");
         }
+
         #endregion
 
         #region 时分列表和TimeSpan互转
+
         /// <summary>
         /// 把列表转为TimeSpan时间
         /// </summary>
@@ -134,16 +110,9 @@ namespace DT_Lib
         /// <returns></returns>
         public static TimeSpan Int2Time(List<int> list)
         {
-            try
-            {
-                TimeSpan time = DateTime.Parse(TimeInt2Str(list, ':')).TimeOfDay;
-                return time;
-            }
-            catch ( Exception ex )
-            {
-                throw ex;
-            }
+            return DateTime.Parse(TimeInt2Str(list, ':')).TimeOfDay;
         }
+
         /// <summary>
         /// 把列表转为TimeSpan时间
         /// </summary>
@@ -151,11 +120,9 @@ namespace DT_Lib
         /// <returns>Int列表 [0]:时 [1]:分</returns>
         public static List<int> Time2Int(TimeSpan time)
         {
-            List<int> list = new List<int>();
-            list.Add(time.Hours);
-            list.Add(time.Minutes);
-            return list;
+            return new List<int> { time.Hours, time.Minutes };
         }
+
         #endregion
 
         public static string JsonTime2DisplayTime(string time)
@@ -171,62 +138,44 @@ namespace DT_Lib
             string result = "";
             int numIndex = numStr.IndexOf(num);
             if (numIndex > -1)
-            {
                 result = chineseStr.Substring(numIndex, 1);
-            }
             return result;
         }
     }
-    /// <summary>
-    /// 文件流处理
-    /// </summary>
+
+    /// <summary> 文件流处理 </summary>
     public class FileProcess // 文件流处理
     {
-        /// <summary>
-        /// 用流写入文件
-        /// </summary>
+        /// <summary> 用流写入文件 </summary>
         /// <param name="Text">字符串</param>
         /// <param name="Path">存放位置</param>
         public static void WriteFile(string Text,string Path)
         {
-            byte[] myByte = Encoding.UTF8.GetBytes(Text);
-            using (FileStream fsWrite = new FileStream(Path, FileMode.Create))
+            using (StreamWriter sw = new StreamWriter(Path, false, Encoding.UTF8))
             {
-                fsWrite.Write(myByte, 0, myByte.Length);
-            };
+                sw.Write(Text);
+            }
         }
         
-        /// <summary>
-        /// 用流读取文件
-        /// </summary>
+        /// <summary> 用流读取文件 </summary>
         /// <param name="Path">文件路径</param>
         /// <returns></returns>
         public static string ReadFile(string Path)
         {
-            try
+            using (StreamReader sr = new StreamReader(Path))
             {
-                string Content; // 通过文件流读取文件，有效防止占用导致程序错误
-                using (FileStream fsRead = new FileStream(Path, FileMode.Open))
-                {
-                    int fsLen = (int)fsRead.Length;
-                    byte[] heByte = new byte[fsLen];
-                    int r = fsRead.Read(heByte, 0, heByte.Length);
-                    Content = Encoding.UTF8.GetString(heByte);
-                }
-                return Content;
+                string content;
+                content = sr.ReadToEnd();
+                return content;
             }
-            catch (Exception ex) { throw ex; }
         }
     }
-    /// <summary>
-    /// 时间表处理
-    /// </summary>
+
+    /// <summary> 时间表处理 </summary>
     public class TimeTable
     {
         #region timetable-JSON
-        /// <summary>
-        /// ViewModel基础类
-        /// </summary>
+        /// <summary> ViewModel基础类 </summary>
         public abstract class ViewModelBase : INotifyPropertyChanged
         {
             public event PropertyChangedEventHandler PropertyChanged;
@@ -253,25 +202,19 @@ namespace DT_Lib
                 return propertyName;
             }
         }
-        /// <summary>
-        /// json 反序列化的类
-        /// </summary>
+        /// <summary> json 反序列化的类 </summary>
         public class TimeTableFile // json第一层
         {
             public List<Timetables> timetables { get; set; } // 第二层
         }
-        /// <summary>
-        /// 时间表列表类
-        /// </summary>
+        /// <summary> 时间表列表类 </summary>
         public class Timetables // json第二层
         {
             public string date { get; set; }
             public string weekday { get; set; }
             public List<Table> tables { get; set; } // 第三层
         }
-        /// <summary>
-        /// 时间表类
-        /// </summary>
+        /// <summary> 时间表类 </summary>
         public class Table // json第三层
         {
             public string name { get; set; }
@@ -279,9 +222,7 @@ namespace DT_Lib
             public string end { get; set; }
             public string notice { get; set; }
         }
-        /// <summary>
-        /// 时间表显示类
-        /// </summary>
+        /// <summary> 时间表显示类 </summary>
         public class TableEntry
         {
             public string Name { get; set; }
@@ -289,10 +230,10 @@ namespace DT_Lib
             public string Notice {  get; set; }
         }
         #endregion
+
         #region 处理
-        /// <summary>
-        /// 反序列化时间表 json 文件
-        /// </summary>
+
+        /// <summary> 反序列化时间表 json 文件 </summary>
         /// <param name="Path">json 位置</param>
         /// <returns>时间表类</returns>
         public static TimeTableFile GetTimetables(string Path)
@@ -303,9 +244,8 @@ namespace DT_Lib
             catch(Exception ex) { throw ex; } // 错误处理
             return tables;
         }
-        /// <summary>
-        /// 序列化并写入时间表 json
-        /// </summary>
+
+        /// <summary> 序列化并写入时间表 json </summary>
         /// <param name="table">时间表类</param>
         /// <param name="Path">时间表文件位置</param>
         public static void WriteTimetables(TimeTableFile table,string Path)
@@ -313,9 +253,8 @@ namespace DT_Lib
             string timetablejson = JsonConvert.SerializeObject(table);
             FileProcess.WriteFile(timetablejson, Path);
         }
-        /// <summary>
-        /// 将时间表Table类转为显示时间表TableEntry类
-        /// </summary>
+
+        /// <summary> 将时间表Table类转为显示时间表TableEntry类 </summary>
         /// <param name="table">时间表Table类</param>
         /// <returns>时间表TableEntry类</returns>
         public static TableEntry Table2Entry(Table table)
@@ -328,9 +267,8 @@ namespace DT_Lib
             entry.Time = time1 + "~" + time2;
             return entry;
         }
-        /// <summary>
-        /// 获取当前所在时间段
-        /// </summary>
+
+        /// <summary> 获取当前所在时间段 </summary>
         /// <param name="table"></param>
         /// <returns>当前时间在时间段的Index</returns>
         public static List<int> GetCurZone(List<Table> tables)
@@ -357,9 +295,8 @@ namespace DT_Lib
             }
             catch (Exception ex) { throw ex; }
         }
-        /// <summary>
-        /// 获取当天对应时间表
-        /// </summary>
+
+        /// <summary> 获取当天对应时间表 </summary>
         /// <param name="timetables">时间表类</param>
         /// <returns>索引</returns>
         public static int GetTodayList(List<Timetables> timetables)
@@ -389,10 +326,9 @@ namespace DT_Lib
             }
             return l;
         }
-        /// <summary>
-        /// 将时间表json的星期日转为汉字文本
-        /// </summary>
-        /// <param name="jsonweekday">时间表json的星期日</param>
+
+        /// <summary> 将时间表 json 的星期日转为汉字文本 </summary>
+        /// <param name="jsonweekday">时间表 json 的星期日</param>
         /// <returns>汉字文本</returns>
         public static string GetWeekday(string jsonweekday)
         {
@@ -402,9 +338,8 @@ namespace DT_Lib
                 outstr.Add("周" + TimeConverter.NumToTime(str));
             return String.Join(", ",outstr);
         }
-        /// <summary>
-        /// 将 json 字符串格式化
-        /// </summary>
+
+        /// <summary> 将 json 字符串格式化 </summary>
         /// <param name="oldjson">单行 json 字符串</param>
         /// <returns>格式化后的 json 字符串</returns>
         public static string Json_Optimization(string oldjson)
@@ -439,23 +374,20 @@ namespace DT_Lib
         }
         #endregion
     }
-    /// <summary>
-    /// 网络工具
-    /// </summary>
+
+    /// <summary> 网络工具 </summary>
     public class NetTool
     {
-        /// <summary>
-        /// ping 各个网站并返回延迟最小的
-        /// </summary>
-        /// <param name="strings">网站链接列表</param>
-        /// <returns>延迟最小网站的链接</returns>
+        /// <summary> ping 各个网站并返回延迟最小的 </summary>
+        /// <param name="strings"> 网站链接列表 </param>
+        /// <returns> 延迟最小网站的链接 </returns>
         public static string Pings(List<string> strings)
         {
             string minlink = string.Empty;
             long min = 2147483647;
             foreach (string s in strings)
             {
-                string s1 = s.Split('/')[2]; // 分割"https://www.example.com/aaa"中的"www.example.com"
+                string s1 = s.Split('/')[2]; // 分割域名
                 Ping ping = new Ping();
                 try
                 {
@@ -474,25 +406,33 @@ namespace DT_Lib
             }
             return minlink;
         }
-
     }
-    /// <summary>
-    /// 其他工具
-    /// </summary>
+
+    /// <summary> 其他工具 </summary>
     public class OtherTools
     {
-        /// <summary>
-        /// 将修改列表去重
-        /// </summary>
+        /// <summary> 连接多个字符串 </summary>
+        /// <param name="connecter"> 连接字符串的方式 </param>
+        /// <param name="args"> 多个字符串 </param>
+        /// <returns></returns>
+        public static string ConnectErrStr(string connecter, params string[] args)
+        {
+            string ret = string.Empty;
+            foreach (string s in args)
+                ret += (s + connecter);
+            return ret;
+        }
+
+        /// <summary> 将修改列表去重 </summary>
         /// <param name="strings">原修改列表</param>
         /// <returns>去重后的修改列表</returns>
-        public static List<string> Duplicate_Removal(List<string> strings)
+        public static List<string> DuplicateRemoval(List<string> strings)
         {
             List<string> list = new List<string>();
             int cnt = strings.Count;
             if (strings != null &&cnt > 0)
             {
-                strings = Class_Sort(strings);
+                strings = ClassSort(strings);
                 for (int i = 0;i < cnt;i++)
                 {
                     if (i != cnt - 1)
@@ -510,12 +450,13 @@ namespace DT_Lib
             }
             return list;
         }
+
         /// <summary>
         /// 对列表进行分类排序
         /// </summary>
         /// <param name="strings">修改记录</param>
         /// <returns>排序后的修改记录</returns>
-        public static List<string> Class_Sort(List<string> strings)
+        public static List<string> ClassSort(List<string> strings)
         {
             List<List<string>> list2f = new List<List<string>>();
             List<string> list1f = new List<string>();
@@ -534,6 +475,7 @@ namespace DT_Lib
                     list1f.Add(list2f[i][j]);
             return list1f;
         }
+
         /// <summary>
         /// 获取 Windows 版本
         /// </summary>
@@ -566,6 +508,7 @@ namespace DT_Lib
                 }
             }
         }
+
         /// <summary>
         /// 获取运行时版本
         /// </summary>
@@ -575,6 +518,7 @@ namespace DT_Lib
             try { return RuntimeInformation.FrameworkDescription; }
             catch (Exception e) { throw e; }
         }
+
         /// <summary>
         /// 获取系统位数
         /// </summary>

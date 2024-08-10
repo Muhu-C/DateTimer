@@ -7,41 +7,50 @@ using DT_Lib;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using MsgBox = HandyControl.Controls.MessageBox;
+using System.Linq;
 
-namespace DateTimer
+namespace DateTimer.View
 {
     /// <summary>
     /// TimerWindow.xaml 的交互逻辑
     /// </summary>
     public partial class TimerWindow : HandyControl.Controls.Window
     {
-        public bool Run = false;
         public List<TimeTable.Table> tables = new List<TimeTable.Table>();
-        public TimerWindow()
+
+        public TimerWindow() { InitializeComponent(); }
+
+        public void Window_Loaded(object sender, RoutedEventArgs e) // 获取时间，获取当前所在时间段
         {
-            InitializeComponent();
-            Console.WriteLine("TimerWindow: Show");
+            if (App.ConfigData.Theme == 0)
+                Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
+            else Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
         }
-        /// <summary>
-        /// 重新加载窗口
-        /// </summary>
+
+        /// <summary> 重新加载窗口 </summary>
         public void Reload()
         {
             try
             {
-                TimeTable.TimeTableFile a = TimeTable.GetTimetables(App.ConfigData.Timetable_File); // 获取时间表
-                if (a != null) // 显示时间表
+                // 获取时间表
+                TimeTable.TimeTableFile a = TimeTable.GetTimetables(App.ConfigData.Timetable_File);
+                if (a != null)
                 {
+                    // 显示时间表
                     DataContext = CurrentTableEntry.model;
                     ObservableCollection<TimeTable.TableEntry> converted = new ObservableCollection<TimeTable.TableEntry>();
+
+                    // 获取当天所在的时间表
                     int ind = TimeTable.GetTodayList(a.timetables);
                     if (ind != -1)
                     {
-                        tables = a.timetables[ind].tables; // 当天所在的时间表
+                        tables = a.timetables[ind].tables; 
                         foreach (TimeTable.Table t in tables)
                             converted.Add(TimeTable.Table2Entry(t));
                         CurrentTableEntry.model.TableEntries = converted;
                     }
+
+                    // 无时间安排
                     else
                     {
                         ObservableCollection<TimeTable.TableEntry> nullentry = new ObservableCollection<TimeTable.TableEntry> { new TimeTable.TableEntry { Time = "无时间安排", Name = "未找到当天时间表" } };
@@ -57,23 +66,16 @@ namespace DateTimer
             }
             GetTime(); // 获取当前所在时间段，获取当前倒计时，并显示当前时间段
         }
-        public void Window_Loaded(object sender, RoutedEventArgs e) // 获取时间，获取当前所在时间段
-        {
-            if (App.ConfigData.Theme == 0)
-                Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
-            else Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
-            Reload();
-        }
+
         private void Window_Closing(object sender, CancelEventArgs e) 
         {
-            e.Cancel = true; Hide(); 
-            App.Home.ShowTimeTable.Style = FindResource("ButtonSuccess") as Style;
-            App.Home.ShowTimeTable.Content = "显示时间表";
+            e.Cancel = true; Hide();
+            MainWindow mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
+            mw.Home.ShowTimeTable.Style = FindResource("ButtonSuccess") as Style;
+            mw.Home.ShowTimeTable.Content = "显示时间表";
         }
 
-        /// <summary>
-        /// 异步重复执行获取时间
-        /// </summary>
+        /// <summary> 异步重复执行获取时间 </summary>
         public async void GetTime()
         {
             await Task.Run(async () =>
@@ -100,11 +102,9 @@ namespace DateTimer
                         catch (Exception ex) { App.Error("无", App.ErrorType.ProgramError, ex, false, true, true); return; }
                     }
                     catch (Exception ex) { App.Error("无", App.ErrorType.ProgresError, ex, false, true, false); return; }
-                    Console.WriteLine("TimerWindow: GetTime");
                     await Task.Delay(1000);
                 }
             });
-            Console.WriteLine("结束 执行");
         }
     }
 }

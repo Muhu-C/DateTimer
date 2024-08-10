@@ -8,8 +8,9 @@ using HandyControl.Themes;
 using DT_Lib;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
+using System.Linq;
 
-namespace DateTimer
+namespace DateTimer.View
 {
     /// <summary>
     /// TimerPage.xaml 的交互逻辑
@@ -17,35 +18,35 @@ namespace DateTimer
     public partial class TimerPage : Page
     {
         #region TimerPage变量定义
-        /// <summary>
-        /// 时间表文件
-        /// </summary>
+        /// <summary> 时间表文件 </summary>
         public TimeTable.TimeTableFile a;
-        /// <summary>
-        /// 选中 "a" 的当前时间表
-        /// </summary>
+        /// <summary> 选中 "a" 的当前时间表 </summary>
         public List<TimeTable.Timetables> timetables = new List<TimeTable.Timetables> ();
-        /// <summary>
-        /// 选中 "a" 的当前时间表的实际内容
-        /// </summary>
+        /// <summary> 选中 "a" 的当前时间表的实际内容 </summary>
         public List<TimeTable.Table> tables = new List<TimeTable.Table>(); // 选中的时间表
-        /// <summary>
-        /// 时间表下标列表
-        /// </summary>
+        /// <summary> 时间表下标列表 </summary>
         public List<int> indexes = new List<int>();
-        /// <summary>
-        /// 选中的时间表下标
-        /// </summary>
+        /// <summary> 选中的时间表下标 </summary>
         public static int selected_ind = -1;
-        /// <summary>
-        /// 存入的修改
-        /// </summary>
+        /// <summary> 存入的修改 </summary>
         public static List<string> changes = new List<string>();
         #endregion
+
         #region TimerPage加载
-        public TimerPage() { Console.WriteLine("TimerPage: Load"); InitializeComponent(); DataContext = HomePage.viewModel;/* 使用 HomePage 的 BindingContent */ }
-        private void Page_Loaded(object sender, RoutedEventArgs e) { Theme.SetSkin(this, Theme.GetSkin(MainWindow.Cur)); Reload(); }
-        public void Reload() // 重载
+
+        public TimerPage() 
+        {
+            InitializeComponent();
+            DataContext = HomePage.viewModel; // 使用 HomePage 的 BindingContent
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e) 
+        {
+            Theme.SetSkin(this, Theme.GetSkin(Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow));
+            Reload();
+        }
+
+        public void Reload()
         {
             #region 初始化
             changes = new List<string>();
@@ -53,6 +54,7 @@ namespace DateTimer
             TPEnd.IsEnabled = false;
             ElementTb.IsEnabled = false;
             NoticeTb.IsEnabled = false;
+
             HomePage.viewModel.TableEntries = new ObservableCollection<TimeTable.TableEntry>();
             TPStart.SelectedTime = DateTime.Now;
             TPEnd.SelectedTime = DateTime.Now;
@@ -62,15 +64,19 @@ namespace DateTimer
             #endregion
             try
             {
-                a = TimeTable.GetTimetables(App.ConfigData.Timetable_File); // 获取时间表
-                if (a != null) // 设置时间表
+                // 获取时间表
+                a = TimeTable.GetTimetables(App.ConfigData.Timetable_File);
+
+                // 设置时间表
+                if (a != null)
                 {
                     timetables = a.timetables;
                     int i = 0;
                     DropDownPanel.Children.Clear();
                     if (timetables != null)
                     {
-                        foreach (TimeTable.Timetables table in timetables) // 在下拉列表里添加日期
+                        // 在下拉列表里添加日期
+                        foreach (TimeTable.Timetables table in timetables) 
                         {
                             MenuItem item = new MenuItem();
                             if (table.date != "GENERAL")
@@ -88,6 +94,7 @@ namespace DateTimer
             catch (Exception ex) { App.Error("无", App.ErrorType.UnknownError, ex, false); }
         }
         #endregion
+
         #region 选择时间段
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -97,9 +104,9 @@ namespace DateTimer
                 TPStart.SelectedTime = new DateTime(TimeConverter.Int2Time(TimeConverter.Str2TimeInt(tables[a].start)).Ticks);
                 TPEnd.SelectedTime = new DateTime(TimeConverter.Int2Time(TimeConverter.Str2TimeInt(tables[a].end)).Ticks);
                 ElementTb.Text = tables[a].name;
-                if (tables[a].notice != "NULL")
-                    NoticeTb.Text = tables[a].notice;
+                if (tables[a].notice != "NULL") NoticeTb.Text = tables[a].notice;
                 else NoticeTb.Text = String.Empty;
+
                 TPStart.IsEnabled = true;
                 TPEnd.IsEnabled = true;
                 ElementTb.IsEnabled = true;
@@ -114,81 +121,107 @@ namespace DateTimer
             }
         }
         #endregion
+
         #region 更改当前日期数据
-        /// <summary>
-        /// 开始时间
-        /// </summary>
+
+        /// <summary> 开始时间 </summary>
         private void TPStart_SelectedTimeChanged(object sender, HandyControl.Data.FunctionEventArgs<DateTime?> e)
         {
+            // 设置开始时间
             string starttime = TPStart.SelectedTime.Value.ToString("HH mm");
-            try { if (selected_ind >= 0 && TPStart.IsEnabled) changes.Add("start%" + selected_ind + '%' + TimeList.SelectedIndex + '%' + starttime); }
-            catch(Exception ex) { App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true); }
+            try 
+            {
+                if (selected_ind >= 0 && TPStart.IsEnabled) changes.Add($"start%{selected_ind}%{TimeList.SelectedIndex}%{starttime}");
+            }
+            catch(Exception ex) 
+            {
+                App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true);
+            }
         }
-        /// <summary>
-        /// 结束时间
-        /// </summary>
+
+        /// <summary> 结束时间 </summary>
         private void TPEnd_SelectedTimeChanged(object sender, HandyControl.Data.FunctionEventArgs<DateTime?> e)
         {
+            // 设置结束时间
             string endtime = TPEnd.SelectedTime.Value.ToString("HH mm");
-            try { if (selected_ind >= 0 && TPEnd.IsEnabled) changes.Add("end%" + selected_ind+'%' +TimeList.SelectedIndex + '%' + endtime); }
-            catch (Exception ex) { App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true); }
+            try 
+            {
+                if (selected_ind >= 0 && TPEnd.IsEnabled) 
+                    changes.Add($"end%{selected_ind}%{TimeList.SelectedIndex}%{endtime}");
+            }
+            catch (Exception ex) 
+            {
+                App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true);
+            }
         }
-        /// <summary>
-        /// 事件名称
-        /// </summary>
+
+        /// <summary> 事件名称 </summary>
         private void ElementTb_TextChanged(object sender, TextChangedEventArgs e)
         {
+            // 设置事件名
             string text = ElementTb.Text;
-            try { if (selected_ind >= 0 && ElementTb.IsEnabled) changes.Add("name%" + selected_ind + '%' + TimeList.SelectedIndex + '%' + text); }
-            catch (Exception ex) { App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true); }
+            try 
+            {
+                if (selected_ind >= 0 && ElementTb.IsEnabled) changes.Add($"name%{selected_ind}%{TimeList.SelectedIndex}%{text}");
+            }
+            catch (Exception ex) 
+            {
+                App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true);
+            }
         }
-        /// <summary>
-        /// 事件提示
-        /// </summary>
+
+        /// <summary> 事件提示 </summary>
         private void NoticeTb_TextChanged(object sender, TextChangedEventArgs e)
         {
+            // 设置提示
             string text = NoticeTb.Text;
             if (selected_ind >= 0 && NoticeTb.IsEnabled)
             {
                 try
                 {
-                    if (text != string.Empty) changes.Add("notice%" + selected_ind + '%' + TimeList.SelectedIndex + '%' + text);
-                    else changes.Add("notice%" + selected_ind + '%' + TimeList.SelectedIndex + '%' + "NULL");
+                    if (text != string.Empty) changes.Add($"notice%{selected_ind}%{TimeList.SelectedIndex}%{text}");
+                    else changes.Add($"notice%{selected_ind}%{TimeList.SelectedIndex}%NULL");
                 }
                 catch (Exception ex) { App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true); }
             }
         }
-        /// <summary>
-        /// (未完成)双击新建一个指定日期的时间表 ##更改数据##
-        /// </summary>
+
+        /// <summary> (未完成)双击新建一个指定日期的时间表 ##更改数据## </summary>
         private void PickDate_Click(object sender, RoutedEventArgs e)
         {
-            changes.Add("new%" + "1 2" + '%' + "2020" + '%' + '0');
+            // 新建时间表
+            changes.Add("new%1 2 3%2222%22");
         }
         #endregion
+
         #region 选择日期 COMPLETED
         private void ItemClick(object sender, RoutedEventArgs e)
         {
-            MenuItem item = e.Source as MenuItem; // 读取按钮数据
+            // 更新选中的时间表
+            MenuItem item = e.Source as MenuItem;
             selected_ind = Convert.ToInt32(item.Tag);
-            ObservableCollection<TimeTable.TableEntry> converted = new ObservableCollection<TimeTable.TableEntry>(); // 新建显示的列表
-            tables = timetables[selected_ind].tables; // 更新选中的时间表
+            ObservableCollection<TimeTable.TableEntry> converted = new ObservableCollection<TimeTable.TableEntry>();
+            tables = timetables[selected_ind].tables;
 
-            string date = timetables[selected_ind].date; // 显示 SelectedTb 的日期或时间
+            // 显示日期或时间
+            string date = timetables[selected_ind].date; 
             string wday = TimeTable.GetWeekday(timetables[selected_ind].weekday);
             if (date != "GENERAL") SelectedTb.Text = date;
             else SelectedTb.Text = wday;
 
-            foreach (TimeTable.Table t in tables) { converted.Add(TimeTable.Table2Entry(t)); } // 转换时间表
-            HomePage.viewModel.TableEntries = converted; // 显示时间表
+            // 转换与显示时间表
+            foreach (TimeTable.Table t in tables) { converted.Add(TimeTable.Table2Entry(t)); }
+            HomePage.viewModel.TableEntries = converted; 
         }
         #endregion
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.Cur.ContentFrame.Navigate(App.Setting);
-            MainWindow.Cur.SettingButton.IsSelected = true;
-            MainWindow.Cur.TableButton.IsSelected = false;
+            // 转到设置页面
+            MainWindow mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
+            mw.ContentFrame.Navigate(mw.Setting);
+            mw.SettingButton.IsSelected = true;
+            mw.TableButton.IsSelected = false;
         }
 
         #region 保存
@@ -196,7 +229,7 @@ namespace DateTimer
         {
             try
             {
-                foreach (string s in OtherTools.Duplicate_Removal(changes)) // 保存修改（一期工程）
+                foreach (string s in OtherTools.DuplicateRemoval(changes)) // 保存修改（一期工程）
                 {
                     string[] L = s.Split('%'); // L[0]为属性, L[3]为属性值, L[1]和L[2]为位置
                     int indD = Convert.ToInt32(L[1]);

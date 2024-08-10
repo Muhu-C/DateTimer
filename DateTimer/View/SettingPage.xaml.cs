@@ -9,44 +9,65 @@ using Newtonsoft.Json;
 using HandyControl.Themes;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using System.Reflection;
+using System.Linq;
 
-namespace DateTimer
+namespace DateTimer.View
 {
     /// <summary>
     /// 设置页面的交互逻辑
     /// </summary>
     public partial class SettingPage : Page
     {
+        #region 页面加载
         public SettingPage()
         {
-            Console.WriteLine("SettingPage: Load");
+            // 初始化
             InitializeComponent();
             DataContext = HomePage.viewModel; // 使用 HomePage 的 BindingContent
         }
+
         private void Page_Loaded(object sender, RoutedEventArgs e) // 页面加载
         {
+            // 设置主题
+            MainWindow mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
             AboutText.Text = App.About;
             Reload();
-            Theme.SetSkin(this, Theme.GetSkin(MainWindow.Cur));
-            if (Theme.GetSkin(MainWindow.Cur) == HandyControl.Data.SkinType.Dark) { BiliImage.Source = new BitmapImage(new Uri("pack://application:,,,/Icon/bilibili-w.png")); GithubImage.Source = new BitmapImage(new Uri("pack://application:,,,/Icon/github-w.png")); }
-            else { BiliImage.Source = new BitmapImage(new Uri("pack://application:,,,/Icon/bilibili-d.png")); GithubImage.Source = new BitmapImage(new Uri("pack://application:,,,/Icon/github-d.png")); }
+            Theme.SetSkin(this, Theme.GetSkin(mw));
 
-        }
-        public void Reload() // 页面重载
-        {
-            TBTimerConfig.Text = App.ConfigData.Timetable_File; // 时间表文件
-            try { TTime.SelectedDate = DateTime.ParseExact(App.ConfigData.Target_Time, "yyyy MM dd", null); } // 尝试设定目标时间
-            catch { TTime.SelectedDate = DateTime.Now; } // 错误时将时间设为当天
-            if (App.ConfigData.Target_Type != "NULL") TName.Text = App.ConfigData.Target_Type; // 设置目标事件名
+            // 获取图片
+            if (Theme.GetSkin(mw) == HandyControl.Data.SkinType.Dark) 
+            {
+                BiliImage.Source = new BitmapImage(new Uri("pack://application:,,,/Icon/bilibili-w.png")); 
+                GithubImage.Source = new BitmapImage(new Uri("pack://application:,,,/Icon/github-w.png")); 
+            }
+            else 
+            {
+                BiliImage.Source = new BitmapImage(new Uri("pack://application:,,,/Icon/bilibili-d.png"));
+                GithubImage.Source = new BitmapImage(new Uri("pack://application:,,,/Icon/github-d.png"));
+            }
         }
 
-        private void ChangeTheme_Click(object sender, RoutedEventArgs e) // 更改主题并重启程序
+        public void Reload()
         {
+            // 设置初始文本
+            TBTimerConfig.Text = App.ConfigData.Timetable_File;
+            try { TTime.SelectedDate = DateTime.ParseExact(App.ConfigData.Target_Time, "yyyy MM dd", null); }
+            catch { TTime.SelectedDate = DateTime.Now; }
+            if (App.ConfigData.Target_Type != "NULL") TName.Text = App.ConfigData.Target_Type;
+        }
+        #endregion
+
+        #region 设置更改
+        private void ChangeTheme_Click(object sender, RoutedEventArgs e)
+        {
+            // 切换主题
+            MainWindow mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
             int theme;
-            if (Theme.GetSkin(MainWindow.Cur) == HandyControl.Data.SkinType.Default)
-                theme = 0;
+            if (Theme.GetSkin(mw) == HandyControl.Data.SkinType.Default) theme = 0;
             else theme = 1;
-            appconfig NewConfig = new appconfig // 重建配置文件
+
+            // 写入配置文件
+            appconfig NewConfig = new appconfig
             {
                 Theme = theme,
                 Target_Time = App.ConfigData.Target_Time,
@@ -54,13 +75,20 @@ namespace DateTimer
                 Timetable_File = App.ConfigData.Timetable_File
             };
             FileProcess.WriteFile(TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
-            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-            Environment.Exit(0);
+            App.LoadConfig();
+
+            // 重启程序
+            Application.Current.Shutdown();
+            System.Diagnostics.Process.Start(Assembly.GetExecutingAssembly().Location);
         }
-        private void BTTimerConfig_Click(object sender, RoutedEventArgs e) // 更改时间表位置
+
+        private void BTTimerConfig_Click(object sender, RoutedEventArgs e) 
         {
+            // 更改时间表位置
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "时间表专用配置文件|*.json";
+
+            // 判断路径合法
             if(openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 if (openFileDialog.FileName.Contains(AppDomain.CurrentDomain.BaseDirectory))
@@ -68,44 +96,38 @@ namespace DateTimer
                     string a = openFileDialog.FileName.Substring(AppDomain.CurrentDomain.BaseDirectory.Length, openFileDialog.FileName.Length - AppDomain.CurrentDomain.BaseDirectory.Length);
                     if (a != "Config\\config.json")
                     {
-                        appconfig NewConfig = new appconfig // 重建配置文件
+                        // 写入配置文件
+                        appconfig NewConfig = new appconfig
                         {
                             Theme = App.ConfigData.Theme,
                             Target_Time = App.ConfigData.Target_Time,
                             Target_Type = App.ConfigData.Target_Type,
                             Timetable_File = a
                         };
+
+                        // 检验配置
                         try
                         {
                             TimeTable.GetTimetables(a);
                             FileProcess.WriteFile(TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
+
                             App.LoadConfig(); // 重新加载 json
-                            MainWindow.Reload();
                             TimeTipIcon.Text = "\uE73E";
                             TimeTip.Text = "更改成功";
                         }
                         catch (JsonSerializationException)
                         {
-                            MsgBox.Error("文件格式错误! ", "用户交互错误");
                             TimeTipIcon.Text = "\uE783";
                             TimeTip.Text = "文件格式错误";
                         }
-                    }
-                    else
-                    {
-                        MsgBox.Error("文件选择错误！");
-                        TimeTipIcon.Text = "\uE783";
-                        TimeTip.Text = "文件格式错误";
+                        return;
                     }
                 }
-                else
-                {
-                    MsgBox.Error("文件须在程序目录内！");
-                    TimeTipIcon.Text = "\uE783";
-                    TimeTip.Text = "文件须在程序目录内";
-                }
+                TimeTipIcon.Text = "\uE783";
+                TimeTip.Text = "文件错误";
             }
         }
+
         private void TTime_SelectedDateChanged(object sender, SelectionChangedEventArgs e) // 更改目标时间
         {
             string DateStr = TimeConverter.DateInt2Str(TTime.SelectedDate.Value.Year, TTime.SelectedDate.Value.Month, TTime.SelectedDate.Value.Day); // 把时间转为字符串
@@ -118,8 +140,8 @@ namespace DateTimer
             };
             FileProcess.WriteFile(TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
             App.LoadConfig(); // 重新加载 json
-            MainWindow.Reload();
         }
+
         private void TName_TextChanged(object sender, TextChangedEventArgs e) // 更改目标事件名
         {
             string Name = TName.Text;
@@ -136,7 +158,6 @@ namespace DateTimer
                 };
                 FileProcess.WriteFile(TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
                 App.LoadConfig(); // 重新加载 json
-                MainWindow.Reload();
             }
             else
             {
@@ -144,6 +165,7 @@ namespace DateTimer
                 Tip.Text = "未填写内容";
             }
         }
+        #endregion
 
         private void GotoGithubIssue(object sender, RoutedEventArgs e) { System.Diagnostics.Process.Start("https://github.com/Muhu-C/DateTimer/issues"); }
         private void GotoGiteeIssue(object sender, RoutedEventArgs e) { System.Diagnostics.Process.Start("https://gitee.com/zzhkjf/DateTimer/issues"); }

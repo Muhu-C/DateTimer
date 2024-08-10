@@ -1,4 +1,4 @@
-﻿<Page x:Class="DateTimer.TimerPage"
+﻿<Page x:Class="DateTimer.View.TimerPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -10,15 +10,6 @@
       d:Background="White"
       Loaded="Page_Loaded"
       Title="TimerPage">
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-            <FontFamily x:Key="IconFont">/DateTimer;Component/Icon/#Segoe Fluent Icons</FontFamily>
-        </ResourceDictionary>
-    </Page.Resources>
     <Grid TextBlock.Foreground="{Binding TextColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="48"/>

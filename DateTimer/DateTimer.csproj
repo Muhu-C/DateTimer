@@ -53,10 +53,6 @@
     <ApplicationIcon>Icon\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DT_Lib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DT_Lib\bin\Debug\DT_Lib.dll</HintPath>
-    </Reference>
     <Reference Include="HandyControl, Version=3.5.1.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b, processorArchitecture=MSIL">
       <HintPath>..\packages\HandyControl.3.5.1\lib\net481\HandyControl.dll</HintPath>
     </Reference>
@@ -84,16 +80,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="HomePage.xaml.cs">
+    <Compile Include="View\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SettingPage.xaml.cs">
+    <Compile Include="View\SettingPage.xaml.cs">
       <DependentUpon>SettingPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimerPage.xaml.cs">
+    <Compile Include="View\TimerPage.xaml.cs">
       <DependentUpon>TimerPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimerWindow.xaml.cs">
+    <Compile Include="View\TimerWindow.xaml.cs">
       <DependentUpon>TimerWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
@@ -108,19 +104,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="HomePage.xaml">
+    <Page Include="View\HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SettingPage.xaml">
+    <Page Include="View\SettingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TimerPage.xaml">
+    <Page Include="View\TimerPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TimerWindow.xaml">
+    <Page Include="View\TimerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -179,10 +175,14 @@
     <Resource Include="Icon\github-w.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icon\icon.png" />
+    <Resource Include="Icon\icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icon\icon.ico" />
+    <ProjectReference Include="..\DT_Lib\DT_Lib.csproj">
+      <Project>{9441f0e4-ee45-4da9-bb77-76c45562b96f}</Project>
+      <Name>DT_Lib</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
