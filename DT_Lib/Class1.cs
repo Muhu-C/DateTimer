@@ -534,29 +534,27 @@ namespace DT_Lib
                     list1f.Add(list2f[i][j]);
             return list1f;
         }
-
+        /// <summary>
+        /// 获取 Windows 版本
+        /// </summary>
+        /// <returns>Windows 版本字符串</returns>
         public static string GetWinVer()
         {
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion"))
+            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion")) // 获取注册表目录
             {
-                string productName = key.GetValue("ProductName") as string;
-                int majorVersion = (int)key.GetValue("CurrentMajorVersionNumber");
-                var buildNumber = int.Parse(key.GetValue("CurrentBuildNumber").ToString());
+                string productName = key.GetValue("ProductName") as string; // 系统名称（Win11不适用）
+                int majorVersion = (int)key.GetValue("CurrentMajorVersionNumber"); // 系统版本
+                var buildNumber = int.Parse(key.GetValue("CurrentBuildNumber").ToString()); // 构建(大于22000为Win11)
 
                 if (!string.IsNullOrEmpty(productName) && productName.ToLower().Contains("windows"))
                 {
                     if (majorVersion > 10 || majorVersion == 10 && buildNumber >= 22000)
                     {
-                        return "Windows 11 Build "+buildNumber;
+                        if (majorVersion > 10) return "Windows " + majorVersion + " Build " + buildNumber;
+                        else return "Windows 11 Build "+buildNumber;
                     }
-                    else if (majorVersion == 10 && buildNumber < 22000)
-                    {
-                        return "Windows 10 Build " + buildNumber;
-                    }
-                    else
-                    {
-                        return productName;
-                    }
+                    else if (majorVersion == 10 && buildNumber < 22000) return "Windows 10 Build " + buildNumber;
+                    else return productName;
                 }
                 else return "错误";
             }
