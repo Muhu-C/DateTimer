@@ -8,6 +8,7 @@ using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Microsoft.Win32;
+using System.Runtime.InteropServices;
 
 namespace DT_Lib
 {
@@ -543,21 +544,48 @@ namespace DT_Lib
             using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion")) // 获取注册表目录
             {
                 string productName = key.GetValue("ProductName") as string; // 系统名称（Win11不适用）
-                int majorVersion = (int)key.GetValue("CurrentMajorVersionNumber"); // 系统版本
-                var buildNumber = int.Parse(key.GetValue("CurrentBuildNumber").ToString()); // 构建(大于22000为Win11)
-
-                if (!string.IsNullOrEmpty(productName) && productName.ToLower().Contains("windows"))
+                try
                 {
-                    if (majorVersion > 10 || majorVersion == 10 && buildNumber >= 22000)
+                    int majorVersion = (int)key.GetValue("CurrentMajorVersionNumber"); // 系统版本
+                    var buildNumber = int.Parse(key.GetValue("CurrentBuildNumber").ToString()); // 构建(大于22000为Win11)
+
+                    if (!string.IsNullOrEmpty(productName) && productName.ToLower().Contains("windows"))
                     {
-                        if (majorVersion > 10) return "Windows " + majorVersion + " Build " + buildNumber;
-                        else return "Windows 11 Build "+buildNumber;
+                        if (majorVersion > 10 || majorVersion == 10 && buildNumber >= 22000)
+                        {
+                            if (majorVersion > 10) return "Windows " + majorVersion + " Build " + buildNumber;
+                            else return "Windows 11 Build " + buildNumber;
+                        }
+                        else if (majorVersion == 10 && buildNumber < 22000) return "Windows 10 Build " + buildNumber;
+                        else return productName;
                     }
-                    else if (majorVersion == 10 && buildNumber < 22000) return "Windows 10 Build " + buildNumber;
-                    else return productName;
+                    else return "错误";
                 }
-                else return "错误";
+                catch
+                {
+                    return productName;
+                }
             }
+        }
+        /// <summary>
+        /// 获取运行时版本
+        /// </summary>
+        /// <returns>.NET 版本</returns>
+        public static string GetEnvVer()
+        {
+            try { return RuntimeInformation.FrameworkDescription; }
+            catch (Exception e) { return e.Message; }
+        }
+        /// <summary>
+        /// 获取系统位数
+        /// </summary>
+        /// <returns>64 或 32</returns>
+        public static int GetBit()
+        {
+            int n = 0;
+            if (Environment.Is64BitOperatingSystem) n = 64;
+            else n = 32;
+            return n;
         }
     }
 }

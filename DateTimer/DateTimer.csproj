@@ -173,9 +173,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Icon\bilibili-d.png" />
     <Resource Include="Icon\bilibili-w.png" />
     <Resource Include="Icon\github-d.png" />

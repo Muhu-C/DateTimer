@@ -63,7 +63,7 @@ namespace DateTimer
                     else Theme.SetSkin(Cur, HandyControl.Data.SkinType.Default);
                 }
             }
-            catch(Exception ex){ App.Error(ex.Message + '\n' + ex.Source, App.ErrorType.UnknownError,true); }
+            catch(Exception ex){ App.Error("无", App.ErrorType.UnknownError, ex, true); }
         }
         #endregion
         #region 任务栏图标事件
@@ -126,16 +126,16 @@ namespace DateTimer
                             SettingButton.IsSelected = false;
                             break;
                         default: // 这选的不对
-                            App.Error("你选了什么?\n选中内容为 "+tag,App.ErrorType.ProgramError,false);
+                            App.Error("你选了什么?\n选中内容为 "+tag,App.ErrorType.ProgramError, null, false);
                             break;
                     }
                 }
-                catch (Exception ex) { App.Error(ex.Message + '\n' + ex.Source, App.ErrorType.UnknownError, true); } // 未知错误的处理
+                catch (Exception ex) { App.Error("无", App.ErrorType.UnknownError, ex, true); } // 未知错误的处理
             }
             else // 错误时
             {
                 System.Diagnostics.Process.Start(App.FeedBackUrl);
-                App.Error("菜单内容为 NULL", App.ErrorType.ProgramError, false);
+                App.Error("菜单内容为 NULL", App.ErrorType.ProgramError, null, false);
             }
         }
     }

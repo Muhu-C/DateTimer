@@ -12,7 +12,7 @@
         Title="DateTimer - 窗口" MinHeight="450" Height="700" MaxHeight="700" MinWidth="400" MaxWidth="400">
     <Grid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0,20,0,0" VerticalAlignment="Top">
-            <TextBlock HorizontalAlignment="Center" x:Name="CountdownText" FontWeight="Bold" FontSize="20" Text="距目标 0 年 0 天 00 时 00 分 00 秒" />
+            <TextBlock HorizontalAlignment="Center" x:Name="CountdownText" FontWeight="Bold" FontSize="20" Text="已到达目标时间" />
             <ListView MaxHeight="590" MaxWidth="360" d:Width="360" d:Height="590" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible" x:Name="TimetableListView" Margin="20,20,20,20" ItemsSource="{Binding TableEntries}" d:ItemsSource="{d:SampleData ItemCount=5}">
                 <!--当天时间表的内容-->
                 <ListView.View>

@@ -1,5 +1,6 @@
 ﻿using DateTimer;
 using System;
+using System.Threading;
 using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -80,7 +81,7 @@ namespace DateTimer
         /// <param name="ShutDown">是否关闭程序</param>
         /// <param name="WindowType">true 为程序运行中的错误, false 为程序运行前的错误</param>
         /// <param name="FeedBack">是否反馈作者</param>
-        public static void Error(string ErrorMessage, ErrorType Type, bool ShutDown, bool WindowType = true, bool FeedBack = true)
+        public static void Error(string ErrorMessage, ErrorType Type, Exception ex, bool ShutDown, bool WindowType = true, bool FeedBack = true)
         {
             string ErrorText = "灾难性错误 - Fatal Error"; // 根据错误类型制定标题
             if (Type == ErrorType.ProgramError)
@@ -92,10 +93,25 @@ namespace DateTimer
             else if (Type == ErrorType.ProgresError)
                 ErrorText = "处理错误 - Progress Error";
 
-            if (FeedBack) { System.Diagnostics.Process.Start(FeedBackUrl); ErrorMessage += "\n请告知程序作者"; } // 反馈
-            if (WindowType) MsgBox.Error("错误原因: " + ErrorMessage, ErrorText); // 程序运行中发生错误
-            else System.Windows.Forms.MessageBox.Show("错误原因: " + ErrorMessage, ErrorText, System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);// 程序运行前发生错误
+            string message = string.Empty;
+            if (ex != null) message = "报错信息: " + ex.Message + "\n报错位置: " + ex.Source + "\n报错代码: \n" + ex.StackTrace + "\n报错数据类型: " + ex.Data + "\n提示: " + ErrorMessage ;
+            else message = ErrorMessage;
+            Clipboard.SetDataObject(message);
+
+            if (FeedBack) { System.Diagnostics.Process.Start(FeedBackUrl); message += "\n请告知程序作者, "; Thread.Sleep(100); } // 反馈
+            if (WindowType) MsgBox.Error(message + "已复制到剪贴板", ErrorText); // 程序运行中发生错误
+            else System.Windows.Forms.MessageBox.Show(message + "已复制到剪贴板", ErrorText, System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);// 程序运行前发生错误
             if (ShutDown) Environment.Exit(0); // 是否关闭程序
+        }
+        private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e) // 未知错误处理
+        {
+            e.Handled = true; //使用e.Handled能防止程序崩溃
+            Error("未知的错误", ErrorType.UnknownError, e.Exception, false, false, true);
+        }
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) // 未知错误处理
+        {
+            MessageBox.Show($"CurrentDomain_UnhandledException：" + (e.ExceptionObject as Exception).Message);
+            Error("未知的错误\n"+e.ToString(), ErrorType.UnknownError, null, false, false, true);
         }
         #endregion
         #region 程序配置
@@ -118,6 +134,10 @@ namespace DateTimer
             Console.WriteLine("程序开始");
             LoadConfig(); // 加载配置文件
             LoadNotice(); // 加载公告
+            //当应用程序引发但未处理异常时出现，UI线程的异常,无法捕获多线程异常
+            Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+            //当某个异常未被捕获时出现,Thread多线程和UI线程都可以捕获
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
         /// <summary>
         /// 加载Config/config.json文件
@@ -139,7 +159,7 @@ namespace DateTimer
                 Home.Reload();
                 Setting.Reload();
             }
-            catch(Exception) { Error("未找到程序配置，请检查下载文件是否完整", ErrorType.RunTimeError, true, false, false); } // 未找到文件时报错
+            catch(Exception ex) { Error("未找到程序配置，请检查下载文件是否完整\n", ErrorType.RunTimeError, ex, true, false, false); } // 未找到文件时报错
         }
         /// <summary>
         /// 公告文本

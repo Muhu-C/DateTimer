@@ -85,7 +85,7 @@ namespace DateTimer
                     }
                 }
             }
-            catch (Exception ex) { App.Error(ex.Message + '\n' + ex.Source, App.ErrorType.UnknownError, false); }
+            catch (Exception ex) { App.Error("无", App.ErrorType.UnknownError, ex, false); }
         }
         #endregion
         #region 选择时间段
@@ -122,7 +122,7 @@ namespace DateTimer
         {
             string starttime = TPStart.SelectedTime.Value.ToString("HH mm");
             try { if (selected_ind >= 0 && TPStart.IsEnabled) changes.Add("start%" + selected_ind + '%' + TimeList.SelectedIndex + '%' + starttime); }
-            catch(Exception ex) { App.Error(ex.Message + '\n' + ex.Source, App.ErrorType.UnknownError, false); }
+            catch(Exception ex) { App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true); }
         }
         /// <summary>
         /// 结束时间
@@ -131,7 +131,7 @@ namespace DateTimer
         {
             string endtime = TPEnd.SelectedTime.Value.ToString("HH mm");
             try { if (selected_ind >= 0 && TPEnd.IsEnabled) changes.Add("end%" + selected_ind+'%' +TimeList.SelectedIndex + '%' + endtime); }
-            catch (Exception ex) { App.Error(ex.Message + '\n' + ex.Source, App.ErrorType.UnknownError, false); }
+            catch (Exception ex) { App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true); }
         }
         /// <summary>
         /// 事件名称
@@ -140,7 +140,7 @@ namespace DateTimer
         {
             string text = ElementTb.Text;
             try { if (selected_ind >= 0 && ElementTb.IsEnabled) changes.Add("name%" + selected_ind + '%' + TimeList.SelectedIndex + '%' + text); }
-            catch (Exception ex) { App.Error(ex.Message + '\n' + ex.Source, App.ErrorType.UnknownError, false); }
+            catch (Exception ex) { App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true); }
         }
         /// <summary>
         /// 事件提示
@@ -155,7 +155,7 @@ namespace DateTimer
                     if (text != string.Empty) changes.Add("notice%" + selected_ind + '%' + TimeList.SelectedIndex + '%' + text);
                     else changes.Add("notice%" + selected_ind + '%' + TimeList.SelectedIndex + '%' + "NULL");
                 }
-                catch (Exception ex) { App.Error(ex.Message + '\n' + ex.Source, App.ErrorType.UnknownError, false); }
+                catch (Exception ex) { App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true); }
             }
         }
         /// <summary>
@@ -163,7 +163,7 @@ namespace DateTimer
         /// </summary>
         private void PickDate_Click(object sender, RoutedEventArgs e)
         {
-            changes.Add("new%" + "1 3 5" + '%' + "2020/02/02" + '%' + '0');
+            changes.Add("new%" + "1 2" + '%' + "2020" + '%' + '0');
         }
         #endregion
         #region 选择日期 COMPLETED
@@ -235,7 +235,7 @@ namespace DateTimer
                 // Console.Write(TimeTable.Json_Optimization(JsonConvert.SerializeObject(a) + "\n"));
                 changes.Clear();
             }
-            catch (Exception ex) { App.Error(ex.Message + '\n' + ex.Source, App.ErrorType.UnknownError, true, true, true); }
+            catch (Exception ex) { App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true, FeedBack: true); }
         }
         #endregion
     }

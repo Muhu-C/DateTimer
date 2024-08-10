@@ -29,9 +29,9 @@ namespace DateTimer
             DataContext = viewModel;
             if (Theme.GetSkin(MainWindow.Cur) == HandyControl.Data.SkinType.Dark)
                 viewModel.TextColor = Brushes.White; // 检测主题并更改文字颜色
+            //MsgBox.Show(OtherTools.GetEnvVer());
             //MsgBox.Show(OtherTools.GetWinVer());
             Reload();
-
         }
         public void Reload() // 重载
         {
@@ -52,7 +52,7 @@ namespace DateTimer
                     LinkAdd.Text = App.FNoticeUrl;
                 }));
             }
-            catch (Exception ex) { App.Error(ex.Message, App.ErrorType.UnknownError, false); }
+            catch (Exception ex) { App.Error(ex.Message, App.ErrorType.UnknownError, ex, false); }
         }
 
         /// <summary>
@@ -83,6 +83,7 @@ namespace DateTimer
             if (!App.Timer.IsVisible)
             {
                 App.Timer.Show();
+                //App.Timer.Reload();
                 ShowTimeTable.Style = FindResource("ButtonWarning") as Style;
                 ShowTimeTable.Content = "隐藏时间表";
             }
