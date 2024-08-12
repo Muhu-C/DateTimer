@@ -6,21 +6,23 @@
       xmlns:local="clr-namespace:DateTimer"
       xmlns:ui="https://handyorg.github.io/handycontrol"
       mc:Ignorable="d" 
+      ScrollViewer.VerticalScrollBarVisibility="Visible"
       Loaded="Page_Loaded"
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="520" d:DesignWidth="600"
+      d:Background="#F0F0F0"
       Title="SettingPage">
     <Grid TextBlock.Foreground="{Binding TextColor}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="6*"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="设置" FontWeight="Bold" FontSize="24"/>
         <Grid Grid.Row="1" Margin="20,0,20,20">
             <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="45"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -52,18 +54,20 @@
                 <TextBlock VerticalAlignment="Center"  FontSize="14" Text="主题"/>
             </StackPanel>
             <Button Name="ChangeTheme" Grid.Row="3" Grid.Column="1" Content="切换" FontSize="14" Height="35" Click="ChangeTheme_Click"/>
-            <StackPanel Grid.Row="4" Grid.ColumnSpan="2">
+            <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Margin="0,20,0,0">
                 <TextBlock VerticalAlignment="Center" Margin="0,10,0,0" FontWeight="Bold" FontSize="24" Text="关于"/>
-                <TextBlock VerticalAlignment="Center" Height="65" FontSize="15" Margin="30,10,0,0" Name="AboutText" d:Text="About"/>
-                <StackPanel Orientation="Horizontal">
+                <ui:Card Margin="15,10,0,0">
+                    <TextBlock VerticalAlignment="Center" Height="Auto" Margin="15,10,10,10" FontSize="16" Name="AboutText" d:Text="About"/>
+                </ui:Card>
+                <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
                     <TextBlock VerticalAlignment="Center" FontSize="15" Margin="30,0,0,0"  Text="问题反馈"/>
-                    <Button Style="{DynamicResource ButtonInfo.Small}" Content="Github" Margin="15,0,0,0" Click="GotoGithubIssue"/>
-                    <Button Style="{DynamicResource ButtonInfo.Small}" Content="Gitee" Margin="15,0,0,0" Click="GotoGiteeIssue"/>
+                    <Button Style="{DynamicResource ButtonInfo}" Content="Github" Margin="15,0,0,0" Click="GotoGithubIssue"/>
+                    <Button Style="{DynamicResource ButtonInfo}" Content="Gitee" Margin="15,0,0,0" Click="GotoGiteeIssue"/>
                     <TextBlock VerticalAlignment="Center" FontSize="15" Margin="15,0,0,0" Text="作者链接"/>
-                    <Button Style="{DynamicResource ButtonInfo.Small}" Margin="15,0,0,0" Click="GotoGithub">
+                    <Button Style="{DynamicResource ButtonInfo}" Margin="15,0,0,0" Click="GotoGithub">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">
-                                <Path Width="15" Height="15" Margin="0,0,1,0" Fill="{Binding TextColor}" Stretch="Uniform"  VerticalAlignment="Center"
+                                <Path Width="18" Height="18" Margin="0,0,1,0" d:Fill="Black" Fill="{Binding TextColor}" Stretch="Uniform"  VerticalAlignment="Center"
                                       Data="M960 512c0 97.76-28.704 185.216-85.664 263.264-56.96 78.016-130.496 131.84-220.64 161.856-10.304 1.824-18.368 0.448-22.848-4.032a22.4 
                                       22.4 0 0 1-7.2-17.504v-122.88c0-37.632-10.304-65.44-30.464-82.912a409.856 409.856 0 0 0 59.616-10.368 222.752 222.752 0 0 0 54.72-22.816c18.848-10.784 
                                       34.528-23.36 47.104-38.592 12.544-15.232 22.848-35.904 30.912-61.44 8.096-25.568 12.128-54.688 12.128-87.904 0-47.072-15.232-86.976-46.208-120.16 
@@ -84,10 +88,10 @@
                             </StackPanel>
                         </Button.Content>
                     </Button>
-                    <Button Style="{DynamicResource ButtonInfo.Small}" Margin="15,0,0,0" Click="GotoBilibili">
+                    <Button Style="{DynamicResource ButtonInfo}" Margin="15,0,0,0" Click="GotoBilibili">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">
-                                <Path Name="BiliImage" Margin="0,0,1.5,0" Fill="{Binding TextColor}" Width="15" Height="15" Stretch="Uniform" VerticalAlignment="Center"
+                                <Path Name="BiliImage" Margin="0,0,1.5,0" d:Fill="Black" Fill="{Binding TextColor}" Width="18" Height="18" Stretch="Uniform" VerticalAlignment="Center"
                                       Data="M977.2 208.2c33.4 36.2 48.8 79.4 46.6 131.4v404.8c-0.8 52.8-18.4 96.2-53 130.2-34.4 34-78.2 51.8-131 
                                       53.4H184.04c-52.9-1.6-96.42-19.6-130.56-54.4C19.364 838.8 1.534 793 0 736.4V339.6c1.534-52 19.364-95.2 53.48-131.4C87.62 
                                       175.5 131.14 157.54 184.04 156h58.76L192.1 104.38c-11.5-11.46-17.26-26-17.26-43.58 0-17.6 5.76-32.12 17.26-43.594C203.6 5.736 
@@ -106,7 +110,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <TextBlock VerticalAlignment="Center" FontSize="15" Margin="30,0,0,0"  Text="系统报告"/>
-                    <Button Style="{DynamicResource ButtonWarning.Small}" Content="查看" Margin="15,0,0,0" Click="CopySystemReport"/>
+                    <Button Style="{DynamicResource ButtonWarning}" Content="查看" Margin="15,0,0,0" Click="CopySystemReport"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

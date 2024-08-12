@@ -17,7 +17,7 @@
                 <!--当天时间表的内容-->
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Time}" Header="时间段" />
+                        <GridViewColumn Width="100" DisplayMemberBinding="{Binding Time}" Header="时间段" />
                         <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="事件" />
                         <GridViewColumn DisplayMemberBinding="{Binding Notice}" Header="提醒" />
                     </GridView>

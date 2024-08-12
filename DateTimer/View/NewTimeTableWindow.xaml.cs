@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using MsgBox = HandyControl.Controls.MessageBox;
@@ -27,6 +25,8 @@ namespace DateTimer.View
             if (App.ConfigData.Theme == 0) Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
             else Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
             InitializeComponent();
+            New.WDay = "GENERAL";
+            New.Date = "GENERAL";
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -35,12 +35,13 @@ namespace DateTimer.View
             mode = true;
             CheckBox c = (CheckBox)sender;
             Days.Add((string)c.Tag);
+            Days.Sort();
             New.WDay = String.Join(" ", Days);
-            InfoText.Text = "星期日 ->" + String.Join(" ",Days);
+            InfoText.Text = "星期日 ->" + Utils.TimeTable.GetWeekday(New.WDay);
 
             if (Days.Count == 0)
             {
-                New.WDay = "";
+                New.WDay = "GENERAL";
                 InfoText.Text = "星期日 -> 未选择";
             }
         }
@@ -52,12 +53,13 @@ namespace DateTimer.View
             mode = true;
             CheckBox c = (CheckBox)sender;
             Days.Remove((string)c.Tag);
+            Days.Sort();
             New.WDay = String.Join(" ", Days);
-            InfoText.Text = "星期日 ->" + String.Join(" ", Days);
+            InfoText.Text = "星期日 ->" + Utils.TimeTable.GetWeekday(New.WDay);
 
             if (Days.Count == 0)
             {
-                New.WDay = "";
+                New.WDay = "GENERAL";
                 InfoText.Text = "星期日 -> 未选择";
             }
         }
@@ -78,17 +80,29 @@ namespace DateTimer.View
         {
             // 设置模式为星期日
             DateT.SelectedDate = DateTime.Now;
+            New.Date = "GENERAL";
             New.Mode = true;
             mode = true;
             DayPanel.IsEnabled = true;
-            InfoText.Text = "星期日 ->v" + String.Join(" ", Days);
+            Days.Sort();
+            InfoText.Text = "星期日 -> " + Utils.TimeTable.GetWeekday(New.WDay);
+            if (Days.Count == 0)
+            {
+                New.WDay = "GENERAL";
+                InfoText.Text = "星期日 -> 未选择";
+            }
         }
 
         private void Commit_Click(object sender, RoutedEventArgs e)
         {
+            if (New.Date == "GENERAL" && New.WDay == "GENERAL")
+            {
+                MsgBox.Error("未选择日期或时间！", "警告");
+                return;
+            }
             if (New.Mode == true) 
             {
-                if(MsgBox.Show($"星期日: {New.WDay}", "请核对信息是否正确", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if(MsgBox.Show($"星期日: { Utils.TimeTable.GetWeekday(New.WDay) }", "请核对信息是否正确", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     (Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow)
                         .TimerPg.timetables.Add(new Utils.TimeTable.Timetables { date = "GENERAL", weekday = New.WDay, tables = new List<Utils.TimeTable.Table>() });
@@ -101,16 +115,16 @@ namespace DateTimer.View
                 if (MsgBox.Show($"日期: {New.Date}", "请核对信息是否正确", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     (Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow)
-                        .TimerPg.timetables.Add(new Utils.TimeTable.Timetables { date = New.Date, weekday = New.WDay, tables = new List<Utils.TimeTable.Table>() });
+                        .TimerPg.timetables.Add(new Utils.TimeTable.Timetables { date = New.Date, weekday = "GENERAL", tables = new List<Utils.TimeTable.Table>() });
                     (Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).TimerPg.isPickDateOpen = false;
                     Close();
                 }
             }
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e)
+        private void Cancel_Click(object sender, object e)
         {
-
+            Close();
         }
     }
 }

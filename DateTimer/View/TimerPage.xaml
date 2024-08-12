@@ -6,6 +6,7 @@
       xmlns:ui="https://handyorg.github.io/handycontrol"
       xmlns:local="clr-namespace:DateTimer"
       mc:Ignorable="d" 
+      Height="420"
       d:DesignHeight="400" d:DesignWidth="600"
       d:Background="White"
       Loaded="Page_Loaded"
@@ -37,7 +38,7 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
-            <ListView ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Column="0" Name="TimeList" ItemsSource="{Binding TableEntries}" Style="{DynamicResource ListView.Small}" SelectionChanged="ListView_SelectionChanged">
+            <ListView ScrollViewer.VerticalScrollBarVisibility="Visible" Name="TimeList" ItemsSource="{Binding TableEntries}" Style="{DynamicResource ListView.Small}" SelectionChanged="ListView_SelectionChanged">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Width="200" Header="时间段" DisplayMemberBinding="{Binding Time}"/>
@@ -46,9 +47,9 @@
             </ListView>
             <Grid Grid.Column="1" TextBlock.Foreground="{Binding TextColor}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="140"/>
+                    <RowDefinition Height="72"/>
                     <RowDefinition Height="2*"/>
-                    <RowDefinition Height="48"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0" Margin="10,0,6,0">
                     <Grid.ColumnDefinitions>
@@ -80,7 +81,7 @@
                         <ui:TimePicker Name="TPEnd" SelectedTimeChanged="TPEnd_SelectedTimeChanged" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" Width="160" TimeFormat="HH:mm" Style="{DynamicResource TimePickerBaseStyle}"/>
                     </Grid>
                 </Grid>
-                <Grid Grid.Row="1" Margin="6">
+                <Grid Grid.Row="1" Margin="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="76"/>
                         <ColumnDefinition/>
@@ -95,10 +96,16 @@
                     <TextBox Grid.Column="1" Grid.Row="0"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Name="ElementTb" d:Text="114514" TextChanged="ElementTb_TextChanged"/>
                     <TextBox Grid.Column="1" Grid.Row="1"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Name="NoticeTb" d:Text="1919810" TextChanged="NoticeTb_TextChanged"/>
                 </Grid>
-                <StackPanel Margin="20,10,20,10" Grid.Row="2" Orientation="Horizontal">
-                    <Button Content="新建时间表" Style="{DynamicResource ButtonPrimary}" Margin="0,0,20,0" Click="PickDate_Click"/>
-                    <Button Content="新建时间段" Style="{DynamicResource ButtonInfo}" Margin="0,0,20,0"/>
-                    <Button Content="检验并保存" Style="{DynamicResource ButtonSuccess}" Name="Save" Click="Save_Click"/>
+                <StackPanel Grid.Row="2">
+                    <StackPanel Margin="20,20,20,0" Orientation="Horizontal">
+                        <Button Content="删除当前时间表" Name="DelTable" Style="{DynamicResource ButtonDanger}" Margin="0,0,5,5" Click="DelTable_Click"/>
+                        <Button Content="删除当前时间段" Name="DelTime" Style="{DynamicResource ButtonDanger}" Margin="0,0,5,5" ButtonBase.Click="DelTime_Click"/>
+                    </StackPanel>
+                    <StackPanel Margin="20,0,20,10" Orientation="Horizontal">
+                        <Button Content="新建时间表" Style="{DynamicResource ButtonPrimary}" Margin="0,0,5,0" Click="PickDate_Click"/>
+                        <Button Content="新建时间段" Style="{DynamicResource ButtonInfo}" Name="NewTime" Margin="0,0,25,0" Click="NewTime_Click"/>
+                        <Button Content="检验并保存" Style="{DynamicResource ButtonSuccess}" Name="Save" Click="Save_Click"/>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </Grid>

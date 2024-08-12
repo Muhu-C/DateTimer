@@ -7,7 +7,7 @@
       xmlns:ui="https://handyorg.github.io/handycontrol"
       mc:Ignorable="d" 
       ui:Theme.Skin="Default"
-      d:DesignHeight="450" d:DesignWidth="600"
+      Height="420" d:DesignWidth="600"
       Loaded="Page_Loaded"
       d:Background="White"
       Title="HomePage">

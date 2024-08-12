@@ -22,17 +22,11 @@ namespace DateTimer.View
     {
         #region TimerPage变量定义
 
-        /// <summary> 时间表文件 </summary>
-        public Utils.TimeTable.TimeTableFile a;
-
-        /// <summary> 选中 "a" 的当前时间表 </summary>
         public List<Utils.TimeTable.Timetables> timetables = new List<Utils.TimeTable.Timetables> ();
 
-        /// <summary> 选中 "a" 的当前时间表的实际内容 </summary>
         public List<Utils.TimeTable.Table> tables = new List<Utils.TimeTable.Table>(); // 选中的时间表
 
-        /// <summary> 时间表下标列表 </summary>
-        public List<int> indexes = new List<int>();
+
 
         /// <summary> 选中的时间表下标 </summary>
         public static int selected_ind = -1;
@@ -41,7 +35,6 @@ namespace DateTimer.View
         public static List<ViewUtils.ChangeEvent> changes = new List<ViewUtils.ChangeEvent>();
 
         public bool isPickDateOpen = false;
-        public bool isPickTimeOpen = false;
 
         public string TimeTableFilePath = string.Empty;
 
@@ -61,14 +54,18 @@ namespace DateTimer.View
             Reload_First();
         }
 
+        /// <summary> 从文件开始重载 </summary>
         public void Reload_First()
         {
+            // 初始化
             #region 初始化
-            changes = new List<ViewUtils.ChangeEvent>();
             TPStart.IsEnabled = false;
             TPEnd.IsEnabled = false;
             ElementTb.IsEnabled = false;
             NoticeTb.IsEnabled = false;
+            NewTime.IsEnabled = false;
+            DelTable.IsEnabled = false;
+            DelTime.IsEnabled = false;
 
             HomePage.viewModel.TableEntries = new ObservableCollection<Utils.TimeTable.TableEntry>();
             TPStart.SelectedTime = DateTime.Now;
@@ -77,6 +74,8 @@ namespace DateTimer.View
             NoticeTb.Text = string.Empty;
             PosTb.Text = TimeTableFilePath;
             #endregion
+            changes = new List<ViewUtils.ChangeEvent>();
+            
             try
             {
                 // 判断时间表是否合法
@@ -87,12 +86,11 @@ namespace DateTimer.View
                 }
                 else EditGrid.Show();
 
+                Utils.TimeTable.TimeTableFile a;
+
                 // 获取时间表
                 try { a = Utils.TimeTable.GetTimetables(TimeTableFilePath); }
-                catch
-                {
-                    a = new Utils.TimeTable.TimeTableFile();
-                }
+                catch { a = new Utils.TimeTable.TimeTableFile(); }
 
                 // 设置时间表
                 if (a != null)
@@ -104,8 +102,26 @@ namespace DateTimer.View
             catch (Exception ex) { App.Error("无", App.ErrorType.UnknownError, ex, false); }
         }
 
+        /// <summary> 从类开始重载 </summary>
         private void Reload_Second()
         {
+            #region 初始化
+            TPStart.IsEnabled = false;
+            TPEnd.IsEnabled = false;
+            ElementTb.IsEnabled = false;
+            NoticeTb.IsEnabled = false;
+            NewTime.IsEnabled = false;
+            DelTable.IsEnabled = false;
+            DelTime.IsEnabled = false;
+
+            HomePage.viewModel.TableEntries = new ObservableCollection<Utils.TimeTable.TableEntry>();
+            TPStart.SelectedTime = DateTime.Now;
+            TPEnd.SelectedTime = DateTime.Now;
+            ElementTb.Text = string.Empty;
+            NoticeTb.Text = string.Empty;
+            PosTb.Text = TimeTableFilePath;
+            #endregion
+
             int i = 0;
             TimeSel.Items.Clear();
             if (timetables != null)
@@ -114,44 +130,19 @@ namespace DateTimer.View
                 foreach (Utils.TimeTable.Timetables table in timetables)
                 {
                     ComboBoxItem item = new ComboBoxItem();
-                    if (table.date != "GENERAL")
+                    if (table.date != "GENERAL") 
                         item.Content = table.date;
-                    else item.Content = Utils.TimeTable.GetWeekday(table.weekday);
-                    indexes.Add(i);
+                    else 
+                        item.Content = Utils.TimeTable.GetWeekday(table.weekday);
                     item.Tag = i;
                     TimeSel.Items.Add(item);
                     i++;
                 }
             }
         }
+
         #endregion
 
-        #region 选择时间段
-        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            int a = TimeSel.SelectedIndex;
-            if(a >= 0)
-            {
-                TPStart.SelectedTime = new DateTime(Utils.TimeConverter.Int2Time(Utils.TimeConverter.Str2TimeInt(tables[a].start)).Ticks);
-                TPEnd.SelectedTime = new DateTime(Utils.TimeConverter.Int2Time(Utils.TimeConverter.Str2TimeInt(tables[a].end)).Ticks);
-                ElementTb.Text = tables[a].name;
-                if (tables[a].notice != "NULL") NoticeTb.Text = tables[a].notice;
-                else NoticeTb.Text = String.Empty;
-
-                TPStart.IsEnabled = true;
-                TPEnd.IsEnabled = true;
-                ElementTb.IsEnabled = true;
-                NoticeTb.IsEnabled = true;
-            }
-            else
-            {
-                TPStart.IsEnabled = false;
-                TPEnd.IsEnabled = false;
-                ElementTb.IsEnabled = false;
-                NoticeTb.IsEnabled = false;
-            }
-        }
-        #endregion
 
         #region 更改当前日期数据
 
@@ -162,8 +153,15 @@ namespace DateTimer.View
             string starttime = TPStart.SelectedTime.Value.ToString("HH mm");
             try 
             {
-                if (selected_ind >= 0 && TPStart.IsEnabled) 
+                if (selected_ind >= 0 && TPStart.IsEnabled)
+                {
+                    int SelInd = TimeList.SelectedIndex;
+                    timetables[selected_ind].tables[TimeList.SelectedIndex].start = starttime;
                     changes.Add(new ViewUtils.ChangeEvent { ChangeClass = "start", ChangeContent = starttime, ChangeDate = selected_ind, ChangeTime = TimeList.SelectedIndex });
+                    Reload_Second();
+                    TimeSel.SelectedIndex = selected_ind;
+                    TimeList.SelectedIndex = SelInd;
+                }
             }
             catch(Exception ex) 
             {
@@ -179,7 +177,14 @@ namespace DateTimer.View
             try 
             {
                 if (selected_ind >= 0 && TPEnd.IsEnabled)
+                {
+                    int SelInd = TimeList.SelectedIndex;
+                    timetables[selected_ind].tables[TimeList.SelectedIndex].end = endtime;
                     changes.Add(new ViewUtils.ChangeEvent { ChangeClass = "end", ChangeContent = endtime, ChangeDate = selected_ind, ChangeTime = TimeList.SelectedIndex });
+                    Reload_Second();
+                    TimeSel.SelectedIndex = selected_ind;
+                    TimeList.SelectedIndex = SelInd;
+                }
             }
             catch (Exception ex) 
             {
@@ -195,7 +200,10 @@ namespace DateTimer.View
             try 
             {
                 if (selected_ind >= 0 && ElementTb.IsEnabled)
+                {
+                    timetables[selected_ind].tables[TimeList.SelectedIndex].name = text;
                     changes.Add(new ViewUtils.ChangeEvent { ChangeClass = "name", ChangeContent = text, ChangeDate = selected_ind, ChangeTime = TimeList.SelectedIndex });
+                }
             }
             catch (Exception ex) 
             {
@@ -212,8 +220,16 @@ namespace DateTimer.View
             {
                 try
                 {
-                    if (text != string.Empty) changes.Add(new ViewUtils.ChangeEvent { ChangeClass = "notice", ChangeContent = text, ChangeDate = selected_ind, ChangeTime = TimeList.SelectedIndex });
-                    else changes.Add(new ViewUtils.ChangeEvent { ChangeClass = "notice", ChangeContent = text, ChangeDate = selected_ind, ChangeTime = TimeList.SelectedIndex });
+                    if (text != string.Empty)
+                    {
+                        timetables[selected_ind].tables[TimeList.SelectedIndex].notice = text;
+                        changes.Add(new ViewUtils.ChangeEvent { ChangeClass = "notice", ChangeContent = text, ChangeDate = selected_ind, ChangeTime = TimeList.SelectedIndex });
+                    }
+                    else
+                    {
+                        timetables[selected_ind].tables[TimeList.SelectedIndex].notice = "NULL";
+                        changes.Add(new ViewUtils.ChangeEvent { ChangeClass = "notice", ChangeContent = "NULL", ChangeDate = selected_ind, ChangeTime = TimeList.SelectedIndex });
+                    }
                 }
                 catch (Exception ex) { App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true); }
             }
@@ -239,16 +255,73 @@ namespace DateTimer.View
 
         private void NewTime_Click(object sender, RoutedEventArgs e)
         {
+            timetables[selected_ind].tables.Add(new Utils.TimeTable.Table { name = "无", notice = "NULL", start = DateTime.Now.ToString("HH mm"), end = DateTime.Now.ToString("HH mm") });
+            Reload_Second();
+            TimeSel.SelectedIndex = selected_ind;
+        }
 
+
+        private void DelTable_Click(object sender, RoutedEventArgs e)
+        {
+            if (MsgBox.Show("是否删除当前时间表?", "警告", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                timetables.Remove(timetables[selected_ind]);
+                Reload_Second();
+            }
+        }
+
+        private void DelTime_Click(object sender, object e)
+        {
+            if (MsgBox.Show("是否删除当前时间段?", "警告", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                timetables[selected_ind].tables.Remove(timetables[selected_ind].tables[TimeList.SelectedIndex]);
+                Reload_Second();
+                TimeSel.SelectedIndex = selected_ind;
+            }
+        }
+
+        #endregion
+
+        #region 选择 - 时间段
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int a = TimeList.SelectedIndex;
+            if (a >= 0)
+            {
+                TPStart.SelectedTime = new DateTime(Utils.TimeConverter.Int2Time(Utils.TimeConverter.Str2TimeInt(tables[a].start)).Ticks);
+                TPEnd.SelectedTime = new DateTime(Utils.TimeConverter.Int2Time(Utils.TimeConverter.Str2TimeInt(tables[a].end)).Ticks);
+                ElementTb.Text = tables[a].name;
+                if (tables[a].notice != "NULL") NoticeTb.Text = tables[a].notice;
+                else NoticeTb.Text = String.Empty;
+
+                DelTime.IsEnabled = true;
+                TPStart.IsEnabled = true;
+                TPEnd.IsEnabled = true;
+                ElementTb.IsEnabled = true;
+                NoticeTb.IsEnabled = true;
+            }
+            else
+            {
+                DelTime.IsEnabled = false;
+                TPStart.IsEnabled = false;
+                TPEnd.IsEnabled = false;
+                ElementTb.IsEnabled = false;
+                NoticeTb.IsEnabled = false;
+            }
         }
         #endregion
 
-        #region 选择日期
+        #region 选择 - 日期
+
         private void ItemClick(object sender, RoutedEventArgs e)
         {
             // 更新选中的时间表
             ComboBoxItem item = TimeSel.SelectedItem as ComboBoxItem;
             if (item == null) return;
+
+            NewTime.IsEnabled = true;
+            DelTable.IsEnabled = true;
+
             selected_ind = Convert.ToInt32(item.Tag);
             ObservableCollection<Utils.TimeTable.TableEntry> converted = new ObservableCollection<Utils.TimeTable.TableEntry>();
             tables = timetables[selected_ind].tables;
@@ -263,6 +336,7 @@ namespace DateTimer.View
             foreach (Utils.TimeTable.Table t in tables) { converted.Add(Utils.TimeTable.Table2Entry(t)); }
             HomePage.viewModel.TableEntries = converted; 
         }
+
         #endregion
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -284,19 +358,52 @@ namespace DateTimer.View
         }
 
         #region 保存
+
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                foreach (object s in changes) // 保存修改（二期工程）
+                List<ViewUtils.ChangeEvent> changes_sorted = Utils.OtherTools.Duplicate_Removal(changes);
+                string str = "将会应用以下更改: \n";
+
+                foreach (ViewUtils.ChangeEvent change in changes_sorted)
                 {
-                    ViewUtils.ChangeEvent change = (ViewUtils.ChangeEvent)s;
-                    Console.WriteLine($"更改 {change.ChangeDate} {change.ChangeTime} {change.ChangeClass} 为 {change.ChangeContent}");
+                    str += "    ";
+                    if (timetables[change.ChangeDate].date != "GENERAL") str += timetables[change.ChangeDate].date;
+                    else str += Utils.TimeTable.GetWeekday(timetables[change.ChangeDate].weekday);
+
+                    str += $" {Utils.TimeConverter.JsonTime2DisplayTime(timetables[change.ChangeDate].tables[change.ChangeTime].start)} ~ {Utils.TimeConverter.JsonTime2DisplayTime(timetables[change.ChangeDate].tables[change.ChangeTime].end)}";
+
+                    switch (change.ChangeClass)
+                    {
+                        case "name":
+                            str += " 事件名 -> ";
+                            break;
+                        case "notice":
+                            str += " 事件提示 -> ";
+                            break;
+                        case "start":
+                            str += " 开始时间 -> ";
+                            break;
+                        case "end":
+                            str += " 结束时间 -> ";
+                            break;
+                    }
+
+                    str += $"{change.ChangeContent} \n";
                 }
-                changes.Clear();
+                if (MsgBox.Show(str, "提示", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                {
+                    Utils.TimeTable.TimeTableFile file = new Utils.TimeTable.TimeTableFile { timetables=timetables };
+                    string fileStr = JsonConvert.SerializeObject(file);
+                    fileStr = Utils.TimeTable.Json_Optimization(fileStr);
+                    Utils.FileProcess.WriteFile(fileStr, TimeTableFilePath);
+                    changes.Clear();
+                }
             }
             catch (Exception ex) { App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true, FeedBack: true); }
         }
+
         #endregion
     }
 }

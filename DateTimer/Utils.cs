@@ -431,7 +431,65 @@ namespace DateTimer
                 return ret;
             }
 
-            
+            /// <summary>
+            /// 将修改列表去重
+            /// </summary>
+            /// <param name="changes">原修改列表</param>
+            /// <returns>去重后的修改列表</returns>
+            public static List<ViewUtils.ChangeEvent> Duplicate_Removal(List<ViewUtils.ChangeEvent> changes)
+            {
+                List<ViewUtils.ChangeEvent> list = new List<ViewUtils.ChangeEvent>();
+                int cnt = changes.Count;
+                if (changes != null && cnt > 0)
+                {
+                    changes = Class_Sort(changes);
+                    for (int i = 0; i < cnt; i++)
+                    {
+                        if (i != cnt - 1)
+                        {
+                            if (changes[i].ChangeTime != changes[i + 1].ChangeTime || changes[i].ChangeDate != changes[i + 1].ChangeDate || changes[i].ChangeClass != changes[i + 1].ChangeClass)
+                            {
+                                list.Add(changes[i]);
+                            }
+                        }
+                        else
+                        {
+                            list.Add(changes[i]);
+                        }
+                    }
+                }
+                return list;
+            }
+
+            /// <summary>
+            /// 对列表进行分类排序
+            /// </summary>
+            /// <param name="changes">修改记录</param>
+            /// <returns>排序后的修改记录</returns>
+            public static List<ViewUtils.ChangeEvent> Class_Sort(List<ViewUtils.ChangeEvent> changes)
+            {
+                List<List<ViewUtils.ChangeEvent>> list2f = new List<List<ViewUtils.ChangeEvent>>();
+                List<ViewUtils.ChangeEvent> list1f = new List<ViewUtils.ChangeEvent>();
+
+                foreach (ViewUtils.ChangeEvent change in changes)
+                {
+                    bool a = false;
+                    for (int i = 0; i < list2f.Count; i++)
+                    {
+                        if (list2f[i][0].ChangeDate == change.ChangeDate && list2f[i][0].ChangeTime == change.ChangeTime && list2f[i][0].ChangeClass == change.ChangeClass)
+                        {
+                            list2f[i].Add(change); 
+                            a = true;
+                        }
+                    }
+                    if (a == false) list2f.Add(new List<ViewUtils.ChangeEvent> { change });
+                }
+                for (int i = 0; i < list2f.Count; i++)
+                    for (int j = 0; j < list2f[i].Count; j++)
+                        list1f.Add(list2f[i][j]);
+                return list1f;
+            }
+
             /// <summary>
             /// 获取 Windows 版本
             /// </summary>

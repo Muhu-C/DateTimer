@@ -29,25 +29,5 @@ namespace DateTimer.View
             public string Date { get; set; }
             public string WDay { get; set; }
         }
-
-        /// <summary> 新建时间事件 </summary>
-        public class NewTimeEvent
-        {
-            public int DateIndex { get; set; }
-            public int TimeIndex { get; set; }
-        }
-
-        /// <summary> 删除时间表事件 </summary>
-        public class DelTableEvent
-        {
-            public int DateIndex { get; set; }
-        }
-
-        /// <summary> 删除时间事件 </summary>
-        public class DelTimeEvent
-        {
-            public int DateIndex { get; set; }
-            public int TimeIndex { get; set; }
-        }
     }
 }

@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Closing="Window_Closing"
         Title="控制台" MinHeight="450" MaxHeight="450" MinWidth="700" MaxWidth="700">
-    <Grid>
+    <Grid Width="700" Height="430">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/><!--菜单-->
             <ColumnDefinition/><!--内容-->
@@ -31,7 +31,11 @@
                 </ui:SideMenuItem.Icon>
             </ui:SideMenuItem>
         </ui:SideMenu>
-        <Frame x:FieldModifier="public" NavigationUIVisibility="Hidden" Grid.Column="1" x:Name="ContentFrame"/>
+        <ui:ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ui:ScrollViewer.Content>
+                <Frame ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" x:FieldModifier="public" NavigationUIVisibility="Hidden" x:Name="ContentFrame"/>
+            </ui:ScrollViewer.Content>
+        </ui:ScrollViewer>
         <ui:NotifyIcon Name="notifyIcon" x:FieldModifier="public" Click="notifyIcon_Click">
             <ui:NotifyIcon.ContextMenu>
                 <ContextMenu Width="180">
