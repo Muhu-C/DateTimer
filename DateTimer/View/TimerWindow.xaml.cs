@@ -1,9 +1,9 @@
 ﻿using System;
+using DateTimer;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using HandyControl.Themes;
-using DT_Lib;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using MsgBox = HandyControl.Controls.MessageBox;
@@ -16,7 +16,7 @@ namespace DateTimer.View
     /// </summary>
     public partial class TimerWindow : HandyControl.Controls.Window
     {
-        public List<TimeTable.Table> tables = new List<TimeTable.Table>();
+        public List<Utils.TimeTable.Table> tables = new List<Utils.TimeTable.Table>();
 
         public TimerWindow() { InitializeComponent(); }
 
@@ -33,27 +33,27 @@ namespace DateTimer.View
             try
             {
                 // 获取时间表
-                TimeTable.TimeTableFile a = TimeTable.GetTimetables(App.ConfigData.Timetable_File);
+                Utils.TimeTable.TimeTableFile a = Utils.TimeTable.GetTimetables(App.ConfigData.Timetable_File);
                 if (a != null)
                 {
                     // 显示时间表
                     DataContext = CurrentTableEntry.model;
-                    ObservableCollection<TimeTable.TableEntry> converted = new ObservableCollection<TimeTable.TableEntry>();
+                    ObservableCollection<Utils.TimeTable.TableEntry> converted = new ObservableCollection<Utils.TimeTable.TableEntry>();
 
                     // 获取当天所在的时间表
-                    int ind = TimeTable.GetTodayList(a.timetables);
+                    int ind = Utils.TimeTable.GetTodayList(a.timetables);
                     if (ind != -1)
                     {
                         tables = a.timetables[ind].tables; 
-                        foreach (TimeTable.Table t in tables)
-                            converted.Add(TimeTable.Table2Entry(t));
+                        foreach (Utils.TimeTable.Table t in tables)
+                            converted.Add(Utils.TimeTable.Table2Entry(t));
                         CurrentTableEntry.model.TableEntries = converted;
                     }
 
                     // 无时间安排
                     else
                     {
-                        ObservableCollection<TimeTable.TableEntry> nullentry = new ObservableCollection<TimeTable.TableEntry> { new TimeTable.TableEntry { Time = "无时间安排", Name = "未找到当天时间表" } };
+                        ObservableCollection<Utils.TimeTable.TableEntry> nullentry = new ObservableCollection<Utils.TimeTable.TableEntry> { new Utils.TimeTable.TableEntry { Time = "无时间安排", Name = "未找到当天时间表" } };
                         CurrentTableEntry.model.TableEntries = nullentry;
                     }
                 }
@@ -61,7 +61,7 @@ namespace DateTimer.View
             catch (Exception ex)
             {
                 DataContext = CurrentTableEntry.model;
-                ObservableCollection<TimeTable.TableEntry> errorentry = new ObservableCollection<TimeTable.TableEntry> { new TimeTable.TableEntry { Name = "错误", Time = "加载时间表失败", Notice = ex.Message } };
+                ObservableCollection<Utils.TimeTable.TableEntry> errorentry = new ObservableCollection<Utils.TimeTable.TableEntry> { new Utils.TimeTable.TableEntry { Name = "错误", Time = "加载时间表失败", Notice = ex.Message } };
                 CurrentTableEntry.model.TableEntries = errorentry;
             }
             GetTime(); // 获取当前所在时间段，获取当前倒计时，并显示当前时间段
@@ -82,10 +82,10 @@ namespace DateTimer.View
             {
                 while (IsVisible) // 程序运行中重复执行
                 {
-                    TimeSpan remainingTime = TimeConverter.Str2Date(App.ConfigData.Target_Time) - DateTime.Now; // 目标剩余时间
+                    TimeSpan remainingTime = Utils.TimeConverter.Str2Date(App.ConfigData.Target_Time) - DateTime.Now; // 目标剩余时间
                     try // 获取时间表，获取当前时间所在时间段
                     {
-                        List<int> inds = TimeTable.GetCurZone(tables);
+                        List<int> inds = Utils.TimeTable.GetCurZone(tables);
                         int ind = -1;
                         if (inds.Count != 0) ind = inds[0];
                         try

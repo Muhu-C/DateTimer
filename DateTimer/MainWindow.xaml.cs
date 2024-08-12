@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Windows;
 using HandyControl.Controls;
 using HandyControl.Themes;
@@ -15,14 +14,18 @@ namespace DateTimer
     {
         // 对 View 中页面的实例化
         public HomePage Home = new HomePage();
+
         public SettingPage Setting = new SettingPage();
+
         public TimerPage TimerPg = new TimerPage();
+
         public TimerWindow Timer = new TimerWindow();
 
         #region 窗口初始化与关闭操作
         public MainWindow()
         {
             InitializeComponent();
+
             ShowHideButtonIcon.Text = "\uE727";
             ShowWindowButton.Header = "隐藏主窗口";
             ContentFrame.Navigate(Home);
@@ -35,7 +38,10 @@ namespace DateTimer
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) // 关闭或隐藏
         {
             MessageBoxResult messageBoxResult = MsgBox.Show("是否关闭程序\n按\"是\"关闭程序\n按\"否\"隐藏到任务栏", "提示", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-            if (messageBoxResult == MessageBoxResult.Yes) Environment.Exit(0);
+
+            if (messageBoxResult == MessageBoxResult.Yes) 
+                Environment.Exit(0);
+
             else if (messageBoxResult == MessageBoxResult.No)
             {
                 e.Cancel = true;
@@ -45,6 +51,7 @@ namespace DateTimer
             }
             else e.Cancel = true;
         }
+
         #endregion
 
         #region 任务栏图标事件
@@ -92,8 +99,8 @@ namespace DateTimer
 
         private void SideMenu_SelectionChanged(object sender, HandyControl.Data.FunctionEventArgs<object> e) // 选中菜单内容
         {
-            
             SideMenuItem s = e.Info as SideMenuItem;
+
             if (s != null) // 正常运行
             {
                 try
@@ -124,10 +131,7 @@ namespace DateTimer
                 catch (Exception ex) { App.Error("无", App.ErrorType.UnknownError, ex, true); } // 未知错误的处理
             }
             else // 错误时
-            {
-                System.Diagnostics.Process.Start(App.FeedBackUrl);
                 App.Error("菜单内容为 NULL", App.ErrorType.ProgramError, null, false);
-            }
         }
     }
 }

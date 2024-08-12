@@ -50,7 +50,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon\icon.ico</ApplicationIcon>
+    <ApplicationIcon>Data\Icon\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HandyControl, Version=3.5.1.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b, processorArchitecture=MSIL">
@@ -80,8 +80,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utils.cs" />
     <Compile Include="View\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewTimeTableWindow.xaml.cs">
+      <DependentUpon>NewTimeTableWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SettingPage.xaml.cs">
       <DependentUpon>SettingPage.xaml</DependentUpon>
@@ -92,6 +96,7 @@
     <Compile Include="View\TimerWindow.xaml.cs">
       <DependentUpon>TimerWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ViewUtils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -105,6 +110,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewTimeTableWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -140,11 +149,11 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Resource Include="Icon\Segoe Fluent Icons.ttf" />
-    <None Include="Config\config.json">
+    <Resource Include="Data\Icon\Segoe Fluent Icons.ttf" />
+    <None Include="Data\Config\config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Config\timetable.json">
+    <None Include="Data\Config\timetable.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
@@ -169,20 +178,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icon\bilibili-d.png" />
-    <Resource Include="Icon\bilibili-w.png" />
-    <Resource Include="Icon\github-d.png" />
-    <Resource Include="Icon\github-w.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Icon\icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DT_Lib\DT_Lib.csproj">
-      <Project>{9441f0e4-ee45-4da9-bb77-76c45562b96f}</Project>
-      <Name>DT_Lib</Name>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </ProjectReference>
+    <Resource Include="Data\Icon\icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

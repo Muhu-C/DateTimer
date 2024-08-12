@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 using MsgBox = HandyControl.Controls.MessageBox;
-using DT_Lib;
 using Newtonsoft.Json;
 using HandyControl.Themes;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
@@ -33,18 +30,6 @@ namespace DateTimer.View
             AboutText.Text = App.About;
             Reload();
             Theme.SetSkin(this, Theme.GetSkin(mw));
-
-            // 获取图片
-            if (Theme.GetSkin(mw) == HandyControl.Data.SkinType.Dark) 
-            {
-                BiliImage.Source = new BitmapImage(new Uri("pack://application:,,,/Icon/bilibili-w.png")); 
-                GithubImage.Source = new BitmapImage(new Uri("pack://application:,,,/Icon/github-w.png")); 
-            }
-            else 
-            {
-                BiliImage.Source = new BitmapImage(new Uri("pack://application:,,,/Icon/bilibili-d.png"));
-                GithubImage.Source = new BitmapImage(new Uri("pack://application:,,,/Icon/github-d.png"));
-            }
         }
 
         public void Reload()
@@ -74,12 +59,14 @@ namespace DateTimer.View
                 Target_Type = App.ConfigData.Target_Type,
                 Timetable_File = App.ConfigData.Timetable_File
             };
-            FileProcess.WriteFile(TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
+            Utils.FileProcess.WriteFile(Utils.TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
             App.LoadConfig();
 
             // 重启程序
-            Application.Current.Shutdown();
+            App.AppMutex.Dispose();
+            (Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).Hide();
             System.Diagnostics.Process.Start(Assembly.GetExecutingAssembly().Location);
+            Environment.Exit(0);
         }
 
         private void BTTimerConfig_Click(object sender, RoutedEventArgs e) 
@@ -108,8 +95,8 @@ namespace DateTimer.View
                         // 检验配置
                         try
                         {
-                            TimeTable.GetTimetables(a);
-                            FileProcess.WriteFile(TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
+                            Utils.TimeTable.GetTimetables(a);
+                            Utils.FileProcess.WriteFile(Utils.TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
 
                             App.LoadConfig(); // 重新加载 json
                             TimeTipIcon.Text = "\uE73E";
@@ -130,7 +117,7 @@ namespace DateTimer.View
 
         private void TTime_SelectedDateChanged(object sender, SelectionChangedEventArgs e) // 更改目标时间
         {
-            string DateStr = TimeConverter.DateInt2Str(TTime.SelectedDate.Value.Year, TTime.SelectedDate.Value.Month, TTime.SelectedDate.Value.Day); // 把时间转为字符串
+            string DateStr = Utils.TimeConverter.DateInt2Str(TTime.SelectedDate.Value.Year, TTime.SelectedDate.Value.Month, TTime.SelectedDate.Value.Day); // 把时间转为字符串
             appconfig NewConfig = new appconfig // 重建配置文件
             {
                 Theme = App.ConfigData.Theme,
@@ -138,7 +125,7 @@ namespace DateTimer.View
                 Target_Type = App.ConfigData.Target_Type,
                 Timetable_File = App.ConfigData.Timetable_File
             };
-            FileProcess.WriteFile(TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
+            Utils.FileProcess.WriteFile(Utils.TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
             App.LoadConfig(); // 重新加载 json
         }
 
@@ -156,7 +143,7 @@ namespace DateTimer.View
                     Target_Type = Name,
                     Timetable_File = App.ConfigData.Timetable_File
                 };
-                FileProcess.WriteFile(TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
+                Utils.FileProcess.WriteFile(Utils.TimeTable.Json_Optimization(JsonConvert.SerializeObject(NewConfig)), App.configPath); // 流写入 json 文件
                 App.LoadConfig(); // 重新加载 json
             }
             else
@@ -175,9 +162,9 @@ namespace DateTimer.View
         {
             string Report = 
                   "生成时间: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") 
-                + "\n系统版本: " + OtherTools.GetWinVer()
-                + "\n系统位数: " + OtherTools.GetBit().ToString() 
-                + "\n运行时版本: " + OtherTools.GetEnvVer()
+                + "\n系统版本: " + Utils.OtherTools.GetWinVer()
+                + "\n系统位数: " + Utils.OtherTools.GetBit().ToString() 
+                + "\n运行时版本: " + Utils.OtherTools.GetEnvVer()
                 + "\nDateTimer 版本: " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
             MessageBoxResult r = MsgBox.Show(Report + "\n是否复制到剪贴板？", "系统报告", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.Yes);
             if(r == MessageBoxResult.Yes) Clipboard.SetDataObject(Report);

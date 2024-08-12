@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using HandyControl.Themes;
 using MsgBox = HandyControl.Controls.MessageBox;
-using DT_Lib;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -53,12 +52,14 @@ namespace DateTimer.View
         {
             string FNoticeUrl = string.Empty;
             string Notice_Text = string.Empty;
+
             try
             {
                 await Task.Run(() =>
                 {
                     WebClient webClient = new WebClient { Encoding = Encoding.UTF8 };
-                    string url = NetTool.Pings(App.NoticeUrl);
+                    string url = Utils.NetTool.Pings(App.NoticeUrl);
+
                     switch (url.Split('/')[2]) // 显示的公告地址
                     {
                         case "gitee.com": FNoticeUrl = "Gitee Raw"; break;
@@ -67,6 +68,7 @@ namespace DateTimer.View
                         case "raw.githubusercontent.com": FNoticeUrl = "Github Raw"; break;
                         default: break;
                     }
+
                     Notice_Text = webClient.DownloadString(url);
                     webClient.Dispose();
                 });
@@ -101,6 +103,7 @@ namespace DateTimer.View
         #endregion
 
         #region 显示/隐藏窗口
+
         private void ShowTimeTable_Click(object sender, RoutedEventArgs e)
         {
             MainWindow mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
@@ -120,6 +123,7 @@ namespace DateTimer.View
                 ShowTimeTable.Content = "显示时间表";
             }
         }
+
         #endregion
     }
 }

@@ -1,21 +1,15 @@
-﻿using DateTimer;
-using System;
+﻿using System;
 using System.Threading;
 using System.IO;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json;
 using MsgBox = HandyControl.Controls.MessageBox;
-using DT_Lib;
-using System.Net;
-using System.Text;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Media;
 using System.Reflection;
 using System.Linq;
-using System.Windows.Threading;
 
 namespace DateTimer
 {
@@ -24,6 +18,7 @@ namespace DateTimer
     {
         #region 静态变量
         public static string FeedBackUrl = "https://github.com/Muhu-C/DateTimer/issues";
+
         public static List<string> NoticeUrl = new List<string> 
         {
             "https://gitee.com/zzhkjf/NoticePage/raw/main/DATETIMER.NOTICE",
@@ -31,12 +26,17 @@ namespace DateTimer
             "https://mirror.ghproxy.com/https://raw.githubusercontent.com/Muhu-C/NoticePage/main/DATETIMER.NOTICE",
             "https://raw.githubusercontent.com/Muhu-C/NoticePage/main/DATETIMER.NOTICE"
         };
+
         public static string About = "DateTimer " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " By MC118CN\n使用 C#(.NET Framework) WPF HandyControls 编写\n本软件使用 MIT LICENSE, 转载请标明出处!"; // 关于程序
+        
         public static string Notice_Text = string.Empty;
+
         /// <summary> 配置数据 </summary>
         public static appconfig ConfigData;
-        public static string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config", "config.json");
-        public Mutex AppMutex;
+
+        public static string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Config", "config.json");
+
+        public static Mutex AppMutex;
         #endregion
 
         #region 错误文本显示以及处理
@@ -102,8 +102,10 @@ namespace DateTimer
         {
             try
             {
-                ConfigData = JsonConvert.DeserializeObject<appconfig>(FileProcess.ReadFile(configPath));
+                ConfigData = JsonConvert.DeserializeObject<appconfig>(Utils.FileProcess.ReadFile(configPath));
+
                 (Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).Home?.Reload();
+
                 (Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).Setting?.Reload();
             }
             catch(Exception ex) // 未找到文件
@@ -115,63 +117,83 @@ namespace DateTimer
         protected override void OnStartup(StartupEventArgs e)
         {
             AppMutex = new Mutex(true, Assembly.GetExecutingAssembly().GetName().Name, out var createNew);
+
             if (!createNew)
                 Error("已经有该程序启动！", ErrorType.ProgramError, null, true, WindowType: false, FeedBack: false);
+
             base.OnStartup(e);
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
-            AppMutex.ReleaseMutex();
-            base.OnExit(e);
+            try
+            {
+                // 关闭程序监视
+                AppMutex.ReleaseMutex();
+            }
+            finally
+            {
+                // 退出程序
+                base.OnExit(e);
+            }
         }
         #endregion
     }
+
     #region 其他类
+
     public class appconfig // Config/config.json 解析内容
     {
         public int Theme { get; set; } // 0 黑 1 白
+
         public string Target_Time { get; set; }
+
         public string Target_Type {  get; set; }
+
         public string Timetable_File { get; set; }
     }
-    public class TimerWindowViewModel : TimeTable.ViewModelBase // 实现实时更改时间表内容
+
+    public class TimerWindowViewModel : Utils.TimeTable.ViewModelBase // 实现实时更改时间表内容
     {
-        private ObservableCollection<TimeTable.TableEntry> tables;
-        public ObservableCollection<TimeTable.TableEntry> TableEntries
+        private ObservableCollection<Utils.TimeTable.TableEntry> tables;
+
+        public ObservableCollection<Utils.TimeTable.TableEntry> TableEntries
         {
             get { return tables; }
+
             set { tables = value; RaisePropertyChangedEvent("TableEntries"); }
         }
     }
-    /// <summary>
-    /// 静态类, 管理显示时间表的 ViewModel
-    /// </summary>
+
+    /// <summary> 静态类, 管理显示时间表的 ViewModel </summary>
     public static class CurrentTableEntry
     {
-        /// <summary>
-        /// [公用]当前时间表
-        /// </summary>
+        /// <summary> [公用]当前时间表 </summary>
         public static TimerWindowViewModel model = new TimerWindowViewModel();
     }
-    /// <summary>
-    /// HomePage 以及其他页面调用的 Binding ViewModel
-    /// </summary>
+
+    /// <summary> HomePage 以及其他页面调用的 Binding ViewModel </summary>
     public class BindContent : INotifyPropertyChanged // 通过 Foreground Binding 实时设置页面文本颜色
     {
         private Brush textColor;
+
         public Brush TextColor
         {
             get { return textColor; }
+
             set { if (textColor != value) { textColor = value; OnPropertyChanged("TextColor"); } }
         }
-        private ObservableCollection<TimeTable.TableEntry> tables;
-        public ObservableCollection<TimeTable.TableEntry> TableEntries
+
+        private ObservableCollection<Utils.TimeTable.TableEntry> tables;
+
+        public ObservableCollection<Utils.TimeTable.TableEntry> TableEntries
         {
             get { return tables; }
+
             set { tables = value; OnPropertyChanged("TableEntries"); }
         }
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string propertyName) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); }
     }
     #endregion

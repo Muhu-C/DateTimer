@@ -24,11 +24,15 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal">
                 <TextBlock FontSize="14" VerticalAlignment="Center" Text="时间表位置"/>
-                <TextBlock Name="PosTb" FontSize="14" VerticalAlignment="Center" d:Text="C:/awd/awd/awd/table.json" Margin="20,0,0,0"/>
+                <ui:ScrollViewer Height="24" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Grid MaxWidth="360">
+                        <TextBlock TextWrapping="Wrap" Name="PosTb" FontSize="12" VerticalAlignment="Center" d:Text="C:/awd/awd/awd/table.json" Margin="20,0,0,0" />
+                    </Grid>
+                </ui:ScrollViewer>
             </StackPanel>
-            <Button Grid.Column="1" Style="{DynamicResource ButtonPrimary.Small}" Content="更改" Click="Button_Click"/>
+            <Button Grid.Column="1" Style="{DynamicResource ButtonPrimary}" Content="选择" Click="Button_Click"/>
         </Grid>
-        <Grid Grid.Row="2" Margin="16,0,16,16">
+        <Grid Name="EditGrid" Grid.Row="2" Margin="16,0,16,16">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="4*"/>
@@ -60,11 +64,7 @@
                     <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" d:Text="2020/01/01" Name="SelectedTb"/>
                     <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="星期日/日期"/>
                     <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="选中时间段"/>
-                    <ui:SplitButton Content="双击以新建日期" MouseDoubleClick="PickDate_Click" Name="PickDate" Grid.Row="0" Grid.Column="1" Width="180" Style="{DynamicResource SplitButtonDefault}">
-                        <ui:SplitButton.DropDownContent>
-                            <StackPanel Width="Auto" Name="DropDownPanel"/>
-                        </ui:SplitButton.DropDownContent>
-                    </ui:SplitButton>
+                    <ui:ComboBox Name="TimeSel" SelectionChanged="ItemClick" Grid.Row="0" Grid.Column="1" Width="180"/>
                     <Grid Grid.Row="2" Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="34"/>
@@ -95,9 +95,11 @@
                     <TextBox Grid.Column="1" Grid.Row="0"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Name="ElementTb" d:Text="114514" TextChanged="ElementTb_TextChanged"/>
                     <TextBox Grid.Column="1" Grid.Row="1"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Name="NoticeTb" d:Text="1919810" TextChanged="NoticeTb_TextChanged"/>
                 </Grid>
-                <Grid Grid.Row="2">
-                    <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,10" Content="检验并保存" Style="{DynamicResource ButtonSuccess}" Name="Save" Click="Save_Click"/>
-                </Grid>
+                <StackPanel Margin="20,10,20,10" Grid.Row="2" Orientation="Horizontal">
+                    <Button Content="新建时间表" Style="{DynamicResource ButtonPrimary}" Margin="0,0,20,0" Click="PickDate_Click"/>
+                    <Button Content="新建时间段" Style="{DynamicResource ButtonInfo}" Margin="0,0,20,0"/>
+                    <Button Content="检验并保存" Style="{DynamicResource ButtonSuccess}" Name="Save" Click="Save_Click"/>
+                </StackPanel>
             </Grid>
         </Grid>
     </Grid>
