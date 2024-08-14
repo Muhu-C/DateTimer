@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DateTimer", "DateTimer\Date
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Update_Log", "Update_Log", "{A23E413C-9694-462D-B8A3-7E8E71592BA9}"
 	ProjectSection(SolutionItems) = preProject
-		更新说明.txt = 更新说明.txt
+		update.md = update.md
 	EndProjectSection
 EndProject
 Global

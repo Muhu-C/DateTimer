@@ -10,14 +10,19 @@ using System.ComponentModel;
 using System.Windows.Media;
 using System.Reflection;
 using System.Linq;
+using DateTimer.View;
 
 namespace DateTimer
 {
     /// <summary> App.xaml 交互逻辑 </summary>
     public partial class App : Application
     {
-        #region 静态变量
+
         public static string FeedBackUrl = "https://github.com/Muhu-C/DateTimer/issues";
+        public static bool isLogOpened = false; // 支持 Log (调试时)
+        #region 静态变量
+        public static CustomNotice NoticeWindow;
+
 
         public static List<string> NoticeUrl = new List<string> 
         {
@@ -27,16 +32,17 @@ namespace DateTimer
             "https://raw.githubusercontent.com/Muhu-C/NoticePage/main/DATETIMER.NOTICE"
         };
 
-        public static string About = "DateTimer " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " By MC118CN\n使用 C#(.NET Framework) WPF HandyControls 编写\n本软件使用 MIT LICENSE, 转载请标明出处!"; // 关于程序
-        
         public static string Notice_Text = string.Empty;
 
         /// <summary> 配置数据 </summary>
-        public static appconfig ConfigData;
+        public static Appconfig ConfigData;
 
         public static string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Config", "config.json");
+        public static string LogPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Logs", $"DTLOG-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.log");
 
         public static Mutex AppMutex;
+
+        public static List<int> WindowCnt = new List<int>(); // 消息窗口编号
         #endregion
 
         #region 错误文本显示以及处理
@@ -90,9 +96,14 @@ namespace DateTimer
 
         public App()
         {
+            LoadConfig();
+
+            LogTool.InitLog();
+            LogTool.WriteLog("启动 DateTimer 程序", LogTool.LogType.Info);
             // 异常处理
             DispatcherUnhandledException += (_ , e) =>
             {
+                LogTool.WriteLog(e.Exception.ToString(), LogTool.LogType.Error);
                 e.Handled = true; // 防止程序原地升天
                 Error("无", ErrorType.UnknownError, e.Exception, false, WindowType: false, FeedBack: true);
             };
@@ -102,14 +113,13 @@ namespace DateTimer
         {
             try
             {
-                ConfigData = JsonConvert.DeserializeObject<appconfig>(Utils.FileProcess.ReadFile(configPath));
-
-                (Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).Home?.Reload();
-
-                (Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).Setting?.Reload();
+                ConfigData = JsonConvert.DeserializeObject<Appconfig>(Utils.FileProcess.ReadFile(configPath));
+                if (ConfigData.Enable_Log == 1) isLogOpened = true;
+                LogTool.WriteLog("读取 config.json 完成", LogTool.LogType.Info);
             }
             catch(Exception ex) // 未找到文件
             {
+                LogTool.WriteLog("未找到或无法加载 config.json", LogTool.LogType.Fatal);
                 Error("请检查下载文件是否完整, ", ErrorType.RunTimeError, ex, true, WindowType: false, FeedBack: false);
             }
         }
@@ -119,7 +129,10 @@ namespace DateTimer
             AppMutex = new Mutex(true, Assembly.GetExecutingAssembly().GetName().Name, out var createNew);
 
             if (!createNew)
+            {
+                LogTool.WriteLog("已有该程序启动! ", LogTool.LogType.Fatal);
                 Error("已经有该程序启动！", ErrorType.ProgramError, null, true, WindowType: false, FeedBack: false);
+            }
 
             base.OnStartup(e);
         }
@@ -133,6 +146,7 @@ namespace DateTimer
             }
             finally
             {
+                LogTool.WriteLog("程序结束", LogTool.LogType.Info);
                 // 退出程序
                 base.OnExit(e);
             }
@@ -142,7 +156,7 @@ namespace DateTimer
 
     #region 其他类
 
-    public class appconfig // Config/config.json 解析内容
+    public class Appconfig // Config/config.json 解析内容
     {
         public int Theme { get; set; } // 0 黑 1 白
 
@@ -151,6 +165,10 @@ namespace DateTimer
         public string Target_Type {  get; set; }
 
         public string Timetable_File { get; set; }
+
+        public int Front_Min { get; set; }
+
+        public int Enable_Log { get; set; }
     }
 
     public class TimerWindowViewModel : Utils.TimeTable.ViewModelBase // 实现实时更改时间表内容
@@ -175,6 +193,15 @@ namespace DateTimer
     /// <summary> HomePage 以及其他页面调用的 Binding ViewModel </summary>
     public class BindContent : INotifyPropertyChanged // 通过 Foreground Binding 实时设置页面文本颜色
     {
+        private string version;
+
+        public string VersionTxt
+        {
+            get { return version; }
+
+            set { if (version != value) { version = value; OnPropertyChanged("VersionTxt"); } }
+        }
+
         private Brush textColor;
 
         public Brush TextColor

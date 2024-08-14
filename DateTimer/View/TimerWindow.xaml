@@ -9,11 +9,11 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Closing="Window_Closing"
-        Title="DateTimer - 窗口" MinHeight="450" Height="700" MaxHeight="700" MinWidth="400" MaxWidth="400">
+        Title="DateTimer - 窗口" MinHeight="350" Height="Auto" MaxHeight="700" MinWidth="400" MaxWidth="400">
     <Grid>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0,20,0,0" VerticalAlignment="Top">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0,20,0,0" Height="Auto" VerticalAlignment="Top">
             <TextBlock HorizontalAlignment="Center" x:Name="CountdownText" FontWeight="Bold" FontSize="20" Text="已到达目标时间" />
-            <ListView MaxHeight="590" MaxWidth="360" d:Width="360" d:Height="590" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible" x:Name="TimetableListView" Margin="20,20,20,20" ItemsSource="{Binding TableEntries}" d:ItemsSource="{d:SampleData ItemCount=5}">
+            <ListView MaxHeight="590" MaxWidth="360" d:Width="360" Height="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible" x:Name="TimetableListView" Margin="20,20,20,20" ItemsSource="{Binding TableEntries}" d:ItemsSource="{d:SampleData ItemCount=5}">
                 <!--当天时间表的内容-->
                 <ListView.View>
                     <GridView>

@@ -1,6 +1,8 @@
 {
   "Theme": 0,
-  "Target_Time": "0000 00 00",
+  "Target_Time": "2024 08 01",
   "Target_Type": "NULL",
-  "Timetable_File": "Data/Config/timetable.json"
+  "Timetable_File": "Data\\Config\\timetable-default.json",
+  "Front_Min": 15,
+  "Enable_Log": 0
 }

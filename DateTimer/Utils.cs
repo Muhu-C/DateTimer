@@ -12,7 +12,7 @@ using DateTimer.View;
 
 namespace DateTimer
 {
-    /// <summary> 函数工具 </summary>
+    /// <summary> 主函数工具 </summary>
     public class Utils
     {
         /// <summary> 时间转换 </summary>
@@ -72,7 +72,7 @@ namespace DateTimer
             /// <returns> 格式: yyyy MM dd </returns>
             public static string Date2Str(DateTime dateTime)
             {
-                try { return dateTime.Year.ToString("0000") + " " + dateTime.Month.ToString("00") + " " + dateTime.Day.ToString("00"); }
+                try { return $"{dateTime.Year:0000} {dateTime.Month:00} {dateTime.Day:00}"; }
                 catch (Exception ex) { throw ex; }
             }
 
@@ -155,6 +155,7 @@ namespace DateTimer
             /// <param name="Path">存放位置</param>
             public static void WriteFile(string Text, string Path)
             {
+                LogTool.WriteLog($"Utils -> 写入 {Path}", LogTool.LogType.Info);
                 using (StreamWriter sw = new StreamWriter(Path, false, Encoding.UTF8))
                 {
                     sw.Write(Text);
@@ -166,6 +167,7 @@ namespace DateTimer
             /// <returns></returns>
             public static string ReadFile(string Path)
             {
+                LogTool.WriteLog($"Utils -> 读取 {Path}", LogTool.LogType.Info);
                 using (StreamReader sr = new StreamReader(Path))
                 {
                     string content;
@@ -246,6 +248,7 @@ namespace DateTimer
             /// <returns>时间表类</returns>
             public static TimeTableFile GetTimetables(string Path)
             {
+                LogTool.WriteLog("Utils -> 获取时间表", LogTool.LogType.Info);
                 TimeTableFile tables;
                 string JsonStr = FileProcess.ReadFile(Path);
                 try { tables = JsonConvert.DeserializeObject<TimeTableFile>(JsonStr); }
@@ -258,6 +261,7 @@ namespace DateTimer
             /// <param name="Path">时间表文件位置</param>
             public static void WriteTimetables(TimeTableFile table, string Path)
             {
+                LogTool.WriteLog("Utils -> 写入时间表", LogTool.LogType.Info);
                 string timetablejson = JsonConvert.SerializeObject(table);
                 FileProcess.WriteFile(timetablejson, Path);
             }
@@ -267,6 +271,7 @@ namespace DateTimer
             /// <returns>时间表TableEntry类</returns>
             public static TableEntry Table2Entry(Table table)
             {
+                LogTool.WriteLog("Utils -> 时间表基类转显示类", LogTool.LogType.Info);
                 TableEntry entry = new TableEntry();
                 entry.Name = table.name;
                 if (table.notice != "NULL") entry.Notice = table.notice;
@@ -302,6 +307,39 @@ namespace DateTimer
                     return index;
                 }
                 catch (Exception ex) { throw ex; }
+            }
+
+            /// <summary> 判断是否到点 </summary>
+            /// <param name="tables"></param>
+            /// <returns></returns>
+            public static int IsStart(List<Table> tables, TimeSpan front)
+            {
+                int i = 0;
+                foreach(Table table in tables)
+                {
+                    TimeSpan start = TimeConverter.Int2Time(TimeConverter.Str2TimeInt(table.start));
+                    TimeSpan now = DateTime.Now.TimeOfDay + front;
+                    if (start.Hours == now.Hours && start.Minutes == now.Minutes)
+                        return i;
+                    i++;
+                }
+                return -1;
+            }
+
+            /// <summary> 获取未完成列表 </summary>
+            /// <param name="tables">时间表</param>
+            /// <returns>int 值列表 1为未到时间 2为在五分钟外</returns>
+            public static List<int> GetTodayUndone(List<Table> tables)
+            {
+                List<int> result = new List<int>();
+                foreach (Table table in tables)
+                {
+                    TimeSpan start = TimeConverter.Int2Time(TimeConverter.Str2TimeInt(table.start));
+                    TimeSpan now = DateTime.Now.TimeOfDay;
+                    if (start.Hours >= now.Hours && start.Minutes > now.Minutes) result.Add(2);
+                    else result.Add(1);
+                }
+                return result;
             }
 
             /// <summary> 获取当天对应时间表 </summary>
@@ -352,6 +390,7 @@ namespace DateTimer
             /// <returns>格式化后的 json 字符串</returns>
             public static string Json_Optimization(string oldjson)
             {
+                LogTool.WriteLog("Utils -> 格式化json字符串", LogTool.LogType.Info);
                 int l = 0, k = 0;
                 bool isInString = false;
                 string newjson = string.Empty;
@@ -397,6 +436,7 @@ namespace DateTimer
                 {
                     string s1 = s.Split('/')[2]; // 分割域名
                     Ping ping = new Ping();
+                    LogTool.WriteLog($"Utils -> Ping {s1}", LogTool.LogType.Info);
                     try
                     {
                         PingReply reply = ping.Send(s1, 4200);
@@ -419,18 +459,6 @@ namespace DateTimer
         /// <summary> 其他工具 </summary>
         public class OtherTools
         {
-            /// <summary> 连接多个字符串 </summary>
-            /// <param name="connecter"> 连接字符串的方式 </param>
-            /// <param name="args"> 多个字符串 </param>
-            /// <returns></returns>
-            public static string ConnectErrStr(string connecter, params string[] args)
-            {
-                string ret = string.Empty;
-                foreach (string s in args)
-                    ret += (s + connecter);
-                return ret;
-            }
-
             /// <summary>
             /// 将修改列表去重
             /// </summary>
@@ -438,6 +466,7 @@ namespace DateTimer
             /// <returns>去重后的修改列表</returns>
             public static List<ViewUtils.ChangeEvent> Duplicate_Removal(List<ViewUtils.ChangeEvent> changes)
             {
+                LogTool.WriteLog("Utils -> 修改去重", LogTool.LogType.Info);
                 List<ViewUtils.ChangeEvent> list = new List<ViewUtils.ChangeEvent>();
                 int cnt = changes.Count;
                 if (changes != null && cnt > 0)
@@ -496,6 +525,7 @@ namespace DateTimer
             /// <returns>Windows 版本字符串</returns>
             public static string GetWinVer()
             {
+                LogTool.WriteLog("Utils -> 获取系统版本", LogTool.LogType.Info);
                 using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion")) // 获取注册表目录
                 {
                     string productName = key.GetValue("ProductName") as string; // 系统名称（Win11不适用）
@@ -529,6 +559,7 @@ namespace DateTimer
             /// <returns>.NET 版本</returns>
             public static string GetEnvVer()
             {
+                LogTool.WriteLog("Utils -> 获取环境版本", LogTool.LogType.Info);
                 try { return RuntimeInformation.FrameworkDescription; }
                 catch (Exception e) { throw e; }
             }
@@ -539,10 +570,9 @@ namespace DateTimer
             /// <returns>64 或 32</returns>
             public static int GetBit()
             {
-                int n = 0;
-                if (Environment.Is64BitOperatingSystem) n = 64;
-                else n = 32;
-                return n;
+                LogTool.WriteLog("Utils -> 获取系统位数", LogTool.LogType.Info);
+                if (Environment.Is64BitOperatingSystem) return 64;
+                else return 32;
             }
         }
     }

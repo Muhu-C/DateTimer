@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:DateTimer.View"
         xmlns:ui="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
+        Closing="Window_Closing"
+        Loaded="Window_Loaded"
         Title="编辑时间表" MinHeight="300" MinWidth="500" MaxHeight="300" MaxWidth="500">
     <Grid>
         <Grid.RowDefinitions>
@@ -36,13 +38,13 @@
                 <StackPanel Name="DayPanel" Orientation="Vertical" Grid.Row="1" Margin="15,10,0,0">
                     <TextBlock VerticalAlignment="Center" Text="或 选择星期日: " Margin="0,0,10,5"/>
                     <StackPanel Orientation="Horizontal" Height="30" Margin="10,0,0,0">
-                        <CheckBox Tag="1" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Content="周一" Margin="0,0,5,0"/>
-                        <CheckBox Tag="2" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Content="周二" Margin="0,0,5,0"/>
-                        <CheckBox Tag="3" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Content="周三" Margin="0,0,5,0"/>
-                        <CheckBox Tag="4" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Content="周四" Margin="0,0,5,0"/>
-                        <CheckBox Tag="5" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Content="周五" Margin="0,0,5,0"/>
-                        <CheckBox Tag="6" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Content="周六" Margin="0,0,5,0"/>
-                        <CheckBox Tag="7" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Content="周日" Margin="0,0,5,0"/>
+                        <CheckBox x:Name="Cb1" Tag="1" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Content="周一" Margin="0,0,5,0"/>
+                        <CheckBox x:Name="Cb2" Tag="2" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Content="周二" Margin="0,0,5,0"/>
+                        <CheckBox x:Name="Cb3" Tag="3" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Content="周三" Margin="0,0,5,0"/>
+                        <CheckBox x:Name="Cb4" Tag="4" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Content="周四" Margin="0,0,5,0"/>
+                        <CheckBox x:Name="Cb5" Tag="5" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Content="周五" Margin="0,0,5,0"/>
+                        <CheckBox x:Name="Cb6" Tag="6" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Content="周六" Margin="0,0,5,0"/>
+                        <CheckBox x:Name="Cb7" Tag="7" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Content="周日" Margin="0,0,5,0"/>
                     </StackPanel>
                 </StackPanel>
                 <Grid Grid.Row="2">

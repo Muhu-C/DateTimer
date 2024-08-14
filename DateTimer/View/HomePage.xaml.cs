@@ -7,6 +7,7 @@ using MsgBox = HandyControl.Controls.MessageBox;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Reflection;
 
 namespace DateTimer.View
 {
@@ -22,12 +23,17 @@ namespace DateTimer.View
         {
             // 初始化
             InitializeComponent();
+            viewModel.VersionTxt = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             DataContext = viewModel;
             GetTime();
+
+            // 获取公告
+            LoadNotice();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            LogTool.WriteLog("主页 -> 加载", LogTool.LogType.Info);
             // 获取主题
             MainWindow mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
             Theme.SetSkin(this, Theme.GetSkin(mw));
@@ -36,20 +42,28 @@ namespace DateTimer.View
             viewModel.TextColor = Brushes.Black; 
             if (Theme.GetSkin(mw) == HandyControl.Data.SkinType.Dark) viewModel.TextColor = Brushes.White; // 检测主题并更改文字颜色
 
-            // 获取公告
-            LoadNotice();
+            // 加载配置文件
+            Reload();
         }
 
         public void Reload()
         {
+            LogTool.WriteLog("主页 -> 获取配置", LogTool.LogType.Info);
             // 获取目标时间
-            try { TargetText.Text = DateTime.ParseExact(App.ConfigData.Target_Time, "yyyy MM dd", null).ToString("yyyy/MM/dd"); }
-            catch (FormatException) { TargetText.Text = "未配置"; }
+            try 
+            {
+                TargetText.Text = DateTime.ParseExact(App.ConfigData.Target_Time, "yyyy MM dd", null).ToString("yyyy/MM/dd");
+            }
+            catch (FormatException) 
+            {
+                TargetText.Text = "未配置";
+            }
         }
 
         /// <summary> 加载公告 </summary>
         public async void LoadNotice()
         {
+            LogTool.WriteLog("主页 -> 获取公告", LogTool.LogType.Info);
             string FNoticeUrl = string.Empty;
             string Notice_Text = string.Empty;
 
@@ -94,10 +108,9 @@ namespace DateTimer.View
         private void GoToSetting_Click(object sender, RoutedEventArgs e)
         {
             // 切换到设置页面
-            MainWindow mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
-            mw.ContentFrame.Navigate(mw.Setting);
-            mw.SettingButton.IsSelected = true;
-            mw.HomeButton.IsSelected = false;
+            (Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).ContentFrame.Navigate((Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).Setting);
+            (Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).SettingButton.IsSelected = true;
+            (Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).HomeButton.IsSelected = false;
         }
 
         #endregion
@@ -106,24 +119,23 @@ namespace DateTimer.View
 
         private void ShowTimeTable_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
-            if (!mw.Timer.IsVisible)
+            if (!(Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).Timer.IsVisible)
             {
+                LogTool.WriteLog("主页 -> 显示时间表", LogTool.LogType.Info);
                 // 显示窗口
-                mw.Timer.Show();
-                mw.Timer.Reload();
+                (Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).Timer.Show();
                 ShowTimeTable.Style = FindResource("ButtonWarning") as Style;
                 ShowTimeTable.Content = "隐藏时间表";
             }
-            else if (mw.Timer.IsVisible)
+            else if ((Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).Timer.IsVisible)
             {
+                LogTool.WriteLog("主页 -> 隐藏时间表", LogTool.LogType.Info);
                 // 隐藏窗口
-                mw.Timer.Hide();
+                (Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).Timer.Hide();
                 ShowTimeTable.Style = FindResource("ButtonSuccess") as Style;
                 ShowTimeTable.Content = "显示时间表";
             }
         }
-
         #endregion
     }
 }

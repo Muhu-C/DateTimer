@@ -11,6 +11,7 @@ using System.Windows.Markup;
 
 namespace DateTimer.View
 {
+    /// <summary> View 文件夹函数工具 </summary>
     public class ViewUtils
     {
         /// <summary> 更改事件 </summary>

@@ -25,31 +25,40 @@ namespace DateTimer
         public MainWindow()
         {
             InitializeComponent();
+            LogTool.WriteLog("加载主窗口", LogTool.LogType.Info);
+            App.NoticeWindow = new CustomNotice();
 
             ShowHideButtonIcon.Text = "\uE727";
             ShowWindowButton.Header = "隐藏主窗口";
             ContentFrame.Navigate(Home);
 
-            App.LoadConfig();
             if (App.ConfigData.Theme == 0) Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
             else Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
+
+            // 初始化时间表窗口
+            Timer.LoadJson();
+            Timer.GetTime();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) // 关闭或隐藏
         {
             MessageBoxResult messageBoxResult = MsgBox.Show("是否关闭程序\n按\"是\"关闭程序\n按\"否\"隐藏到任务栏", "提示", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
 
-            if (messageBoxResult == MessageBoxResult.Yes) 
-                Environment.Exit(0);
+            if (messageBoxResult == MessageBoxResult.Yes) Application.Current.Shutdown();
 
             else if (messageBoxResult == MessageBoxResult.No)
             {
                 e.Cancel = true;
                 Hide();
+                LogTool.WriteLog("关闭按钮 -> 隐藏主窗口", LogTool.LogType.Info);
                 ShowHideButtonIcon.Text = "\uE737";
                 ShowWindowButton.Header = "显示主窗口";
             }
-            else e.Cancel = true;
+            else
+            {
+                e.Cancel = true;
+                return;
+            }
         }
 
         #endregion
@@ -60,38 +69,37 @@ namespace DateTimer
         {
             if (Visibility == Visibility.Visible) // 隐藏
             {
-                Console.WriteLine("MainWindow.Hide");
                 Hide();
                 ShowHideButtonIcon.Text = "\uE737";
                 ShowWindowButton.Header = "显示主窗口";
+                LogTool.WriteLog("任务栏 -> 隐藏主窗口", LogTool.LogType.Info);
             }
             else // 显示
             {
-                Console.WriteLine("MainWindow.Show");
                 Show();
                 ShowHideButtonIcon.Text = "\uE727";
                 ShowWindowButton.Header = "隐藏主窗口";
+                LogTool.WriteLog("任务栏 -> 显示主窗口", LogTool.LogType.Info);
             }
         } // 打开或者关闭主窗口
 
-        private void MenuItemB_Click(object sender, RoutedEventArgs e) { Environment.Exit(0); } // 关闭程序
+        private void MenuItemB_Click(object sender, RoutedEventArgs e) { Application.Current.Shutdown(); } // 关闭程序
 
         private void notifyIcon_Click(object sender, RoutedEventArgs e) 
         {
             if (!Timer.IsVisible)
             {
-                Console.WriteLine("TimeTable.Show");
                 Timer.Show();
-                Timer.Reload();
                 Home.ShowTimeTable.Style = FindResource("ButtonWarning") as Style;
                 Home.ShowTimeTable.Content = "隐藏时间表";
+                LogTool.WriteLog("任务栏 -> 显示时间表", LogTool.LogType.Info);
             }
             else if (Timer.IsVisible)
             {
-                Console.WriteLine("TimeTable.Hide");
                 Timer.Hide();
                 Home.ShowTimeTable.Style = FindResource("ButtonSuccess") as Style;
                 Home.ShowTimeTable.Content = "显示时间表";
+                LogTool.WriteLog("任务栏 -> 隐藏时间表", LogTool.LogType.Info);
             }
         } // 显示或者隐藏时间表窗口
 
@@ -99,9 +107,7 @@ namespace DateTimer
 
         private void SideMenu_SelectionChanged(object sender, HandyControl.Data.FunctionEventArgs<object> e) // 选中菜单内容
         {
-            SideMenuItem s = e.Info as SideMenuItem;
-
-            if (s != null) // 正常运行
+            if (e.Info is SideMenuItem s) // 正常运行
             {
                 try
                 {
@@ -124,7 +130,8 @@ namespace DateTimer
                             SettingButton.IsSelected = false;
                             break;
                         default: // 这选的不对
-                            App.Error($"你选了什么?\n选中内容为{tag}",App.ErrorType.ProgramError, null, false);
+                            App.Error($"你选了什么?\n选中内容为{tag}", App.ErrorType.ProgramError, null, false);
+                            LogTool.WriteLog($"选中内容错误: {tag}", LogTool.LogType.Warn);
                             break;
                     }
                 }

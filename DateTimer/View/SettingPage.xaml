@@ -8,9 +8,18 @@
       mc:Ignorable="d" 
       ScrollViewer.VerticalScrollBarVisibility="Visible"
       Loaded="Page_Loaded"
-      d:DesignHeight="520" d:DesignWidth="600"
+      d:DesignHeight="640" d:DesignWidth="600"
       d:Background="#F0F0F0"
       Title="SettingPage">
+    <Page.Resources>
+        <RoutedUICommand x:Key="SaveFunc" Text="SaveFunc"/>
+    </Page.Resources>
+    <Page.CommandBindings>
+        <CommandBinding Command="{StaticResource SaveFunc}" CanExecute="SaveSettingsButton_Click"/>
+    </Page.CommandBindings>
+    <Page.InputBindings>
+        <KeyBinding Gesture="Ctrl+S" Command="{StaticResource SaveFunc}"/>
+    </Page.InputBindings>
     <Grid TextBlock.Foreground="{Binding TextColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
@@ -19,6 +28,8 @@
         <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="设置" FontWeight="Bold" FontSize="24"/>
         <Grid Grid.Row="1" Margin="20,0,20,20">
             <Grid.RowDefinitions>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="45"/>
                 <RowDefinition Height="45"/>
                 <RowDefinition Height="45"/>
                 <RowDefinition Height="45"/>
@@ -49,16 +60,65 @@
                 <TextBlock VerticalAlignment="Center" FontSize="14" Name="TimeTip" Margin="5,0,0,0"/>
             </StackPanel>
             <Button Name="BTTimerConfig" Grid.Row="2" Grid.Column="1" Content="选择" FontSize="14" Height="35" Click="BTTimerConfig_Click"/>
-            <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
+            <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal">
                 <!--切换主题-->
                 <TextBlock VerticalAlignment="Center"  FontSize="14" Text="主题"/>
             </StackPanel>
-            <Button Name="ChangeTheme" Grid.Row="3" Grid.Column="1" Content="切换" FontSize="14" Height="35" Click="ChangeTheme_Click"/>
-            <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Margin="0,20,0,0">
+            <Button Name="ChangeTheme" Grid.Row="5" Grid.Column="1" Content="切换" FontSize="14" Height="35" Click="ChangeTheme_Click"/>
+
+            <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center"  FontSize="14" Text="时间点提前提醒分钟数"/>
+                <ui:TextBox Style="{StaticResource TextBoxExtend}" ui:InfoElement.Placeholder="建议 5~45" Name="TFrontTime" Width="80" Height="35" Margin="20,0,0,0" TextChanged="TFrontTime_TextChanged"/>
+                <TextBlock VerticalAlignment="Center"  FontSize="14" Text="分钟" Margin="5,0,0,0"/>
+                <TextBlock VerticalAlignment="Center" FontSize="14" Name="TipIcon2" FontFamily="{StaticResource IconFont}" Margin="10,0,0,0"/>
+                <TextBlock VerticalAlignment="Center" FontSize="14" Name="Tip2" Margin="5,0,0,0"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="1">
+                <Button Name="SaveSettingsButton" Style="{DynamicResource ButtonSuccess}" Click="SaveSettingsButton_Click">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE74E;" FontFamily="{StaticResource IconFont}" Margin="0,0,3,0" FontSize="14"/>
+                            <TextBlock Text="保存设置" FontSize="12"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+            <TextBlock Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Name="IsChangeSaved" Foreground="Orange" d:Text="设置未保存" Margin="0,0,20,0"/>
+
+            <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Margin="0,20,0,0">
                 <TextBlock VerticalAlignment="Center" Margin="0,10,0,0" FontWeight="Bold" FontSize="24" Text="关于"/>
-                <ui:Card Margin="15,10,0,0">
-                    <TextBlock VerticalAlignment="Center" Height="Auto" Margin="15,10,10,10" FontSize="16" Name="AboutText" d:Text="About"/>
+                <ui:Card TextBlock.FontSize="15" Margin="15,10,0,0">
+                    <Grid Margin="15,5,5,5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Width="Auto" Text="木沪时间表 DateTimer" Margin="0,0,10,10"/>
+                            <TextBlock Grid.Column="1" Text="{Binding VersionTxt}"/>
+                        </Grid>
+                        <Grid Grid.Row="1" Width="523" Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock TextWrapping="Wrap" Grid.Column="0" Text="使用 C#(.NET Framework) WPF "/>
+                            <TextBlock Grid.Column="1" Text="HandyControl" Foreground="#00AA00"/>
+                            <TextBlock Grid.Column="2" Text=" 控件库" />
+                        </Grid>
+                        <TextBlock TextWrapping="Wrap" Grid.Row="2" Text="Copyright © 2024 MC118CN.  All rights reserved." Margin="0,0,0,10"/>
+                        <TextBlock TextWrapping="Wrap" Grid.Row="3" Foreground="Red" Grid.Column="1" Text="本软件使用 MIT LICENSE, 转载请标明出处!"/>
+                    </Grid>
                 </ui:Card>
+                
                 <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
                     <TextBlock VerticalAlignment="Center" FontSize="15" Margin="30,0,0,0"  Text="问题反馈"/>
                     <Button Style="{DynamicResource ButtonInfo}" Content="Github" Margin="15,0,0,0" Click="GotoGithubIssue"/>

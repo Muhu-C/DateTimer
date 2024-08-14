@@ -5,12 +5,35 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:ui="https://handyorg.github.io/handycontrol"
       xmlns:local="clr-namespace:DateTimer"
+      xmlns:cur="clr-namespace:DateTimer.View"
       mc:Ignorable="d" 
       Height="420"
       d:DesignHeight="400" d:DesignWidth="600"
       d:Background="White"
       Loaded="Page_Loaded"
       Title="TimerPage">
+    <Page.Resources>
+        <RoutedUICommand x:Key="DelTimeFunc" Text="DelTimeFunc"/>
+        <RoutedUICommand x:Key="AddTimeFunc" Text="AddTimeFunc"/>
+        <RoutedUICommand x:Key="DelTableFunc" Text="DelTableFunc"/>
+        <RoutedUICommand x:Key="AddTableFunc" Text="AddTableFunc"/>
+        <RoutedUICommand x:Key="SaveFunc" Text="SaveFunc"/>
+    </Page.Resources>
+    <Page.CommandBindings>
+        <CommandBinding Command="{StaticResource DelTimeFunc}" CanExecute="DelTime_Click"/>
+        <CommandBinding Command="{StaticResource AddTimeFunc}" CanExecute="NewTime_Click"/>
+        <CommandBinding Command="{StaticResource DelTableFunc}" CanExecute="DelTable_Click"/>
+        <CommandBinding Command="{StaticResource AddTableFunc}" CanExecute="PickDate_Click"/>
+        <CommandBinding Command="{StaticResource SaveFunc}" CanExecute="Save_Click"/>
+    </Page.CommandBindings>
+    <Page.InputBindings>
+        <KeyBinding Key="Delete" Command="{StaticResource DelTimeFunc}"/>
+        <KeyBinding Key="Add" Command="{StaticResource AddTimeFunc}"/>
+        <KeyBinding Gesture="Ctrl+Delete" Command="{StaticResource DelTableFunc}"/>
+        <KeyBinding Gesture="Ctrl+Add" Command="{StaticResource AddTableFunc}"/>
+        <KeyBinding Gesture="Ctrl+S" Command="{StaticResource SaveFunc}"/>
+    </Page.InputBindings>
+    
     <Grid TextBlock.Foreground="{Binding TextColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="48"/>
@@ -98,13 +121,13 @@
                 </Grid>
                 <StackPanel Grid.Row="2">
                     <StackPanel Margin="20,20,20,0" Orientation="Horizontal">
-                        <Button Content="删除当前时间表" Name="DelTable" Style="{DynamicResource ButtonDanger}" Margin="0,0,5,5" Click="DelTable_Click"/>
-                        <Button Content="删除当前时间段" Name="DelTime" Style="{DynamicResource ButtonDanger}" Margin="0,0,5,5" ButtonBase.Click="DelTime_Click"/>
+                        <Button ToolTip="或按下 Ctrl+Delete" Content="删除当前时间表" Name="DelTable" Style="{DynamicResource ButtonDanger}" Margin="0,0,5,5" Click="DelTable_Click"/>
+                        <Button ToolTip="或按下 Delete" Content="删除当前时间段" Name="DelTime" Style="{DynamicResource ButtonDanger}" Margin="0,0,5,5" ButtonBase.Click="DelTime_Click"/>
                     </StackPanel>
                     <StackPanel Margin="20,0,20,10" Orientation="Horizontal">
-                        <Button Content="新建时间表" Style="{DynamicResource ButtonPrimary}" Margin="0,0,5,0" Click="PickDate_Click"/>
-                        <Button Content="新建时间段" Style="{DynamicResource ButtonInfo}" Name="NewTime" Margin="0,0,25,0" Click="NewTime_Click"/>
-                        <Button Content="检验并保存" Style="{DynamicResource ButtonSuccess}" Name="Save" Click="Save_Click"/>
+                        <Button ToolTip="或按下 Ctrl+加号" Content="新建时间表" Style="{DynamicResource ButtonPrimary}" Margin="0,0,5,0" Click="PickDate_Click"/>
+                        <Button ToolTip="或按下 加号" Content="新建时间段" Style="{DynamicResource ButtonInfo}" Name="NewTime" Margin="0,0,25,0" Click="NewTime_Click"/>
+                        <Button ToolTip="或按下 Ctrl+S" Content="检验并保存" Style="{DynamicResource ButtonSuccess}" Name="Save" Click="Save_Click"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
