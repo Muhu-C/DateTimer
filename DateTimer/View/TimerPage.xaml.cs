@@ -36,7 +36,7 @@ namespace DateTimer.View
 
         public string TimeTableFilePath = string.Empty;
 
-        private NewTimeTableWindow newTime;
+        private CustomControls.NewTimeTableWindow newTime;
 
         #endregion
 
@@ -46,7 +46,7 @@ namespace DateTimer.View
         {
             LogTool.WriteLog("编辑时间表 -> 初始化", LogTool.LogType.Info);
             InitializeComponent();
-            newTime = new NewTimeTableWindow();
+            newTime = new CustomControls.NewTimeTableWindow();
             DataContext = HomePage.viewModel; // 使用 HomePage 的 BindingContent
             LoadFile(false);
         }
@@ -325,7 +325,7 @@ namespace DateTimer.View
             AddOrDel += "\n删除时间段 ";
             if (timetables[TimeSel.SelectedIndex].date != "GENERAL") AddOrDel += timetables[TimeSel.SelectedIndex].date;
             else AddOrDel += Utils.TimeTable.GetWeekday(timetables[TimeSel.SelectedIndex].weekday);
-            AddOrDel += $" {Utils.TimeConverter.JsonTime2DisplayTime(timetables[TimeSel.SelectedIndex].tables[TimeList.SelectedIndex].start)} ~ {Utils.TimeConverter.JsonTime2DisplayTime(timetables[TimeSel.SelectedIndex].tables[TimeList.SelectedIndex].end)}";
+            AddOrDel += $" {Utils.TimeConverter.JTime2DTime(timetables[TimeSel.SelectedIndex].tables[TimeList.SelectedIndex].start)} ~ {Utils.TimeConverter.JTime2DTime(timetables[TimeSel.SelectedIndex].tables[TimeList.SelectedIndex].end)}";
             AddOrDel += "    ";
 
             timetables[TimeSel.SelectedIndex].tables.Remove(timetables[TimeSel.SelectedIndex].tables[TimeList.SelectedIndex]);
@@ -406,6 +406,7 @@ namespace DateTimer.View
                     LogTool.WriteLog("编辑时间表 -> 更改配置", LogTool.LogType.Info);
                     LoadFile();
                 }
+                else openFileDialog.Dispose();
             }
         }
 
@@ -432,7 +433,7 @@ namespace DateTimer.View
             {
                 if (timetables[change.ChangeDate].date != "GENERAL") str += timetables[change.ChangeDate].date;
                 else str += Utils.TimeTable.GetWeekday(timetables[change.ChangeDate].weekday);
-                str += $" {Utils.TimeConverter.JsonTime2DisplayTime(timetables[change.ChangeDate].tables[change.ChangeTime].start)} ~ {Utils.TimeConverter.JsonTime2DisplayTime(timetables[change.ChangeDate].tables[change.ChangeTime].end)}";
+                str += $" {Utils.TimeConverter.JTime2DTime(timetables[change.ChangeDate].tables[change.ChangeTime].start)} ~ {Utils.TimeConverter.JTime2DTime(timetables[change.ChangeDate].tables[change.ChangeTime].end)}";
                 switch (change.ChangeClass)
                 {
                     case "name": str += " 事件名 -> "; break;

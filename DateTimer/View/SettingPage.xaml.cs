@@ -49,7 +49,7 @@ namespace DateTimer.View
 
             // 设置初始文本
             TBTimerConfig.Text = CurrentConfig.Timetable_File;
-            TFrontTime.Text = CurrentConfig.Front_Min.ToString();
+            TFrontTime.Value = CurrentConfig.Front_Min;
             try { TTime.SelectedDate = DateTime.ParseExact(CurrentConfig.Target_Time, "yyyy MM dd", null); }
             catch { TTime.SelectedDate = DateTime.Now; }
             if (CurrentConfig.Target_Type != "NULL") TName.Text = CurrentConfig.Target_Type;
@@ -117,6 +117,7 @@ namespace DateTimer.View
                             await Task.Run(async () => { await Task.Delay(3000); });
                             TimeTipIcon.Text = "";
                             TimeTip.Text = "";
+                            openFileDialog.Dispose();
                             return;
                         }
                     }
@@ -177,30 +178,21 @@ namespace DateTimer.View
             }
         }
 
-        private void TFrontTime_TextChanged(object sender, TextChangedEventArgs e)
+        private void TFrontTime_TextChanged(object sender, EventArgs e)
         {
             try
             {
-                if (TFrontTime.Text == string.Empty)
+                if (TFrontTime.Value <= 0)
                 {
-                    TipIcon2.Text = "\uE783";
-                    Tip2.Text = "未填写内容";
-                    return;
+                    TFrontTime.Value = 1;
                 }
-                int front_T = Convert.ToInt32(TFrontTime.Text);
-                if (front_T <= 0)
+                else if (TFrontTime.Value >= 60)
                 {
-                    TFrontTime.Text = "1";
-                    front_T = 1;
-                }
-                else if (front_T >= 60)
-                {
-                    TFrontTime.Text = "60";
-                    front_T = 60;
+                    TFrontTime.Value = 60;
                 }
                 TipIcon2.Text = string.Empty;
                 Tip2.Text = string.Empty;
-                CurrentConfig.Front_Min = front_T;
+                CurrentConfig.Front_Min = (int)TFrontTime.Value;
                 if (CurrentConfig.Front_Min != App.ConfigData.Front_Min) IsChangeSaved.Text = "设置未保存";
                 else if (MatchConfig()) IsChangeSaved.Text = string.Empty;
             }

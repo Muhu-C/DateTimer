@@ -68,7 +68,7 @@
 
             <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
                 <TextBlock VerticalAlignment="Center"  FontSize="14" Text="时间点提前提醒分钟数"/>
-                <ui:TextBox Style="{StaticResource TextBoxExtend}" ui:InfoElement.Placeholder="建议 5~45" Name="TFrontTime" Width="80" Height="35" Margin="20,0,0,0" TextChanged="TFrontTime_TextChanged"/>
+                <ui:NumericUpDown Style="{StaticResource NumericUpDownExtend}" Name="TFrontTime" Width="80" Height="35" Margin="20,0,0,0" ValueChanged="TFrontTime_TextChanged"/>
                 <TextBlock VerticalAlignment="Center"  FontSize="14" Text="分钟" Margin="5,0,0,0"/>
                 <TextBlock VerticalAlignment="Center" FontSize="14" Name="TipIcon2" FontFamily="{StaticResource IconFont}" Margin="10,0,0,0"/>
                 <TextBlock VerticalAlignment="Center" FontSize="14" Name="Tip2" Margin="5,0,0,0"/>

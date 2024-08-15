@@ -82,14 +82,23 @@
     </ApplicationDefinition>
     <Compile Include="LogTool.cs" />
     <Compile Include="Utils.cs" />
-    <Compile Include="View\CustomNotice.xaml.cs">
+    <Compile Include="View\CustomControls\CustomNotice.xaml.cs">
       <DependentUpon>CustomNotice.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CustomControls\EditNoteWindow.xaml.cs">
+      <DependentUpon>EditNoteWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CustomControls\NewNoteWindow.xaml.cs">
+      <DependentUpon>NewNoteWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\NewTimeTableWindow.xaml.cs">
+    <Compile Include="View\CustomControls\NewTimeTableWindow.xaml.cs">
       <DependentUpon>NewTimeTableWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NotePage.xaml.cs">
+      <DependentUpon>NotePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SettingPage.xaml.cs">
       <DependentUpon>SettingPage.xaml</DependentUpon>
@@ -113,7 +122,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\CustomNotice.xaml">
+    <Page Include="View\CustomControls\CustomNotice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomControls\EditNoteWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomControls\NewNoteWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -121,7 +138,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\NewTimeTableWindow.xaml">
+    <Page Include="View\CustomControls\NewTimeTableWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NotePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -159,6 +180,9 @@
     </EmbeddedResource>
     <Resource Include="Data\Icon\Segoe Fluent Icons.ttf" />
     <None Include="Data\Config\config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\Config\notes.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Data\Config\timetable-default.json">

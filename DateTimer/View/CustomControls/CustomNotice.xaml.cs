@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace DateTimer.View
+namespace DateTimer.View.CustomControls
 {
     /// <summary>
     /// CustomNotice.xaml 的交互逻辑
@@ -28,11 +28,13 @@ namespace DateTimer.View
             {
                 HandyControl.Themes.Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
                 Ctt.NT2Fore = Brushes.White;
+                TimeText.Foreground = new SolidColorBrush(Color.FromRgb(200, 200, 200));
             }
             else
             {
                 HandyControl.Themes.Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
                 Ctt.NT2Fore = Brushes.Black;
+                TimeText.Foreground = new SolidColorBrush(Color.FromRgb(56, 56, 56));
             }
             // 显示窗口行为
             Left = SystemParameters.WorkArea.Right - Width;
@@ -42,6 +44,7 @@ namespace DateTimer.View
 
         public async void Init()
         {
+            TimeText.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             LogTool.WriteLog($"消息 -> 弹出消息", LogTool.LogType.Info);
             Show();
             // 等待窗口加载完毕

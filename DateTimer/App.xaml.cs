@@ -9,8 +9,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Media;
 using System.Reflection;
-using System.Linq;
-using DateTimer.View;
+using DateTimer.View.CustomControls;
 
 namespace DateTimer
 {

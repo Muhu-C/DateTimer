@@ -21,12 +21,14 @@ namespace DateTimer
 
         public TimerWindow Timer = new TimerWindow();
 
+        public NotePage Note = new NotePage();
+
         #region 窗口初始化与关闭操作
         public MainWindow()
         {
             InitializeComponent();
             LogTool.WriteLog("加载主窗口", LogTool.LogType.Info);
-            App.NoticeWindow = new CustomNotice();
+            App.NoticeWindow = new View.CustomControls.CustomNotice();
 
             ShowHideButtonIcon.Text = "\uE727";
             ShowWindowButton.Header = "隐藏主窗口";
@@ -118,15 +120,24 @@ namespace DateTimer
                             ContentFrame.Navigate(Home);
                             SettingButton.IsSelected = false;
                             TableButton.IsSelected = false;
+                            NoteButton.IsSelected = false;
                             break;
                         case "Setting":
                             ContentFrame.Navigate(Setting);
                             HomeButton.IsSelected = false;
                             TableButton.IsSelected = false;
+                            NoteButton.IsSelected = false;
                             break;
                         case "Edit":
                             ContentFrame.Navigate(TimerPg);
                             HomeButton.IsSelected = false;
+                            SettingButton.IsSelected = false;
+                            NoteButton.IsSelected = false;
+                            break;
+                        case "Note":
+                            ContentFrame.Navigate(Note);
+                            HomeButton.IsSelected = false;
+                            TableButton.IsSelected = false;
                             SettingButton.IsSelected = false;
                             break;
                         default: // 这选的不对

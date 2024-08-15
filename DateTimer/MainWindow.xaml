@@ -25,7 +25,12 @@
                     <TextBlock Text="&#xE70F;" FontFamily="{StaticResource IconFont}" FontSize="18"/>
                 </ui:SideMenuItem.Icon>
             </ui:SideMenuItem>
-            <ui:SideMenuItem Margin="0,275,0,0" Header="设置" Tag="Setting" x:FieldModifier="public" Name="SettingButton">
+            <ui:SideMenuItem Header="待办" Tag="Note" IsSelected="True" x:FieldModifier="public" Name="NoteButton">
+                <ui:SideMenuItem.Icon>
+                    <TextBlock Text="&#xE70B;" FontFamily="{StaticResource IconFont}" FontSize="18"/>
+                </ui:SideMenuItem.Icon>
+            </ui:SideMenuItem>
+            <ui:SideMenuItem Margin="0,228,0,0" Header="设置" Tag="Setting" x:FieldModifier="public" Name="SettingButton">
                 <ui:SideMenuItem.Icon>
                     <TextBlock Text="&#xE713;" FontFamily="{StaticResource IconFont}" FontSize="18"/>
                 </ui:SideMenuItem.Icon>

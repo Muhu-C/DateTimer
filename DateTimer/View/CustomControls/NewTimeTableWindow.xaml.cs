@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using MsgBox = HandyControl.Controls.MessageBox;
 
-namespace DateTimer.View
+namespace DateTimer.View.CustomControls
 {
     /// <summary>
     /// NewTimeTableWindow.xaml 的交互逻辑

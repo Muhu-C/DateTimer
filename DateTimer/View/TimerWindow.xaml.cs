@@ -6,8 +6,8 @@ using System.Windows;
 using HandyControl.Themes;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
-using MsgBox = HandyControl.Controls.MessageBox;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace DateTimer.View
 {
@@ -19,8 +19,12 @@ namespace DateTimer.View
         public List<Utils.TimeTable.Table> tables = new List<Utils.TimeTable.Table>();
         public List<int> undone = new List<int>();
 
-        public TimerWindow() { InitializeComponent(); LogTool.WriteLog("时间表窗口 -> 初始化", LogTool.LogType.Info); CurrentTableEntry.model.TableEntries = new ObservableCollection<Utils.TimeTable.TableEntry>(); }
-
+        public TimerWindow()
+        {
+            InitializeComponent();
+            LogTool.WriteLog("时间表窗口 -> 初始化", LogTool.LogType.Info);
+            CurrentTableEntry.model.TableEntries = new ObservableCollection<Utils.TimeTable.TableEntry>();
+        }
         public void Window_Loaded(object sender, RoutedEventArgs e) // 获取时间，获取当前所在时间段
         {
             LogTool.WriteLog("时间表窗口 -> 加载", LogTool.LogType.Info);
@@ -38,8 +42,7 @@ namespace DateTimer.View
             // 获取时间表
             try
             {
-                Utils.TimeTable.TimeTableFile a = Utils.TimeTable.GetTimetables(App.ConfigData.Timetable_File);
-                InitUI(a);
+                InitUI(Utils.TimeTable.GetTimetables(App.ConfigData.Timetable_File));
             }
             catch
             {
@@ -57,13 +60,15 @@ namespace DateTimer.View
             LogTool.WriteLog("时间表窗口 -> 加载 UI", LogTool.LogType.Info);
             if (file == null)
             {
-                CurrentTableEntry.model.TableEntries = new ObservableCollection<Utils.TimeTable.TableEntry> { new Utils.TimeTable.TableEntry { Time = "提示", Name = "没有时间表", Notice = "请配置时间表" } };
+                CurrentTableEntry.model.TableEntries = new ObservableCollection<Utils.TimeTable.TableEntry> 
+                { new Utils.TimeTable.TableEntry { Time = "提示", Name = "没有时间表", Notice = "请配置时间表" } };
                 return;
             }
             int TodayListIndex = Utils.TimeTable.GetTodayList(file.timetables);
             if (TodayListIndex < 0)
             {
-                CurrentTableEntry.model.TableEntries = new ObservableCollection<Utils.TimeTable.TableEntry> { new Utils.TimeTable.TableEntry { Time = "0:00 ~ 23:59", Name = "今日无时间安排" } };
+                CurrentTableEntry.model.TableEntries = new ObservableCollection<Utils.TimeTable.TableEntry> 
+                { new Utils.TimeTable.TableEntry { Time = "0:00 ~ 23:59", Name = "今日无时间安排" } };
                 return;
             }
 
@@ -88,6 +93,7 @@ namespace DateTimer.View
         public async void GetTime()
         {
             LogTool.WriteLog("时间表窗口 -> 获取时间开始", LogTool.LogType.Info);
+            int SpanSeconds = 0;
             await Task.Run(async () =>
             {
                 while (true) // 程序运行中重复执行
@@ -95,39 +101,43 @@ namespace DateTimer.View
                     if (IsVisible)
                     {
                         TimeSpan remainingTime = Utils.TimeConverter.Str2Date(App.ConfigData.Target_Time) - DateTime.Now; // 目标剩余时间
-                        try // 获取时间表，获取当前时间所在时间段
+                        
+                        // 获取时间表，获取当前时间所在时间段
+                        List<int> inds = Utils.TimeTable.GetCurZone(tables);
+                        int ind = -1;
+                        if (inds.Count != 0) ind = inds[0];
+                        string str = "目标";
+                        if (App.ConfigData.Target_Type != "NULL") str = App.ConfigData.Target_Type;
+                        Dispatcher.Invoke(() =>
                         {
-                            List<int> inds = Utils.TimeTable.GetCurZone(tables);
-                            int ind = -1;
-                            if (inds.Count != 0) ind = inds[0];
-                            try
-                            {
-                                string str = "目标";
-                                if (App.ConfigData.Target_Type != "NULL") str = App.ConfigData.Target_Type;
-                                Dispatcher.Invoke(() =>
-                                {
-                                    if (remainingTime < TimeSpan.Zero) CountdownText.Text = "已到达" + str + "时间";
-                                    else CountdownText.Text = "距 " + str + " " + remainingTime.Days + "天 " + remainingTime.Hours + "时 " + remainingTime.Minutes + "分 " + remainingTime.Seconds + "秒 ";
-                                    if (ind != TimetableListView.SelectedIndex && ind != -1) TimetableListView.SelectedIndex = ind;
-                                });
+                            if (remainingTime < TimeSpan.Zero) CountdownText.Text = "已到达" + str + "时间";
+                            else CountdownText.Text = $"距 {str} {remainingTime.Days}天 {remainingTime.Hours}时" +
+                                $" {remainingTime.Minutes}分 {remainingTime.Seconds}秒";
 
-                            }
-                            catch (Exception ex) { App.Error("无", App.ErrorType.ProgramError, ex, false, true, true); return; }
-                        }
-                        catch (Exception ex) { App.Error("无", App.ErrorType.ProgresError, ex, false, true, false); return; }
+                            if (ind != TimetableListView.SelectedIndex && ind != -1) TimetableListView.SelectedIndex = ind;
+                        });
+                        inds.Clear();
                     }
+
                     int nowind = Utils.TimeTable.IsStart(tables, TimeSpan.Zero);
-                    if (nowind != -1 && undone[nowind] >= 1)
+                    if (nowind != -1 && undone[nowind] > 0)
                     {
                         undone[nowind] = 0;
                         Dispatcher.Invoke(() =>
                         {
                             App.NoticeWindow.Show();
                             App.NoticeWindow.Ctt.NoticeText1 = "提示";
+
                             if (tables[nowind].notice != "NULL") 
-                                App.NoticeWindow.Ctt.NoticeText2 = $"{tables[nowind].name} 时间 到了\n提示: {tables[nowind].notice}\n时间段: {tables[nowind].start} ~ {tables[nowind].end}";
+                                App.NoticeWindow.Ctt.NoticeText2 = 
+                                $"{tables[nowind].name} 时间 到了\n提示: {tables[nowind].notice}\n" +
+                                $"时间段: {Utils.TimeConverter.JTime2DTime(tables[nowind].start)} ~ {Utils.TimeConverter.JTime2DTime(tables[nowind].end)}";
+
                             else 
-                                App.NoticeWindow.Ctt.NoticeText2 = $"{tables[nowind].name} 时间 到了\n提示: 无\n时间段: {tables[nowind].start} ~ {tables[nowind].end}";
+                                App.NoticeWindow.Ctt.NoticeText2 = 
+                                $"{tables[nowind].name} 时间 到了\n提示: 无\n时间段: {Utils.TimeConverter.JTime2DTime(tables[nowind].start)} " +
+                                $"~ {Utils.TimeConverter.JTime2DTime(tables[nowind].end)}";
+
                             App.NoticeWindow.MediaFile = "Data/Media/alarm.wav";
                             App.NoticeWindow.Init();
                         });
@@ -136,18 +146,30 @@ namespace DateTimer.View
                     int fminind = Utils.TimeTable.IsStart(tables, TimeSpan.FromMinutes(App.ConfigData.Front_Min));
                     if (fminind != -1 && undone[fminind] == 2)
                     {
-                        undone[fminind] = 1;
-                        Dispatcher.Invoke(() =>
+                        if (nowind != -1 && SpanSeconds < 6) SpanSeconds++;
+                        else
                         {
-                            App.NoticeWindow.Show();
-                            App.NoticeWindow.Ctt.NoticeText1 = "提示";
-                            if (tables[fminind].notice != "NULL")
-                                App.NoticeWindow.Ctt.NoticeText2 = $"{App.ConfigData.Front_Min} 分钟后将要到 {tables[fminind].name} 时间了\n提示: {tables[fminind].notice}\n时间段: {tables[fminind].start} ~ {tables[fminind].end}";
-                            else
-                                App.NoticeWindow.Ctt.NoticeText2 = $"{App.ConfigData.Front_Min} 分钟后将要到 {tables[fminind].name} 时间了\n提示: 无\n时间段: {tables[fminind].start} ~ {tables[fminind].end}";
-                            App.NoticeWindow.MediaFile = "Data/Media/notice.wav";
-                            App.NoticeWindow.Init();
-                        });
+                            SpanSeconds = 0;
+                            undone[fminind] = 1;
+                            Dispatcher.Invoke(() =>
+                            {
+                                App.NoticeWindow.Show();
+                                App.NoticeWindow.Ctt.NoticeText1 = "提示";
+
+                                if (tables[fminind].notice != "NULL")
+                                    App.NoticeWindow.Ctt.NoticeText2 =
+                                    $"{App.ConfigData.Front_Min} 分钟后将要到 {tables[fminind].name} 时间了\n提示: {tables[fminind].notice}\n" +
+                                    $"时间段: {Utils.TimeConverter.JTime2DTime(tables[fminind].start)} ~ {Utils.TimeConverter.JTime2DTime(tables[fminind].end)}";
+
+                                else
+                                    App.NoticeWindow.Ctt.NoticeText2 =
+                                    $"{App.ConfigData.Front_Min} 分钟后将要到 {tables[fminind].name} 时间了\n提示: 无\n" +
+                                    $"时间段: {Utils.TimeConverter.JTime2DTime(tables[fminind].start)} ~ {Utils.TimeConverter.JTime2DTime(tables[fminind].end)}";
+
+                                App.NoticeWindow.MediaFile = "Data/Media/notice.wav";
+                                App.NoticeWindow.Init();
+                            });
+                        }
                     }
                     await Task.Delay(1000);
                 }

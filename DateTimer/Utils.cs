@@ -59,21 +59,15 @@ namespace DateTimer
             /// <returns> DateTime 类 </returns>
             public static DateTime Str2Date(string dtstr)
             {
-                DateTime dt = DateTime.Now;
-                try
-                {
-                    dt = DateTime.ParseExact(dtstr, "yyyy MM dd", null);
-                    return dt;
-                }
-                catch (Exception ex) { throw ex; }
+                DateTime dt = DateTime.ParseExact(dtstr, "yyyy MM dd", null);
+                return dt;
             }
             /// <summary> DateTime 类型转 string </summary>
             /// <param name="dateTime"></param>
             /// <returns> 格式: yyyy MM dd </returns>
             public static string Date2Str(DateTime dateTime)
             {
-                try { return $"{dateTime.Year:0000} {dateTime.Month:00} {dateTime.Day:00}"; }
-                catch (Exception ex) { throw ex; }
+                return $"{dateTime.Year:0000} {dateTime.Month:00} {dateTime.Day:00}";
             }
 
             #endregion
@@ -129,7 +123,7 @@ namespace DateTimer
 
             #endregion
 
-            public static string JsonTime2DisplayTime(string time)
+            public static string JTime2DTime(string time)
             {
                 string[] a = time.Split(' ');
                 return int.Parse(a[0]).ToString() + ":" + a[1];
@@ -249,10 +243,8 @@ namespace DateTimer
             public static TimeTableFile GetTimetables(string Path)
             {
                 LogTool.WriteLog("Utils -> 获取时间表", LogTool.LogType.Info);
-                TimeTableFile tables;
                 string JsonStr = FileProcess.ReadFile(Path);
-                try { tables = JsonConvert.DeserializeObject<TimeTableFile>(JsonStr); }
-                catch (Exception ex) { throw ex; } // 错误处理
+                TimeTableFile tables = JsonConvert.DeserializeObject<TimeTableFile>(JsonStr);
                 return tables;
             }
 
@@ -275,8 +267,8 @@ namespace DateTimer
                 TableEntry entry = new TableEntry();
                 entry.Name = table.name;
                 if (table.notice != "NULL") entry.Notice = table.notice;
-                string time1 = TimeConverter.JsonTime2DisplayTime(table.start);
-                string time2 = TimeConverter.JsonTime2DisplayTime(table.end);
+                string time1 = TimeConverter.JTime2DTime(table.start);
+                string time2 = TimeConverter.JTime2DTime(table.end);
                 entry.Time = time1 + "~" + time2;
                 return entry;
             }
@@ -286,27 +278,23 @@ namespace DateTimer
             /// <returns>当前时间在时间段的Index</returns>
             public static List<int> GetCurZone(List<Table> tables)
             {
-                try
+                List<int> index = new List<int>();
+                int i = 0;
+                foreach (Table table in tables)
                 {
-                    List<int> index = new List<int>();
-                    int i = 0;
-                    foreach (Table table in tables)
+                    TimeSpan start = TimeConverter.Int2Time(TimeConverter.Str2TimeInt(table.start));
+                    TimeSpan end = TimeConverter.Int2Time(TimeConverter.Str2TimeInt(table.end));
+                    if (start < end)
                     {
-                        TimeSpan start = TimeConverter.Int2Time(TimeConverter.Str2TimeInt(table.start));
-                        TimeSpan end = TimeConverter.Int2Time(TimeConverter.Str2TimeInt(table.end));
-                        if (start < end)
+                        TimeSpan now = DateTime.Now.TimeOfDay;
+                        if (now > start && now < end)
                         {
-                            TimeSpan now = DateTime.Now.TimeOfDay;
-                            if (now > start && now < end)
-                            {
-                                index.Add(i);
-                            }
+                            index.Add(i);
                         }
-                        i++;
                     }
-                    return index;
+                    i++;
                 }
-                catch (Exception ex) { throw ex; }
+                return index;
             }
 
             /// <summary> 判断是否到点 </summary>
@@ -336,8 +324,8 @@ namespace DateTimer
                 {
                     TimeSpan start = TimeConverter.Int2Time(TimeConverter.Str2TimeInt(table.start));
                     TimeSpan now = DateTime.Now.TimeOfDay;
-                    if (start.Hours >= now.Hours && start.Minutes > now.Minutes) result.Add(2);
-                    else result.Add(1);
+                    if (start > now) result.Add(2);
+                    else result.Add(0);
                 }
                 return result;
             }
@@ -475,16 +463,10 @@ namespace DateTimer
                     for (int i = 0; i < cnt; i++)
                     {
                         if (i != cnt - 1)
-                        {
                             if (changes[i].ChangeTime != changes[i + 1].ChangeTime || changes[i].ChangeDate != changes[i + 1].ChangeDate || changes[i].ChangeClass != changes[i + 1].ChangeClass)
-                            {
                                 list.Add(changes[i]);
-                            }
-                        }
                         else
-                        {
                             list.Add(changes[i]);
-                        }
                     }
                 }
                 return list;
