@@ -30,6 +30,20 @@
  - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)  
  - [DT_Lib by MC118CN](https://github.com/Muhu-C/DateTimer/tree/master/DT_Lib)
 
+### 1.1.0 版本特点
+
+- 新增编辑时间表中的"新建时间表","新建时间段","删除时间表"和"删除时间段"功能
+- 新增"时间点提前提醒"功能
+- 新增"时间点到点提醒"功能
+- 新增使用 **HandyControl.Controls.Growl** 的提示
+- 新增"Log"功能
+- 新增提示音(Windows 11 官方提示音封装)
+- 修复在"新建时间表"中按上下键导致选中时间表为空的问题
+- 更改"关于"部分内容
+- 将 **DT_Lib** 中的功能全部转移至 **DateTimer.Utils**
+- 优化某些函数代码的占用，减小内存溢出可能
+- 优化关闭程序的功能，防止退出时未响应
+
 ### 1.0.4 版本特点
  - 新增"系统报告"内容
  - 优化"错误"窗口功能
