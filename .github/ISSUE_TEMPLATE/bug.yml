@@ -10,14 +10,18 @@ body:
     options:
       - "DateTimer 控制台"
       - "DateTimer 时间表"
-      - "启动中"
+      - "DateTimer 编辑时间表"
+      - "DateTimer 待办"
+      - "总: 启动前"
+      - "总: 启动中"
+      - "总: 加载窗口时(启动后)"
   validations:
     required: true
 
 - type: textarea
   attributes:
     label: "系统报告"
-    description: "DateTimer 1.0.4 及以上可以在设置页面生程系统报告"
+    description: "DateTimer 1.0.4 及以上可以在设置页面生成系统报告"
   validations:
     required: true
 
