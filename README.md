@@ -8,6 +8,7 @@
 ![Lang](https://img.shields.io/badge/Language-C%23_.NET_Framework_4.8.1-blue?style=flat-square)  
 ![Issues](https://img.shields.io/github/issues/Muhu-C/DateTimer?style=flat-square)
 ![GitHub](https://img.shields.io/github/downloads/Muhu-C/DateTimer/total?style=flat-square)  
+![GitHub](https://img.shields.io/badge/Latest-1.1.2-yellow?style=flat-square)  
   
 -------  
   
