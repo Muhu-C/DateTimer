@@ -2,13 +2,15 @@
   "notes": [
     {
       "date": "default",
+      "span": "08 02",
       "weekday": "default",
       "title": "待办",
       "note": "无"
     },
     {
-      "date": "2024/10/01",
+      "date": "2024 10 01",
       "weekday": "default",
+      "span": "default",
       "title": "测试 - 标题",
       "note": "简介"
     }

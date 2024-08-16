@@ -74,7 +74,7 @@ namespace DateTimer
         {
             // 定义消息并复制到剪贴板
             string message;
-            if (ex != null) message = $"报错信息: {ex.Message} \n报错位置: {ex.Source}\n报错代码: \n{ex.StackTrace}\n报错数据类型: {ex.Data}\n提示: {ErrorMessage}";
+            if (ex != null) message = $"报错信息: {ex.Message} \n报错位置: {ex.Source}\n报错代码: \n{ex.StackTrace}\n报错数据类型: {ex.Data}\n提示: {ErrorMessage}\n{ex.InnerException}";
             else message = ErrorMessage;
             Clipboard.SetDataObject(message);
 
@@ -103,6 +103,12 @@ namespace DateTimer
             DispatcherUnhandledException += (_ , e) =>
             {
                 LogTool.WriteLog(e.Exception.ToString(), LogTool.LogType.Error);
+                if (e.Exception is Win32Exception)
+                {
+                    Console.WriteLine(e.Exception.ToString());
+                    e.Handled = true; // 防止程序原地升天
+                    return;
+                }
                 e.Handled = true; // 防止程序原地升天
                 Error("无", ErrorType.UnknownError, e.Exception, false, WindowType: false, FeedBack: true);
             };

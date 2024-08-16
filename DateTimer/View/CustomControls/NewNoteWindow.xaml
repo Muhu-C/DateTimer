@@ -20,7 +20,7 @@
                 <ui:DatePicker x:Name="Dp" VerticalAlignment="Center" Width="200" Margin="0,0,10,5" ui:TitleElement.Title="日期(可选)" ui:TitleElement.TitleWidth="90" ui:TitleElement.TitlePlacement="Left" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
                 <Button x:Name="ClearDate" Content="清除" Style="{DynamicResource ButtonWarning.Small}" Click="ClearDate_Click"/>
             </StackPanel>
-            <ui:ComboBox x:Name="Cb" Width="180" HorizontalAlignment="Left" Margin="0,0,0,5" ui:TitleElement.Title="星期日(可选)" SelectedIndex="0" ui:TitleElement.TitlePlacement="Left" ui:TitleElement.TitleWidth="90">
+            <ui:ComboBox SelectionChanged="Cb_SelectionChanged" x:Name="Cb" Width="180" HorizontalAlignment="Left" Margin="0,0,0,5" ui:TitleElement.Title="星期日(可选)" SelectedIndex="0" ui:TitleElement.TitlePlacement="Left" ui:TitleElement.TitleWidth="90">
                 <ComboBoxItem Tag="default" Content="无"/>
                 <ComboBoxItem Tag="1" Content="周一"/>
                 <ComboBoxItem Tag="2" Content="周二"/>

@@ -1,8 +1,10 @@
 ﻿using DateTimer.View.CustomControls;
 using HandyControl.Themes;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -19,6 +21,7 @@ namespace DateTimer.View
         public NotePageBindContent viewModel = new NotePageBindContent();
         public static NoteFile CurNote;
         public NewNoteWindow newNoteWindow;
+        public EditNoteWindow editNoteWindow;
 
         public NotePage()
         {
@@ -26,6 +29,7 @@ namespace DateTimer.View
             DataContext = viewModel;
             viewModel.Entries = new ObservableCollection<NoteEntry>();
             newNoteWindow = new NewNoteWindow();
+            editNoteWindow = new EditNoteWindow();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -42,6 +46,7 @@ namespace DateTimer.View
             viewModel.Entries.Clear();
             foreach (Note note in CurNote.notes)
                 viewModel.Entries.Add(Note2Entry(note));
+            GetUndoneList();
         }
 
         private void NewNoteButton_Click(object sender, RoutedEventArgs e)
@@ -51,7 +56,7 @@ namespace DateTimer.View
 
         private void EditNote_Click(object sender, RoutedEventArgs e)
         {
-
+            editNoteWindow.Init(NoteList.SelectedIndex);
         }
 
         private void DeleteNote_Click(object sender, RoutedEventArgs e)
@@ -122,17 +127,43 @@ namespace DateTimer.View
             FileProcess.WriteFile(json, Path);
         }
 
+        private void GetUndoneList()
+        {
+            List<UndoneNoteEntry> undones = new List<UndoneNoteEntry>();
+            foreach (Note note in CurNote.notes)
+            {
+                if (note.date != "default")
+                {
+                    string time = string.Empty;
+                    TimeSpan timeSpan = TimeSpan.Zero;
+                    if (note.span != "default")
+                    {
+                        time = string.Join(":", note.span.Split(' '));
+                        timeSpan = TimeConverter.Int2Time(TimeConverter.Str2TimeInt(note.span));
+                    }
+                    DateTime DT = TimeConverter.Str2Date(note.date);
+                    if (DT >= DateTime.Today && timeSpan == TimeSpan.Zero || DT + timeSpan > DateTime.Now)
+                    {
+                        undones.Add(new UndoneNoteEntry { Date=string.Join("/", note.date.Split(' ')), Name=note.title, Span=time });
+                    }
+                }
+            }
+            UndoneNotesList.ItemsSource = undones;
+        }
+
         private NoteEntry Note2Entry(Note note)
         {
-            LogTool.WriteLog("Utils -> 待办基类转显示类", LogTool.LogType.Info);
+            LogTool.WriteLog("Note -> 待办基类转显示类", LogTool.LogType.Info);
             NoteEntry entry = new NoteEntry();
-            if (note.date == "default" && note.weekday != "default") entry.time = note.weekday;
-            else if (note.date != "default" && note.weekday == "default") entry.time = note.date;
-            else if (note.date == "default" && note.weekday == "default") entry.time = "default";
-            else entry.time = note.date;
-            entry.span = note.span;
+            if (note.date == "default" && note.weekday != "default") { entry.time = TimeTable.GetWeekday(note.weekday); Console.WriteLine(note.weekday); }
+            else if (note.date != "default" && note.weekday == "default") entry.time = string.Join("/", note.date.Split(' '));
+            else if (note.date == "default" && note.weekday == "default") entry.time = "未设置";
+            else entry.time = string.Join("/", note.date.Split(' '));
+            if (note.span != "default") entry.span = note.span;
+            else entry.span = "未设置";
+            if (note.note != "default") entry.note = note.note;
+            else entry.note = "无描述";
             entry.title = note.title;
-            entry.note = note.note;
             return entry;
         }
 
@@ -161,5 +192,11 @@ namespace DateTimer.View
         public string span { get; set; }
         public string title { get; set; }
         public string note { get; set; }
+    }
+    public class UndoneNoteEntry
+    {
+        public string Date { get; set; }
+        public string Span { get; set; }
+        public string Name { get; set; }
     }
 }

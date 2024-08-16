@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using HandyControl;
 using HandyControl.Themes;
 using Newtonsoft.Json;
@@ -34,19 +35,34 @@ namespace DateTimer.View.CustomControls
 
         private void DatePicker_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (Dp.SelectedDate == null) return;
+            if (Dp.SelectedDate == null)
+            {
+                NewNote.date = "default";
+                return;
+            }
             NewNote.date = ((DateTime)Dp.SelectedDate).ToString("yyyy MM dd");
         }
 
         private void TimePicker_SelectedTimeChanged(object sender, HandyControl.Data.FunctionEventArgs<DateTime?> e)
         {
-            if (Tp.SelectedTime == null) return;
+            if (Tp.SelectedTime == null)
+            {
+                NewNote.span = "default";
+                return;
+            }
             NewNote.span = ((DateTime)Tp.SelectedTime).ToString("HH mm");
         }
 
         private void ClearDate_Click(object sender, RoutedEventArgs e)
         {
             Dp.SelectedDate = null;
+        }
+
+        private void Cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (NewNote == null) return;
+            if (Cb.SelectedIndex <= 0) NewNote.weekday = "default";
+            else NewNote.weekday = Cb.SelectedIndex.ToString();
         }
 
         private void TbName_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -57,6 +73,7 @@ namespace DateTimer.View.CustomControls
         private void ClearTime_Click(object sender, RoutedEventArgs e)
         {
             Tp.SelectedTime = null;
+            Tp.DisplayTime = DateTime.Now;
         }
 
         private void TbDescription_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -74,12 +91,14 @@ namespace DateTimer.View.CustomControls
         {
             if (NewNote.title == string.Empty)
             {
-                HandyControl.Controls.Growl.Error("未设置标题! ");
+                HandyControl.Controls.Growl.Error("未设置事件名! ");
             }
             else
             {
                 NotePage.CurNote.notes.Add(NewNote);
                 string json = JsonConvert.SerializeObject(NotePage.CurNote);
+                if (NewNote.date != "default" && NewNote.weekday != "default")
+                    HandyControl.Controls.Growl.WarningGlobal("请注意: 待办事项优先判定日期! ");
                 FileProcess.WriteFile(json, "Data\\Config\\notes.json");
                 (Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).Note.LoadFile();
                 Close();
