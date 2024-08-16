@@ -28,7 +28,17 @@
 ### 用到的开源项目  
  - [HandyControl](https://github.com/ghost1372/HandyControl)  
  - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)  
- - [DT_Lib by MC118CN](https://github.com/Muhu-C/DateTimer/tree/master/DT_Lib)
+
+### 1.1.2 版本特点
+
+- 新增"待办"功能
+- 新增待办事项显示功能(半成品)
+- (半)修复 Growl 在显示结束时报错 Win32Exception 的问题
+- 修复内存占用在程序运行时不断变大的问题
+- 修复了同一时间只能显示一条消息的问题
+
+*ps: 这 HandyControl 都停更好久了，Bug 提交和没提交没区别。*  
+*圣诞快乐!!啊啊啊(拍桌子声)好快乐啊啊啊啊啊啊!!!!*
 
 ### 1.1.0 版本特点
 
