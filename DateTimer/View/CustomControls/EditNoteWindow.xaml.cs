@@ -68,9 +68,10 @@ namespace DateTimer.View.CustomControls
 
         private void TbName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (Utils.OtherTools.CountStrLen(TbName.Text) > 20)
+            if (OtherTools.CountStrLen(TbName.Text) > 20)
             {
-                TbName.Text = TbName.Text.Substring(0, 10);
+                TbName.Text = OtherTools.LimitStrLen(TbName.Text, 20);
+                TbName.CaretIndex = TbName.Text.Length - 1;
             }
             NewNote.title = TbName.Text;
         }
@@ -91,7 +92,10 @@ namespace DateTimer.View.CustomControls
         private void TbDescription_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (TbDescription.Text == string.Empty) NewNote.note = "default";
-            else NewNote.note = TbDescription.Text;
+            else
+            {
+                NewNote.note = TbDescription.Text;
+            }
         }
 
         private void CancelBtn_Click(object sender, RoutedEventArgs e)

@@ -582,22 +582,29 @@ namespace DateTimer
                 int count = 0;
                 Regex p_regex = new Regex("^[\u4e00-\u9fa5]{0,}$");
                 foreach (char ch in str)
-                    count = p_regex.IsMatch(ch.ToString()) ? count+2 : count+1;
+                {
+                    if ((int)ch > 127)
+                        count += 2;
+                    else count += 1;
+                }
 
                 return count;
             }
 
-            public static string LimitStrLen(string str)
+            public static string LimitStrLen(string str, int limit)
             {
                 int count = 0, k=0;
                 Regex p_regex = new Regex("^[\u4e00-\u9fa5]{0,}$");
                 foreach (char ch in str)
                 {
-                    count = p_regex.IsMatch(ch.ToString()) ? count + 2 : count + 1;
+                    if ((int)ch > 127)
+                        count += 2;
+                    else count += 1;
+                    if (count > limit) break;
                     k++;
                 }
 
-                return count;
+                return str.Substring(0, k);
             }
         }
     }
