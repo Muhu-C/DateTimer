@@ -84,7 +84,20 @@ namespace DateTimer.View.CustomControls
         private void TbDescription_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             if (TbDescription.Text == string.Empty) NewNote.note = "default";
-            else NewNote.note = TbDescription.Text;
+            else if (TbDescription.Text == "default")
+            {
+                TbDescription.Text = string.Empty;
+                NewNote.note = "default";
+            }
+            else
+            {
+                if (OtherTools.CountStrLen(TbDescription.Text) > 40)
+                {
+                    TbDescription.Text = OtherTools.LimitStrLen(TbDescription.Text, 40);
+                    TbDescription.CaretIndex = TbDescription.Text.Length - 1;
+                }
+                NewNote.note = TbDescription.Text;
+            }
         }
 
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
