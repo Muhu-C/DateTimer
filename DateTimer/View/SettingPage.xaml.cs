@@ -33,7 +33,7 @@ namespace DateTimer.View
             LogTool.WriteLog("设置 -> 加载", LogTool.LogType.Info);
             // 设置主题
             Reload();
-            Theme.SetSkin(this, Theme.GetSkin(Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow));
+            ThemeManager.SetRequestedTheme(this, ThemeManager.GetRequestedTheme(Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow));
         }
 
         public void Reload()
@@ -62,7 +62,7 @@ namespace DateTimer.View
             // 切换主题
             MainWindow mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
             int theme;
-            if (Theme.GetSkin(mw) == HandyControl.Data.SkinType.Default) theme = 0;
+            if (ThemeManager.GetRequestedTheme(mw) == ElementTheme.Default) theme = 0;
             else theme = 1;
 
             // 写入配置文件

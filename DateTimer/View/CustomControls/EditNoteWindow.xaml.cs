@@ -18,8 +18,8 @@ namespace DateTimer.View.CustomControls
         public EditNoteWindow()
         {
             InitializeComponent();
-            if (App.ConfigData.Theme == 0) Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
-            else Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
+            if (App.ConfigData.Theme == 0) ThemeManager.SetRequestedTheme(this, ElementTheme.Dark);
+            else ThemeManager.SetRequestedTheme(this, ElementTheme.Default);
         }
 
         public void Init(int ind)

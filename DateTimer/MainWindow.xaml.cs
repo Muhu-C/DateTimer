@@ -34,8 +34,8 @@ namespace DateTimer
             ShowWindowButton.Header = "隐藏主窗口";
             ContentFrame.Navigate(Home);
 
-            if (App.ConfigData.Theme == 0) Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
-            else Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
+            if (App.ConfigData.Theme == 0) ThemeManager.SetRequestedTheme(this, ElementTheme.Dark);
+            else ThemeManager.SetRequestedTheme(this, ElementTheme.Default);
 
             // 初始化时间表窗口
             Timer.LoadJson();

@@ -41,9 +41,9 @@ namespace DateTimer.View
         {
             viewModel.TextColor = HomePage.viewModel.TextColor;
             if (App.ConfigData.Theme == 0) 
-                Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
+                ThemeManager.SetRequestedTheme(this, ElementTheme.Dark);
             else 
-                Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
+                ThemeManager.SetRequestedTheme(this, ElementTheme.Default);
         }
 
         private async void InitRange()

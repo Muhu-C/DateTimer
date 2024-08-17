@@ -20,8 +20,8 @@ namespace DateTimer.View.CustomControls
 
         public NewTimeTableWindow()
         {
-            if (App.ConfigData.Theme == 0) Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
-            else Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
+            if (App.ConfigData.Theme == 0) ThemeManager.SetRequestedTheme(this, ElementTheme.Dark);
+            else ThemeManager.SetRequestedTheme(this, ElementTheme.Default);
             InitializeComponent();
             LogTool.WriteLog("新建时间表 -> 初始化", LogTool.LogType.Info);
         }

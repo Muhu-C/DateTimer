@@ -31,8 +31,8 @@ namespace DateTimer.View
             DataContext = CurrentTableEntry.model;
             SizeToContent = SizeToContent.WidthAndHeight;
             if (App.ConfigData.Theme == 0)
-                Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
-            else Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
+                ThemeManager.SetRequestedTheme(this, ElementTheme.Dark);
+            else ThemeManager.SetRequestedTheme(this, ElementTheme.Default);
         }
 
         /// <summary> 加载时间表 </summary>

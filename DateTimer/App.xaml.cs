@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Windows.Media;
 using System.Reflection;
 using DateTimer.View.CustomControls;
+using HandyControl.Tools;
 
 namespace DateTimer
 {
@@ -132,7 +133,7 @@ namespace DateTimer
         protected override void OnStartup(StartupEventArgs e)
         {
             AppMutex = new Mutex(true, Assembly.GetExecutingAssembly().GetName().Name, out var createNew);
-
+            ConfigHelper​.Instance.SetLang("zh-cn");
             if (!createNew)
             {
                 LogTool.WriteLog("已有该程序启动! ", LogTool.LogType.Fatal);

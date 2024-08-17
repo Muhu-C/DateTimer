@@ -26,13 +26,13 @@ namespace DateTimer.View.CustomControls
         {
             if (App.ConfigData.Theme == 0)
             {
-                HandyControl.Themes.Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
+                HandyControl.Themes.ThemeManager.SetRequestedTheme(this, HandyControl.Themes.ElementTheme.Dark);
                 Ctt.NT2Fore = Brushes.White;
                 TimeText.Foreground = new SolidColorBrush(Color.FromRgb(200, 200, 200));
             }
             else
             {
-                HandyControl.Themes.Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
+                HandyControl.Themes.ThemeManager.SetRequestedTheme(this, HandyControl.Themes.ElementTheme.Default);
                 Ctt.NT2Fore = Brushes.Black;
                 TimeText.Foreground = new SolidColorBrush(Color.FromRgb(56, 56, 56));
             }
