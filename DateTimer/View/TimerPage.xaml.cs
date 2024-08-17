@@ -341,8 +341,8 @@ namespace DateTimer.View
             int a = TimeList.SelectedIndex;
             if (a >= 0)
             {
-                TPStart.SelectedTime = new DateTime(Utils.TimeConverter.Int2Time(Utils.TimeConverter.Str2TimeInt(tables[a].start)).Ticks);
-                TPEnd.SelectedTime = new DateTime(Utils.TimeConverter.Int2Time(Utils.TimeConverter.Str2TimeInt(tables[a].end)).Ticks);
+                TPStart.SelectedTime = new DateTime(Utils.TimeConverter.Str2Time(tables[a].start).Ticks);
+                TPEnd.SelectedTime = new DateTime(Utils.TimeConverter.Str2Time(tables[a].end).Ticks);
                 ElementTb.Text = tables[a].name;
                 if (tables[a].notice != "NULL") NoticeTb.Text = tables[a].notice;
                 else NoticeTb.Text = String.Empty;

@@ -309,8 +309,8 @@ namespace DateTimer
                 int i = 0;
                 foreach (Table table in tables)
                 {
-                    TimeSpan start = TimeConverter.Int2Time(TimeConverter.Str2TimeInt(table.start));
-                    TimeSpan end = TimeConverter.Int2Time(TimeConverter.Str2TimeInt(table.end));
+                    TimeSpan start = TimeConverter.Str2Time(table.start);
+                    TimeSpan end = TimeConverter.Str2Time(table.end);
                     if (start < end)
                     {
                         TimeSpan now = DateTime.Now.TimeOfDay;
@@ -332,7 +332,7 @@ namespace DateTimer
                 int i = 0;
                 foreach(Table table in tables)
                 {
-                    TimeSpan start = TimeConverter.Int2Time(TimeConverter.Str2TimeInt(table.start));
+                    TimeSpan start = TimeConverter.Str2Time(table.start);
                     TimeSpan now = DateTime.Now.TimeOfDay + front;
                     if (start.Hours == now.Hours && start.Minutes == now.Minutes)
                         return i;
@@ -349,7 +349,7 @@ namespace DateTimer
                 List<int> result = new List<int>();
                 foreach (Table table in tables)
                 {
-                    TimeSpan start = TimeConverter.Int2Time(TimeConverter.Str2TimeInt(table.start));
+                    TimeSpan start = TimeConverter.Str2Time(table.start);
                     TimeSpan now = DateTime.Now.TimeOfDay;
                     if (start > now) result.Add(2);
                     else result.Add(0);

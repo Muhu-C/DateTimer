@@ -37,7 +37,7 @@ namespace DateTimer.View.CustomControls
             TbName.Text = NewNote.title;
             TbDescription.Text = NewNote.note;
             if (NewNote.date != "default") Dp.SelectedDate = TimeConverter.Str2Date(NewNote.date);
-            if (NewNote.span != "default") Tp.SelectedTime = new DateTime(TimeConverter.Int2Time(TimeConverter.Str2TimeInt(NewNote.span)).Ticks);
+            if (NewNote.span != "default") Tp.SelectedTime = new DateTime(TimeConverter.Str2Time(NewNote.span).Ticks);
             if (NewNote.weekday != "default") Cb.SelectedIndex = Convert.ToInt32(NewNote.weekday);
         }
 

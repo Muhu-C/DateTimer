@@ -131,15 +131,16 @@ namespace DateTimer.View
             List<UndoneNoteEntry> undones = new List<UndoneNoteEntry>();
             foreach (Note note in CurNote.notes)
             {
-                if (note.date != "default")
-                {
-                    TimeSpan timeSpan = TimeSpan.Zero;
-                    if (note.span != "default")
-                        timeSpan = TimeConverter.Str2Time(note.span);
-                    DateTime DT = TimeConverter.Str2Date(note.date);
-                    if (DT >= DateTime.Today && timeSpan == TimeSpan.Zero || DT + timeSpan > DateTime.Now)
-                        undones.Add(new UndoneNoteEntry { Date=string.Join("/", note.date.Split(' ')), Name=note.title, Span=TimeConverter.Time2Str(timeSpan, ":") });
-                }
+                if (note.date == "default") continue;
+                TimeSpan timeSpan = (note.span == "default") ? TimeSpan.Zero : TimeConverter.Str2Time(note.span);
+                DateTime DT = TimeConverter.Str2Date(note.date);
+                if (DT >= DateTime.Today && timeSpan == TimeSpan.Zero || DT + timeSpan > DateTime.Now)
+                    undones.Add(new UndoneNoteEntry
+                    {
+                        Date = string.Join("/", note.date.Split(' ')),
+                        Name = note.title,
+                        Span = (timeSpan == TimeSpan.Zero) ? "" : TimeConverter.Time2Str(timeSpan, ":")
+                    });
             }
             UndoneNotesList.ItemsSource = undones;
         }
@@ -148,33 +149,39 @@ namespace DateTimer.View
         {
             LogTool.WriteLog("Note -> 待办基类转显示类", LogTool.LogType.Info);
             NoteEntry entry = new NoteEntry();
-            if (note.date == "default" && note.weekday != "default") { entry.time = TimeTable.GetWeekday(note.weekday); Console.WriteLine(note.weekday); }
-            else if (note.date != "default" && note.weekday == "default") entry.time = string.Join("/", note.date.Split(' '));
-            else if (note.date == "default" && note.weekday == "default") entry.time = "未设置";
+            if (note.date == "default")
+                entry.time = (note.weekday == "default") ? "未设置" : TimeTable.GetWeekday(note.weekday);
             else entry.time = string.Join("/", note.date.Split(' '));
-            if (note.span != "default") entry.span = note.span;
-            else entry.span = "未设置";
-            if (note.note != "default") entry.note = note.note;
-            else entry.note = "无描述";
+
+            entry.span = (note.span == "default") ? "未设置" : note.span;
+            entry.note = (note.note == "default") ? "无描述" : note.note;
+            
             entry.title = note.title;
             return entry;
         }
 
+        private List<UndoneNoteEntry> NoteTimeSort(List<UndoneNoteEntry> undones)
+        {
+            List<UndoneNoteEntry> sorted = undones;
+            int lenofnotes = sorted.Count;
+        }
+        #endregion
+
+        #region 右击选中
         private void ListViewItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var listViewItem = VisualUpwardSearch<ListViewItem>(e.OriginalSource as DependencyObject) as ListViewItem;
-            if (listViewItem != null)
+            // 使右击列表时选中当前内容
+            if (VisualUpwardSearch<ListViewItem>(e.OriginalSource as DependencyObject) is ListViewItem listViewItem)
             {
-                NoteList.SelectedIndex = -1;
-                listViewItem.IsSelected = true;
+                NoteList.SelectedIndex = -1; // 取消选择
+                listViewItem.IsSelected = true; // 重新选择
                 e.Handled = true;
             }
         }
 
         static DependencyObject VisualUpwardSearch<T>(DependencyObject source)
         {
-            while (source != null && source.GetType() != typeof(T))
-                source = VisualTreeHelper.GetParent(source);
+            while (source != null && source.GetType() != typeof(T)) source = VisualTreeHelper.GetParent(source);
             return source;
         }
         #endregion
