@@ -54,7 +54,7 @@ namespace DateTimer.View
         private void Page_Loaded(object sender, RoutedEventArgs e) 
         {
             LogTool.WriteLog("编辑时间表 -> 加载", LogTool.LogType.Info);
-            ThemeManager.SetRequestedTheme(this, ThemeManager.GetRequestedTheme(Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow));
+            Theme.SetSkin(this, Theme.GetSkin(Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow));
             InitUI();
         }
 

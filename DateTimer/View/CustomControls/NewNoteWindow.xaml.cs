@@ -29,8 +29,8 @@ namespace DateTimer.View.CustomControls
                 weekday="default",
                 title=string.Empty
             };
-            if (App.ConfigData.Theme == 0) ThemeManager.SetRequestedTheme(this, ElementTheme.Dark);
-            else ThemeManager.SetRequestedTheme(this, ElementTheme.Default);
+            if (App.ConfigData.Theme == 0) Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
+            else Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
         }
 
         private void DatePicker_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)

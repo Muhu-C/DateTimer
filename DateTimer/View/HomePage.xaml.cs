@@ -36,11 +36,11 @@ namespace DateTimer.View
             LogTool.WriteLog("主页 -> 加载", LogTool.LogType.Info);
             // 获取主题
             MainWindow mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
-            ThemeManager.SetRequestedTheme(this, ThemeManager.GetRequestedTheme(mw));
+            Theme.SetSkin(this, Theme.GetSkin(mw));
 
             // 设置主题
             viewModel.TextColor = Brushes.Black; 
-            if (ThemeManager.GetRequestedTheme(mw) == ElementTheme.Dark) viewModel.TextColor = Brushes.White; // 检测主题并更改文字颜色
+            if (Theme.GetSkin(mw) == HandyControl.Data.SkinType.Dark) viewModel.TextColor = Brushes.White; // 检测主题并更改文字颜色
 
             // 加载配置文件
             Reload();
