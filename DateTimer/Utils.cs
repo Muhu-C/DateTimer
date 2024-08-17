@@ -57,17 +57,17 @@ namespace DateTimer
             /// <summary> 字符串转DateTime类型 </summary>
             /// <param name="dtstr">格式: yyyy MM dd</param>
             /// <returns> DateTime 类 </returns>
-            public static DateTime Str2Date(string dtstr)
+            public static DateTime Str2Date(string dtstr, string connect = " ")
             {
-                DateTime dt = DateTime.ParseExact(dtstr, "yyyy MM dd", null);
+                DateTime dt = DateTime.ParseExact(dtstr, $"yyyy{connect}MM{connect}dd", null);
                 return dt;
             }
             /// <summary> DateTime 类型转 string </summary>
             /// <param name="dateTime"></param>
             /// <returns> 格式: yyyy MM dd </returns>
-            public static string Date2Str(DateTime dateTime)
+            public static string Date2Str(DateTime dateTime, string connect = " ")
             {
-                return $"{dateTime.Year:0000} {dateTime.Month:00} {dateTime.Day:00}";
+                return $"{dateTime.Year:0000}{connect}{dateTime.Month:00}{connect}{dateTime.Day:00}";
             }
 
             #endregion

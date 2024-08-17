@@ -139,10 +139,10 @@ namespace DateTimer.View
                     {
                         Date = string.Join("/", note.date.Split(' ')),
                         Name = note.title,
-                        Span = (timeSpan == TimeSpan.Zero) ? "" : TimeConverter.Time2Str(timeSpan, ":")
+                        Span = (timeSpan == TimeSpan.Zero) ? string.Empty : TimeConverter.Time2Str(timeSpan, ":")
                     });
             }
-            UndoneNotesList.ItemsSource = undones;
+            UndoneNotesList.ItemsSource = NoteTimeSort(undones);
         }
 
         private NoteEntry Note2Entry(Note note)
@@ -164,6 +164,18 @@ namespace DateTimer.View
         {
             List<UndoneNoteEntry> sorted = undones;
             int lenofnotes = sorted.Count;
+
+            // 通过冒泡排序按时间排出顺序
+            for (int i = 0; i < lenofnotes; i++)
+                for (int j = 0; j < lenofnotes - i - 1; j++)
+                {
+                    DateTime time1 = TimeConverter.Str2Date(sorted[j].Date, "/") + ((sorted[j].Span == "") ? TimeSpan.Zero : TimeConverter.Str2Time(sorted[j].Span));
+                    DateTime time2 = TimeConverter.Str2Date(sorted[j+1].Date, "/") + ((sorted[j+1].Span == "") ? TimeSpan.Zero : TimeConverter.Str2Time(sorted[j].Span));
+                    if (time1 > time2)
+                        (sorted[j], sorted[j + 1]) = (sorted[j + 1], sorted[j]);
+                }
+
+            return sorted;
         }
         #endregion
 
