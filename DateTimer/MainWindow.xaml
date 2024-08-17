@@ -6,6 +6,7 @@
         xmlns:ui="https://handyorg.github.io/handycontrol"
         xmlns:local="clr-namespace:DateTimer"
         xmlns:prop="clr-namespace:DateTimer.Properties"
+        
         mc:Ignorable="d"
         Closing="Window_Closing"
         Title="控制台" MinHeight="450" MaxHeight="450" MinWidth="700" MaxWidth="700">
