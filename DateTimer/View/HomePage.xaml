@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:DateTimer"
       xmlns:ui="https://handyorg.github.io/handycontrol"
       mc:Ignorable="d" 
-      ui:ThemeManager.ActualTheme="Dark"
+      ui:ThemeManager.RequestedTheme="Dark"
       Height="420" d:DesignWidth="600"
       Loaded="Page_Loaded"
       d:Background="White"

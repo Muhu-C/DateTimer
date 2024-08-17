@@ -9,7 +9,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemeResources/>
                 <ui:Theme/>
-                <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
             <FontFamily x:Key="IconFont">/DateTimer;Component/Data/Icon/#Segoe Fluent Icons</FontFamily>
         </ResourceDictionary>

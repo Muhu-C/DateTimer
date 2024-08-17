@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DateTimer"
         xmlns:ui="https://handyorg.github.io/handycontrol"
-        ui:Theme.Skin="Dark"
+        ui:ThemeManager.RequestedTheme="Dark"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Closing="Window_Closing"
-        Title="DateTimer - 窗口" MinHeight="350" Height="Auto" MaxHeight="700" MinWidth="400" MaxWidth="400">
+        Title="DateTimer - 窗口" MinHeight="350" Height="350" MaxHeight="700" MinWidth="400" MaxWidth="400">
     <Grid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0,20,0,0" Height="Auto" VerticalAlignment="Top">
             <TextBlock HorizontalAlignment="Center" x:Name="CountdownText" FontWeight="Bold" FontSize="20" Text="已到达目标时间" />
