@@ -151,7 +151,7 @@ namespace DateTimer
             public static string JTime2DTime(string time)
             {
                 string[] a = time.Split(' ');
-                return int.Parse(a[0]).ToString() + ":" + a[1];
+                return $"{int.Parse(a[0])}:{a[1]}"; ;
             }
 
             public static string NumToTime(string num)
@@ -189,9 +189,7 @@ namespace DateTimer
                 LogTool.WriteLog($"Utils -> 读取 {Path}", LogTool.LogType.Info);
                 using (StreamReader sr = new StreamReader(Path))
                 {
-                    string content;
-                    content = sr.ReadToEnd();
-                    return content;
+                    return sr.ReadToEnd();
                 }
             }
         }
@@ -268,9 +266,7 @@ namespace DateTimer
             public static TimeTableFile GetTimetables(string Path)
             {
                 LogTool.WriteLog("Utils -> 获取时间表", LogTool.LogType.Info);
-                string JsonStr = FileProcess.ReadFile(Path);
-                TimeTableFile tables = JsonConvert.DeserializeObject<TimeTableFile>(JsonStr);
-                return tables;
+                return JsonConvert.DeserializeObject<TimeTableFile>(FileProcess.ReadFile(Path));
             }
 
             /// <summary> 序列化并写入时间表 json </summary>
@@ -279,8 +275,7 @@ namespace DateTimer
             public static void WriteTimetables(TimeTableFile table, string Path)
             {
                 LogTool.WriteLog("Utils -> 写入时间表", LogTool.LogType.Info);
-                string timetablejson = JsonConvert.SerializeObject(table);
-                FileProcess.WriteFile(timetablejson, Path);
+                FileProcess.WriteFile(JsonConvert.SerializeObject(table), Path);
             }
 
             /// <summary> 将时间表Table类转为显示时间表TableEntry类 </summary>
@@ -289,18 +284,17 @@ namespace DateTimer
             public static TableEntry Table2Entry(Table table)
             {
                 LogTool.WriteLog("Utils -> 时间表基类转显示类", LogTool.LogType.Info);
-                TableEntry entry = new TableEntry();
-                entry.Name = table.name;
-                if (table.notice != "NULL") entry.Notice = table.notice;
-                string time1 = TimeConverter.JTime2DTime(table.start);
-                string time2 = TimeConverter.JTime2DTime(table.end);
-                entry.Time = time1 + "~" + time2;
-                return entry;
+                return new TableEntry
+                {
+                    Name = table.name,
+                    Notice = (table.notice == "NULL") ? string.Empty : table.notice,
+                    Time = $"{TimeConverter.JTime2DTime(table.start)}~{TimeConverter.JTime2DTime(table.end)}"
+                };
             }
 
             /// <summary> 获取当前所在时间段 </summary>
             /// <param name="table"></param>
-            /// <returns>当前时间在时间段的Index</returns>
+            /// <returns>当前时间在时间段的下标</returns>
             public static List<int> GetCurZone(List<Table> tables)
             {
                 List<int> index = new List<int>();
@@ -309,14 +303,14 @@ namespace DateTimer
                 {
                     TimeSpan start = TimeConverter.Str2Time(table.start);
                     TimeSpan end = TimeConverter.Str2Time(table.end);
-                    if (start < end)
+                    if (start >= end)
                     {
-                        TimeSpan now = DateTime.Now.TimeOfDay;
-                        if (now > start && now < end)
-                        {
-                            index.Add(i);
-                        }
+                        HandyControl.Controls.Growl.WarningGlobal("时间表配置不正确! ");
+                        continue;
                     }
+                    TimeSpan now = DateTime.Now.TimeOfDay;
+                    if (now > start && now < end) index.Add(i);
+
                     i++;
                 }
                 return index;
@@ -395,7 +389,7 @@ namespace DateTimer
                 string[] a = jsonweekday.Split(' ');
                 foreach (string str in a)
                     outstr.Add("周" + TimeConverter.NumToTime(str));
-                return String.Join(", ", outstr);
+                return string.Join(", ", outstr);
             }
 
             /// <summary> 将 json 字符串格式化 </summary>
@@ -482,17 +476,18 @@ namespace DateTimer
                 LogTool.WriteLog("Utils -> 修改去重", LogTool.LogType.Info);
                 List<ViewUtils.ChangeEvent> list = new List<ViewUtils.ChangeEvent>();
                 int cnt = changes.Count;
-                if (changes != null && cnt > 0)
+                if (changes == null || cnt == 0) return list;
+
+                changes = Class_Sort(changes);
+                for (int i = 0; i < cnt; i++)
                 {
-                    changes = Class_Sort(changes);
-                    for (int i = 0; i < cnt; i++)
+                    if (i != cnt - 1)
                     {
-                        if (i != cnt - 1)
-                            if (changes[i].ChangeTime != changes[i + 1].ChangeTime || changes[i].ChangeDate != changes[i + 1].ChangeDate || changes[i].ChangeClass != changes[i + 1].ChangeClass)
-                                list.Add(changes[i]);
-                        else
+                        if (changes[i].ChangeTime != changes[i + 1].ChangeTime || changes[i].ChangeDate != changes[i + 1].ChangeDate || changes[i].ChangeClass != changes[i + 1].ChangeClass)
                             list.Add(changes[i]);
                     }
+                    else
+                        list.Add(changes[i]);
                 }
                 return list;
             }
@@ -567,8 +562,7 @@ namespace DateTimer
             public static string GetEnvVer()
             {
                 LogTool.WriteLog("Utils -> 获取环境版本", LogTool.LogType.Info);
-                try { return RuntimeInformation.FrameworkDescription; }
-                catch (Exception e) { throw e; }
+                return RuntimeInformation.FrameworkDescription;
             }
 
             /// <summary>
