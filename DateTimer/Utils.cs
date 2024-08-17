@@ -146,7 +146,7 @@ namespace DateTimer
             /// <returns>格式 HH mm</returns>
             public static string Time2Str(TimeSpan timeSpan, string connect = " ")
             {
-                return $"{timeSpan.Hours}{connect}{timeSpan.Minutes}";
+                return $"{timeSpan.Hours:00}{connect}{timeSpan.Minutes:00}";
             }
             #endregion
 

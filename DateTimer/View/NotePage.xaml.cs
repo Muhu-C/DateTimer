@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using static DateTimer.Utils;
+using static DateTimer.View.NotePage;
 
 namespace DateTimer.View
 {
@@ -142,7 +143,22 @@ namespace DateTimer.View
                         Span = (timeSpan == TimeSpan.Zero) ? string.Empty : TimeConverter.Time2Str(timeSpan, ":")
                     });
             }
-            UndoneNotesList.ItemsSource = NoteTimeSort(undones);
+            undones = NoteTimeSort(undones);
+            foreach (Note note1 in CurNote.notes)
+            {
+                if (note1.weekday == "default") continue;
+                TimeSpan timeSpan = (note1.span == "default") ? TimeSpan.Zero : TimeConverter.Str2Time(note1.span);
+                if (Convert.ToInt32(note1.weekday) % 7 == Convert.ToInt32(DateTime.Today.DayOfWeek))
+                {
+                    undones.Insert(0, new UndoneNoteEntry
+                    {
+                        Date = TimeTable.GetWeekday(note1.weekday),
+                        Name = note1.title,
+                        Span = (timeSpan == TimeSpan.Zero) ? string.Empty : TimeConverter.Time2Str(timeSpan, ":")
+                    });
+                }
+            }
+            UndoneNotesList.ItemsSource = undones;
         }
 
         private NoteEntry Note2Entry(Note note)
@@ -167,13 +183,15 @@ namespace DateTimer.View
 
             // 通过冒泡排序按时间排出顺序
             for (int i = 0; i < lenofnotes; i++)
+            {
                 for (int j = 0; j < lenofnotes - i - 1; j++)
                 {
-                    DateTime time1 = TimeConverter.Str2Date(sorted[j].Date, "/") + ((sorted[j].Span == "") ? TimeSpan.Zero : TimeConverter.Str2Time(sorted[j].Span));
-                    DateTime time2 = TimeConverter.Str2Date(sorted[j+1].Date, "/") + ((sorted[j+1].Span == "") ? TimeSpan.Zero : TimeConverter.Str2Time(sorted[j].Span));
+                    DateTime time1 = TimeConverter.Str2Date(sorted[j].Date, "/") + ((sorted[j].Span == string.Empty) ? TimeSpan.Zero : TimeConverter.Str2Time(sorted[j].Span, ':'));
+                    DateTime time2 = TimeConverter.Str2Date(sorted[j + 1].Date, "/") + ((sorted[j + 1].Span == string.Empty) ? TimeSpan.Zero : TimeConverter.Str2Time(sorted[j + 1].Span, ':'));
                     if (time1 > time2)
                         (sorted[j], sorted[j + 1]) = (sorted[j + 1], sorted[j]);
                 }
+            }
 
             return sorted;
         }
