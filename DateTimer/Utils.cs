@@ -540,13 +540,13 @@ namespace DateTimer
                         {
                             if (majorVersion > 10 || majorVersion == 10 && buildNumber >= 22000)
                             {
-                                if (majorVersion > 10) return "Windows " + majorVersion + " Build " + buildNumber;
-                                else return "Windows 11 Build " + buildNumber;
+                                if (majorVersion > 10) return $"Windows {majorVersion} Build {buildNumber}";
+                                else return $"Windows 11 Build {buildNumber}";
                             }
-                            else if (majorVersion == 10 && buildNumber < 22000) return "Windows 10 Build " + buildNumber;
+                            else if (majorVersion == 10 && buildNumber < 22000) return $"Windows 10 Build {buildNumber}";
                             else return productName;
                         }
-                        else return "错误";
+                        else return "无法获取系统版本";
                     }
                     catch
                     {

@@ -55,7 +55,11 @@
             <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
                 <!--设置配置文件地址-->
                 <TextBlock VerticalAlignment="Center" FontSize="14" Text="时间表配置文件"/>
-                <TextBlock VerticalAlignment="Center" Margin="40,0,0,0" FontSize="14" Text="未配置" Name="TBTimerConfig"/>
+                <ui:ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="40,0,0,0" MaxWidth="180">
+                    <ui:ScrollViewer.Content>
+                        <TextBlock VerticalAlignment="Center" FontSize="14" Text="未配置" Name="TBTimerConfig"/>
+                    </ui:ScrollViewer.Content>
+                </ui:ScrollViewer>
                 <TextBlock VerticalAlignment="Center" FontSize="14" Name="TimeTipIcon" FontFamily="{StaticResource IconFont}" Margin="20,0,0,0"/>
                 <TextBlock VerticalAlignment="Center" FontSize="14" Name="TimeTip" Margin="5,0,0,0"/>
             </StackPanel>
@@ -87,7 +91,7 @@
             <TextBlock Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Name="IsChangeSaved" Foreground="Orange" d:Text="设置未保存" Margin="0,0,20,0"/>
 
             <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Margin="0,20,0,0">
-                <TextBlock VerticalAlignment="Center" Margin="0,10,0,0" FontWeight="Bold" FontSize="24" Text="关于"/>
+                <TextBlock VerticalAlignment="Center" Margin="0,10,0,0" FontWeight="Bold" FontSize="24" Text="关于程序"/>
                 <ui:Card TextBlock.FontSize="15" Margin="15,10,0,0">
                     <Grid Margin="15,5,5,5">
                         <Grid.RowDefinitions>
@@ -101,7 +105,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Width="Auto" Text="木沪时间表 DateTimer" Margin="0,0,10,10"/>
+                            <TextBlock Grid.Column="0" Width="Auto" Text="木沪时间表 DateTimer" Margin="0,0,5,10"/>
                             <TextBlock Grid.Column="1" Text="{Binding VersionTxt}"/>
                         </Grid>
                         <Grid Grid.Row="1" Width="523" Margin="0,0,0,10">

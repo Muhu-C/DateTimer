@@ -19,6 +19,7 @@ namespace DateTimer.View
     {
         public NotePageBindContent viewModel = new NotePageBindContent();
         public static NoteFile CurNote;
+        public static List<UndoneNoteEntry> UndoneNotes;
         public NewNoteWindow newNoteWindow;
         public EditNoteWindow editNoteWindow;
 
@@ -165,7 +166,6 @@ namespace DateTimer.View
                 }
             }
             UndoneNotesList.ItemsSource = undones;
-            undones.Clear();
         }
 
         private NoteEntry Note2Entry(Note note)
