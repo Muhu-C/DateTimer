@@ -143,6 +143,5 @@ namespace DateTimer.View.CustomControls
             e.Cancel = true;
             Hide();
         }
-
     }
 }

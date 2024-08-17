@@ -1,3 +1,4 @@
+chcp 65001
 @echo off
 E:
 cd E:/Tools/DateTimer_1.1
