@@ -123,6 +123,33 @@ namespace DateTimer
 
             #endregion
 
+            #region 时分字符串和 TimeSpan 互转
+            /// <summary>
+            /// 把字符串转为 TimeSpan
+            /// </summary>
+            /// <param name="TMStr">格式: HH{split}mm</param>
+            /// <param name="split">时分连接字符</param>
+            /// <returns>TimeSpan 时间</returns>
+            public static TimeSpan Str2Time(string TMStr, char split = ' ')
+            {
+                string[] times = TMStr.Split(split);
+                TimeSpan timeSpan = new TimeSpan();
+                timeSpan = DateTime.Parse($"{times[0]}:{times[1]}").TimeOfDay;
+                return timeSpan;
+            }
+
+            /// <summary>
+            /// 把 TimeSpan 转为字符串
+            /// </summary>
+            /// <param name="timeSpan">时间(HH mm)</param>
+            /// <param name="connect">连接字符</param>
+            /// <returns>格式 HH mm</returns>
+            public static string Time2Str(TimeSpan timeSpan, string connect = " ")
+            {
+                return $"{timeSpan.Hours}{connect}{timeSpan.Minutes}";
+            }
+            #endregion
+
             public static string JTime2DTime(string time)
             {
                 string[] a = time.Split(' ');

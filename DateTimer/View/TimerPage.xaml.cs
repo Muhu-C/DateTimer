@@ -288,7 +288,7 @@ namespace DateTimer.View
             else
             {
                 lastend = timetables[TimeSel.SelectedIndex].tables[timetables[TimeSel.SelectedIndex].tables.Count - 1].end;
-                TimeSpan newend = Utils.TimeConverter.Int2Time(Utils.TimeConverter.Str2TimeInt(lastend));
+                TimeSpan newend = Utils.TimeConverter.Str2Time(lastend);
                 if (App.ConfigData.Front_Min <= 8) newend += TimeSpan.FromMinutes(30);
                 else if(App.ConfigData.Front_Min <= 20) newend += TimeSpan.FromHours(1);
                 else newend += TimeSpan.FromMinutes(90);

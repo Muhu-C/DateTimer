@@ -133,18 +133,12 @@ namespace DateTimer.View
             {
                 if (note.date != "default")
                 {
-                    string time = string.Empty;
                     TimeSpan timeSpan = TimeSpan.Zero;
                     if (note.span != "default")
-                    {
-                        time = string.Join(":", note.span.Split(' '));
-                        timeSpan = TimeConverter.Int2Time(TimeConverter.Str2TimeInt(note.span));
-                    }
+                        timeSpan = TimeConverter.Str2Time(note.span);
                     DateTime DT = TimeConverter.Str2Date(note.date);
                     if (DT >= DateTime.Today && timeSpan == TimeSpan.Zero || DT + timeSpan > DateTime.Now)
-                    {
-                        undones.Add(new UndoneNoteEntry { Date=string.Join("/", note.date.Split(' ')), Name=note.title, Span=time });
-                    }
+                        undones.Add(new UndoneNoteEntry { Date=string.Join("/", note.date.Split(' ')), Name=note.title, Span=TimeConverter.Time2Str(timeSpan, ":") });
                 }
             }
             UndoneNotesList.ItemsSource = undones;
