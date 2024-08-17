@@ -4,6 +4,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -33,6 +35,7 @@ namespace DateTimer.View
             newNoteWindow = new NewNoteWindow();
             editNoteWindow = new EditNoteWindow();
             UndoneNotes = new List<UndoneNoteEntry>();
+            InitRange();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -42,8 +45,18 @@ namespace DateTimer.View
                 Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
             else 
                 Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
+        }
 
-            LoadFile();
+        private async void InitRange()
+        {
+            await Task.Run(async () =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    LoadFile();
+                });
+                await Task.Delay(5000);
+            });
         }
 
         public void LoadFile()
@@ -53,6 +66,7 @@ namespace DateTimer.View
             foreach (Note note in CurNote.notes)
                 viewModel.Entries.Add(Note2Entry(note));
             GetUndoneList();
+            (Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).Home.NoteCnt.Text = (todayNote == 0) ? "今日无待办" : $"今日有 {todayNote} 项待办";
         }
 
         private void NewNoteButton_Click(object sender, RoutedEventArgs e)
@@ -136,6 +150,7 @@ namespace DateTimer.View
         private void GetUndoneList()
         {
             UndoneNotes.Clear();
+            todayNote = 0;
 
             // 获取日期为主的待办
             foreach (Note note in CurNote.notes)
@@ -146,9 +161,7 @@ namespace DateTimer.View
                 if (DT >= DateTime.Today && timeSpan == TimeSpan.Zero || DT + timeSpan > DateTime.Now)
                 {
                     if (DT == DateTime.Today && timeSpan == TimeSpan.Zero || DT == DateTime.Today && DT + timeSpan > DateTime.Now)
-                    {
-
-                    }
+                        todayNote++;
                     UndoneNotes.Add(new UndoneNoteEntry
                     {
                         Date = string.Join("/", note.date.Split(' ')),
