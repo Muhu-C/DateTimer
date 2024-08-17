@@ -15,7 +15,7 @@
             <RowDefinition Height="42"/>
         </Grid.RowDefinitions>
         <TextBlock Margin="10,0,0,0" Grid.Row="0" Text="新建待办" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" FontSize="18"/>
-        <StackPanel Margin="40,0,0,0" Grid.Row="1" HorizontalAlignment="Left">
+        <StackPanel MaxWidth="250" Margin="40,0,0,0" Grid.Row="1" HorizontalAlignment="Left">
             <StackPanel Width="250" Orientation="Horizontal" VerticalAlignment="Center">
                 <ui:DatePicker x:Name="Dp" VerticalAlignment="Center" Width="200" Margin="0,0,10,5" ui:TitleElement.Title="日期(可选)" ui:TitleElement.TitleWidth="90" ui:TitleElement.TitlePlacement="Left" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
                 <Button x:Name="ClearDate" Content="清除" Style="{DynamicResource ButtonWarning.Small}" Click="ClearDate_Click"/>
