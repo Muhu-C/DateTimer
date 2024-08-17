@@ -133,9 +133,7 @@ namespace DateTimer
             public static TimeSpan Str2Time(string TMStr, char split = ' ')
             {
                 string[] times = TMStr.Split(split);
-                TimeSpan timeSpan = new TimeSpan();
-                timeSpan = DateTime.Parse($"{times[0]}:{times[1]}").TimeOfDay;
-                return timeSpan;
+                return DateTime.Parse($"{times[0]}:{times[1]}").TimeOfDay;
             }
 
             /// <summary>

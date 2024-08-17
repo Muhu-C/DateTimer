@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using static DateTimer.Utils;
-using static DateTimer.View.NotePage;
 
 namespace DateTimer.View
 {
@@ -35,8 +34,11 @@ namespace DateTimer.View
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             viewModel.TextColor = HomePage.viewModel.TextColor;
-            if (App.ConfigData.Theme == 0) Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
-            else Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
+            if (App.ConfigData.Theme == 0) 
+                Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
+            else 
+                Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
+
             LoadFile();
         }
 
@@ -51,11 +53,13 @@ namespace DateTimer.View
 
         private void NewNoteButton_Click(object sender, RoutedEventArgs e)
         {
+            // 新建待办
             newNoteWindow.Show();
         }
 
         private void EditNote_Click(object sender, RoutedEventArgs e)
         {
+            // 编辑待办
             editNoteWindow.Init(NoteList.SelectedIndex);
         }
 
@@ -116,20 +120,20 @@ namespace DateTimer.View
         private static NoteFile GetNotes(string Path)
         {
             LogTool.WriteLog("Note -> 获取待办", LogTool.LogType.Info);
-            string JsonStr = FileProcess.ReadFile(Path);
-            return JsonConvert.DeserializeObject<NoteFile>(JsonStr);
+            return JsonConvert.DeserializeObject<NoteFile>(FileProcess.ReadFile(Path));
         }
 
         private static void WriteNotes(NoteFile file, string Path)
         {
             LogTool.WriteLog("Note -> 写入待办", LogTool.LogType.Info);
-            string json = JsonConvert.SerializeObject(file);
-            FileProcess.WriteFile(json, Path);
+            FileProcess.WriteFile(JsonConvert.SerializeObject(file), Path);
         }
 
         private void GetUndoneList()
         {
             List<UndoneNoteEntry> undones = new List<UndoneNoteEntry>();
+
+            // 获取日期为主的待办
             foreach (Note note in CurNote.notes)
             {
                 if (note.date == "default") continue;
@@ -144,6 +148,8 @@ namespace DateTimer.View
                     });
             }
             undones = NoteTimeSort(undones);
+
+            // 获取星期日为主的待办
             foreach (Note note1 in CurNote.notes)
             {
                 if (note1.weekday == "default") continue;
@@ -159,20 +165,21 @@ namespace DateTimer.View
                 }
             }
             UndoneNotesList.ItemsSource = undones;
+            undones.Clear();
         }
 
         private NoteEntry Note2Entry(Note note)
         {
             LogTool.WriteLog("Note -> 待办基类转显示类", LogTool.LogType.Info);
             NoteEntry entry = new NoteEntry();
-            if (note.date == "default")
-                entry.time = (note.weekday == "default") ? "未设置" : TimeTable.GetWeekday(note.weekday);
+
+            if (note.date == "default") entry.time = (note.weekday == "default") ? "未设置" : TimeTable.GetWeekday(note.weekday);
             else entry.time = string.Join("/", note.date.Split(' '));
 
             entry.span = (note.span == "default") ? "未设置" : note.span;
             entry.note = (note.note == "default") ? "无描述" : note.note;
-            
             entry.title = note.title;
+
             return entry;
         }
 

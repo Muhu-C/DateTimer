@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Muhu Org")]
 [assembly: AssemblyProduct("DateTimer")]
-[assembly: AssemblyCopyright("Copyright © MC118CN 2024")]
+[assembly: AssemblyCopyright("Copyright © 2024 ~ 2025 MC118CN")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -49,5 +49,5 @@ using System.Windows;
 //通过使用 "*"，如下所示:
 // [assembly: AssemblyVersion("1.0.*")]
 //
-[assembly: AssemblyVersion("1.1.2.0")]
-[assembly: AssemblyFileVersion("1.1.2.0")]
+[assembly: AssemblyVersion("1.2.0")]
+[assembly: AssemblyFileVersion("1.2.0")]
