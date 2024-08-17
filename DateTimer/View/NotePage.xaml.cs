@@ -30,6 +30,7 @@ namespace DateTimer.View
             viewModel.Entries = new ObservableCollection<NoteEntry>();
             newNoteWindow = new NewNoteWindow();
             editNoteWindow = new EditNoteWindow();
+            UndoneNotes = new List<UndoneNoteEntry>();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -132,7 +133,7 @@ namespace DateTimer.View
 
         private void GetUndoneList()
         {
-            List<UndoneNoteEntry> undones = new List<UndoneNoteEntry>();
+            UndoneNotes.Clear();
 
             // 获取日期为主的待办
             foreach (Note note in CurNote.notes)
@@ -141,14 +142,14 @@ namespace DateTimer.View
                 TimeSpan timeSpan = (note.span == "default") ? TimeSpan.Zero : TimeConverter.Str2Time(note.span);
                 DateTime DT = TimeConverter.Str2Date(note.date);
                 if (DT >= DateTime.Today && timeSpan == TimeSpan.Zero || DT + timeSpan > DateTime.Now)
-                    undones.Add(new UndoneNoteEntry
+                    UndoneNotes.Add(new UndoneNoteEntry
                     {
                         Date = string.Join("/", note.date.Split(' ')),
                         Name = note.title,
                         Span = (timeSpan == TimeSpan.Zero) ? string.Empty : TimeConverter.Time2Str(timeSpan, ":")
                     });
             }
-            undones = NoteTimeSort(undones);
+            UndoneNotes = NoteTimeSort(UndoneNotes);
 
             // 获取星期日为主的待办
             foreach (Note note1 in CurNote.notes)
@@ -157,7 +158,7 @@ namespace DateTimer.View
                 TimeSpan timeSpan = (note1.span == "default") ? TimeSpan.Zero : TimeConverter.Str2Time(note1.span);
                 if (Convert.ToInt32(note1.weekday) % 7 == Convert.ToInt32(DateTime.Today.DayOfWeek))
                 {
-                    undones.Insert(0, new UndoneNoteEntry
+                    UndoneNotes.Insert(0, new UndoneNoteEntry
                     {
                         Date = TimeTable.GetWeekday(note1.weekday),
                         Name = note1.title,
@@ -165,7 +166,8 @@ namespace DateTimer.View
                     });
                 }
             }
-            UndoneNotesList.ItemsSource = undones;
+
+            UndoneNotesList.ItemsSource = UndoneNotes;
         }
 
         private NoteEntry Note2Entry(Note note)
