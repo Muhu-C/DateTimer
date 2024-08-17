@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
 using DateTimer.View;
+using System.Text.RegularExpressions;
 
 namespace DateTimer
 {
@@ -574,6 +575,29 @@ namespace DateTimer
                 LogTool.WriteLog("Utils -> 获取系统位数", LogTool.LogType.Info);
                 if (Environment.Is64BitOperatingSystem) return 64;
                 else return 32;
+            }
+
+            public static int CountStrLen(string str)
+            {
+                int count = 0;
+                Regex p_regex = new Regex("^[\u4e00-\u9fa5]{0,}$");
+                foreach (char ch in str)
+                    count = p_regex.IsMatch(ch.ToString()) ? count+2 : count+1;
+
+                return count;
+            }
+
+            public static string LimitStrLen(string str)
+            {
+                int count = 0, k=0;
+                Regex p_regex = new Regex("^[\u4e00-\u9fa5]{0,}$");
+                foreach (char ch in str)
+                {
+                    count = p_regex.IsMatch(ch.ToString()) ? count + 2 : count + 1;
+                    k++;
+                }
+
+                return count;
             }
         }
     }

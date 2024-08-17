@@ -21,7 +21,6 @@ namespace DateTimer.View
     {
         public NotePageBindContent viewModel = new NotePageBindContent();
         public static NoteFile CurNote;
-        public static List<UndoneNoteEntry> UndoneNotes;
         public NewNoteWindow newNoteWindow;
         public EditNoteWindow editNoteWindow;
         public static int todayNote = 0;
@@ -34,7 +33,7 @@ namespace DateTimer.View
             viewModel.Entries = new ObservableCollection<NoteEntry>();
             newNoteWindow = new NewNoteWindow();
             editNoteWindow = new EditNoteWindow();
-            UndoneNotes = new List<UndoneNoteEntry>();
+            
             InitRange();
         }
 
@@ -149,7 +148,7 @@ namespace DateTimer.View
 
         private void GetUndoneList()
         {
-            UndoneNotes.Clear();
+            List<UndoneNoteEntry> UndoneNotes = new List<UndoneNoteEntry>();
             todayNote = 0;
 
             // 获取日期为主的待办

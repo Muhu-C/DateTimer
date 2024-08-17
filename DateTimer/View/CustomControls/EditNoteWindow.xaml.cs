@@ -68,6 +68,10 @@ namespace DateTimer.View.CustomControls
 
         private void TbName_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (Utils.OtherTools.CountStrLen(TbName.Text) > 20)
+            {
+                TbName.Text = TbName.Text.Substring(0, 10);
+            }
             NewNote.title = TbName.Text;
         }
 
