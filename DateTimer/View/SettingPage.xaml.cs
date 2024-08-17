@@ -32,9 +32,8 @@ namespace DateTimer.View
         {
             LogTool.WriteLog("设置 -> 加载", LogTool.LogType.Info);
             // 设置主题
-            MainWindow mw = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
             Reload();
-            Theme.SetSkin(this, Theme.GetSkin(mw));
+            Theme.SetSkin(this, Theme.GetSkin(Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow));
         }
 
         public void Reload()

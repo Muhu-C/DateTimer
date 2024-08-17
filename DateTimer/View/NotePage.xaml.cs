@@ -22,6 +22,8 @@ namespace DateTimer.View
         public static List<UndoneNoteEntry> UndoneNotes;
         public NewNoteWindow newNoteWindow;
         public EditNoteWindow editNoteWindow;
+        public static int todayNote = 0;
+
 
         public NotePage()
         {
@@ -142,12 +144,18 @@ namespace DateTimer.View
                 TimeSpan timeSpan = (note.span == "default") ? TimeSpan.Zero : TimeConverter.Str2Time(note.span);
                 DateTime DT = TimeConverter.Str2Date(note.date);
                 if (DT >= DateTime.Today && timeSpan == TimeSpan.Zero || DT + timeSpan > DateTime.Now)
+                {
+                    if (DT == DateTime.Today && timeSpan == TimeSpan.Zero || DT == DateTime.Today && DT + timeSpan > DateTime.Now)
+                    {
+
+                    }
                     UndoneNotes.Add(new UndoneNoteEntry
                     {
                         Date = string.Join("/", note.date.Split(' ')),
                         Name = note.title,
                         Span = (timeSpan == TimeSpan.Zero) ? string.Empty : TimeConverter.Time2Str(timeSpan, ":")
                     });
+                }
             }
             UndoneNotes = NoteTimeSort(UndoneNotes);
 
