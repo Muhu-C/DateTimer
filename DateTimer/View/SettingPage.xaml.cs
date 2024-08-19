@@ -1,13 +1,13 @@
-﻿using System;
+﻿using HandyControl.Themes;
+using Newtonsoft.Json;
+using System;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using MsgBox = HandyControl.Controls.MessageBox;
-using Newtonsoft.Json;
-using HandyControl.Themes;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
-using System.Reflection;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DateTimer.View
 {
@@ -77,7 +77,7 @@ namespace DateTimer.View
             Environment.Exit(0);
         }
 
-        private async void BTTimerConfig_Click(object sender, RoutedEventArgs e) 
+        private async void BTTimerConfig_Click(object sender, RoutedEventArgs e)
         {
             LogTool.WriteLog("设置 -> 设置时间表位置", LogTool.LogType.Info);
             // 更改时间表位置
@@ -108,7 +108,7 @@ namespace DateTimer.View
                                 LogTool.WriteLog("设置 -> 文件格式错误", LogTool.LogType.Error);
                             }
 
-                            
+
                             if (CurrentConfig.Timetable_File != App.ConfigData.Timetable_File) IsChangeSaved.Text = "设置未保存";
                             else if (MatchConfig()) IsChangeSaved.Text = string.Empty;
 
@@ -229,21 +229,20 @@ namespace DateTimer.View
                 return;
             }
             LastChange = DateTime.Now;
-            string Report = 
-                  "生成时间: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") 
-                + "\n系统版本: " + Utils.OtherTools.GetWinVer()
-                + "\n系统位数: " + Utils.OtherTools.GetBit().ToString() 
-                + "\n运行时版本: " + Utils.OtherTools.GetEnvVer()
-                + "\nDateTimer 版本: " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            MessageBoxResult r = MsgBox.Show(Report + "\n是否复制到剪贴板？", "系统报告", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.Yes);
-            if (r == MessageBoxResult.Yes)
+            string Report =
+                  $"生成时间: {DateTime.Now:yyyy-MM-dd HH:mm:ss}"
+                + $"\n系统版本: {Utils.OtherTools.GetWinVer()}"
+                + $"\n系统位数: {Utils.OtherTools.GetBit()}"
+                + $"\n运行时版本: {Utils.OtherTools.GetEnvVer()}"
+                + $"\nDateTimer 版本: {Assembly.GetExecutingAssembly().GetName().Version}";
+            if (MsgBox.Show(Report + "\n是否复制到剪贴板？", "系统报告", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.Yes) == MessageBoxResult.Yes)
             {
                 Clipboard.SetDataObject(Report);
                 HandyControl.Controls.Growl.Success("系统报告复制成功！");
             }
         }
 
-        
+
 
         private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
         {

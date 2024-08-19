@@ -1,15 +1,14 @@
-﻿using System;
+﻿using DateTimer.View;
+using Microsoft.Win32;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Net.NetworkInformation;
-using Newtonsoft.Json;
-using Microsoft.Win32;
 using System.Runtime.InteropServices;
-using DateTimer.View;
-using System.Text.RegularExpressions;
+using System.Text;
 
 namespace DateTimer
 {
@@ -159,11 +158,9 @@ namespace DateTimer
             {
                 string numStr = "1234567";
                 string chineseStr = "一二三四五六日";
-                string result = "";
-                int numIndex = numStr.IndexOf(num);
-                if (numIndex > -1)
-                    result = chineseStr.Substring(numIndex, 1);
-                return result;
+                if (numStr.IndexOf(num) > -1)
+                    return chineseStr.Substring(numStr.IndexOf(num), 1);
+                return string.Empty;
             }
         }
 
@@ -188,10 +185,12 @@ namespace DateTimer
             public static string ReadFile(string Path)
             {
                 LogTool.WriteLog($"Utils -> 读取 {Path}", LogTool.LogType.Info);
+                string str;
                 using (StreamReader sr = new StreamReader(Path))
                 {
-                    return sr.ReadToEnd();
+                    str = sr.ReadToEnd();
                 }
+                return str;
             }
         }
 
@@ -323,7 +322,7 @@ namespace DateTimer
             public static int IsStart(List<Table> tables, TimeSpan front)
             {
                 int i = 0;
-                foreach(Table table in tables)
+                foreach (Table table in tables)
                 {
                     TimeSpan start = TimeConverter.Str2Time(table.start);
                     TimeSpan now = DateTime.Now.TimeOfDay + front;
@@ -510,7 +509,7 @@ namespace DateTimer
                     {
                         if (list2f[i][0].ChangeDate == change.ChangeDate && list2f[i][0].ChangeTime == change.ChangeTime && list2f[i][0].ChangeClass == change.ChangeClass)
                         {
-                            list2f[i].Add(change); 
+                            list2f[i].Add(change);
                             a = true;
                         }
                     }
@@ -577,28 +576,35 @@ namespace DateTimer
                 else return 32;
             }
 
+            /// <summary>
+            /// 获取字符串长度(物理)
+            /// </summary>
+            /// <param name="str">字符串</param>
+            /// <returns></returns>
             public static int CountStrLen(string str)
             {
                 int count = 0;
-                Regex p_regex = new Regex("^[\u4e00-\u9fa5]{0,}$");
                 foreach (char ch in str)
                 {
-                    if ((int)ch > 127)
-                        count += 2;
+                    if ((int)ch > 127) count += 2;
                     else count += 1;
                 }
 
                 return count;
             }
 
+            /// <summary>
+            /// 限制字符串长度
+            /// </summary>
+            /// <param name="str">超长的字符串</param>
+            /// <param name="limit"></param>
+            /// <returns></returns>
             public static string LimitStrLen(string str, int limit)
             {
-                int count = 0, k=0;
-                Regex p_regex = new Regex("^[\u4e00-\u9fa5]{0,}$");
+                int count = 0, k = 0;
                 foreach (char ch in str)
                 {
-                    if ((int)ch > 127)
-                        count += 2;
+                    if ((int)ch > 127) count += 2;
                     else count += 1;
                     if (count > limit) break;
                     k++;

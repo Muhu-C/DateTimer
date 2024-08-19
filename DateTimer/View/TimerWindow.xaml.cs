@@ -1,13 +1,11 @@
-﻿using System;
-using DateTimer;
+﻿using HandyControl.Themes;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using HandyControl.Themes;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace DateTimer.View
 {
@@ -60,14 +58,14 @@ namespace DateTimer.View
             LogTool.WriteLog("时间表窗口 -> 加载 UI", LogTool.LogType.Info);
             if (file == null)
             {
-                CurrentTableEntry.model.TableEntries = new ObservableCollection<Utils.TimeTable.TableEntry> 
+                CurrentTableEntry.model.TableEntries = new ObservableCollection<Utils.TimeTable.TableEntry>
                 { new Utils.TimeTable.TableEntry { Time = "提示", Name = "没有时间表", Notice = "请配置时间表" } };
                 return;
             }
             int TodayListIndex = Utils.TimeTable.GetTodayList(file.timetables);
             if (TodayListIndex < 0)
             {
-                CurrentTableEntry.model.TableEntries = new ObservableCollection<Utils.TimeTable.TableEntry> 
+                CurrentTableEntry.model.TableEntries = new ObservableCollection<Utils.TimeTable.TableEntry>
                 { new Utils.TimeTable.TableEntry { Time = "0:00 ~ 23:59", Name = "今日无时间安排" } };
                 return;
             }
@@ -79,7 +77,7 @@ namespace DateTimer.View
         }
 
 
-        private void Window_Closing(object sender, CancelEventArgs e) 
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             LogTool.WriteLog("时间表窗口 -> 隐藏时间表", LogTool.LogType.Info);
             if (Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow == null) { return; }
@@ -101,7 +99,7 @@ namespace DateTimer.View
                     if (IsVisible)
                     {
                         TimeSpan remainingTime = Utils.TimeConverter.Str2Date(App.ConfigData.Target_Time) - DateTime.Now; // 目标剩余时间
-                        
+
                         // 获取时间表，获取当前时间所在时间段
                         List<int> inds = Utils.TimeTable.GetCurZone(tables);
                         int ind = -1;
@@ -128,13 +126,13 @@ namespace DateTimer.View
                             App.NoticeWindow.Show();
                             App.NoticeWindow.Ctt.NoticeText1 = "提示";
 
-                            if (tables[nowind].notice != "NULL") 
-                                App.NoticeWindow.Ctt.NoticeText2 = 
+                            if (tables[nowind].notice != "NULL")
+                                App.NoticeWindow.Ctt.NoticeText2 =
                                 $"{tables[nowind].name} 时间 到了\n提示: {tables[nowind].notice}\n" +
                                 $"时间段: {Utils.TimeConverter.JTime2DTime(tables[nowind].start)} ~ {Utils.TimeConverter.JTime2DTime(tables[nowind].end)}";
 
-                            else 
-                                App.NoticeWindow.Ctt.NoticeText2 = 
+                            else
+                                App.NoticeWindow.Ctt.NoticeText2 =
                                 $"{tables[nowind].name} 时间 到了\n提示: 无\n时间段: {Utils.TimeConverter.JTime2DTime(tables[nowind].start)} " +
                                 $"~ {Utils.TimeConverter.JTime2DTime(tables[nowind].end)}";
 

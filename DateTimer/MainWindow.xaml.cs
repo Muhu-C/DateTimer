@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows;
+﻿using DateTimer.View;
 using HandyControl.Controls;
 using HandyControl.Themes;
-using DateTimer.View;
+using System;
+using System.Windows;
 using MsgBox = HandyControl.Controls.MessageBox;
 
 namespace DateTimer
@@ -67,7 +67,7 @@ namespace DateTimer
 
         #region 任务栏图标事件
 
-        private void MenuItemA_Click(object sender, RoutedEventArgs e) 
+        private void MenuItemA_Click(object sender, RoutedEventArgs e)
         {
             if (Visibility == Visibility.Visible) // 隐藏
             {
@@ -87,7 +87,7 @@ namespace DateTimer
 
         private void MenuItemB_Click(object sender, RoutedEventArgs e) { Application.Current.Shutdown(); } // 关闭程序
 
-        private void notifyIcon_Click(object sender, RoutedEventArgs e) 
+        private void notifyIcon_Click(object sender, RoutedEventArgs e)
         {
             if (!Timer.IsVisible)
             {

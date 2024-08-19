@@ -1,15 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.IO;
-using System.Windows;
-using System.Windows.Controls;
-using System.Linq;
-using System.Windows.Navigation;
-using System.Windows.Media;
-using HandyControl.Tools.Extension;
-using System.Windows.Markup;
-
-namespace DateTimer.View
+﻿namespace DateTimer.View
 {
     /// <summary> View 文件夹函数工具 </summary>
     public class ViewUtils

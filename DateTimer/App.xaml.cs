@@ -1,15 +1,15 @@
-﻿using System;
-using System.Threading;
-using System.IO;
-using System.Collections.Generic;
-using System.Windows;
+﻿using DateTimer.View.CustomControls;
 using Newtonsoft.Json;
-using MsgBox = HandyControl.Controls.MessageBox;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Media;
+using System.IO;
 using System.Reflection;
-using DateTimer.View.CustomControls;
+using System.Threading;
+using System.Windows;
+using System.Windows.Media;
+using MsgBox = HandyControl.Controls.MessageBox;
 
 namespace DateTimer
 {
@@ -23,7 +23,7 @@ namespace DateTimer
         public static CustomNotice NoticeWindow;
 
 
-        public static List<string> NoticeUrl = new List<string> 
+        public static List<string> NoticeUrl = new List<string>
         {
             "https://gitee.com/zzhkjf/NoticePage/raw/main/DATETIMER.NOTICE",
             "https://raw.gitmirror.com/Muhu-C/NoticePage/main/DATETIMER.NOTICE",
@@ -49,7 +49,7 @@ namespace DateTimer
         public enum ErrorType
         {
             ProgramError = 0,
-            UnknownError = 1, 
+            UnknownError = 1,
             RunTimeError = 2,
             ProgresError = 3,
             FatalError = 4
@@ -100,7 +100,7 @@ namespace DateTimer
             LogTool.InitLog();
             LogTool.WriteLog("启动 DateTimer 程序", LogTool.LogType.Info);
             // 异常处理
-            DispatcherUnhandledException += (_ , e) =>
+            DispatcherUnhandledException += (_, e) =>
             {
                 LogTool.WriteLog(e.Exception.ToString(), LogTool.LogType.Error);
                 if (e.Exception is Win32Exception)
@@ -122,7 +122,7 @@ namespace DateTimer
                 if (ConfigData.Enable_Log == 1) isLogOpened = true;
                 LogTool.WriteLog("读取 config.json 完成", LogTool.LogType.Info);
             }
-            catch(Exception ex) // 未找到文件
+            catch (Exception ex) // 未找到文件
             {
                 LogTool.WriteLog("未找到或无法加载 config.json", LogTool.LogType.Fatal);
                 Error("请检查下载文件是否完整, ", ErrorType.RunTimeError, ex, true, WindowType: false, FeedBack: false);
@@ -167,7 +167,7 @@ namespace DateTimer
 
         public string Target_Time { get; set; }
 
-        public string Target_Type {  get; set; }
+        public string Target_Type { get; set; }
 
         public string Timetable_File { get; set; }
 

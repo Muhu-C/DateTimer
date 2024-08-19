@@ -33,16 +33,16 @@ namespace DateTimer.View
             viewModel.Entries = new ObservableCollection<NoteEntry>();
             newNoteWindow = new NewNoteWindow();
             editNoteWindow = new EditNoteWindow();
-            
+
             InitRange();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             viewModel.TextColor = HomePage.viewModel.TextColor;
-            if (App.ConfigData.Theme == 0) 
+            if (App.ConfigData.Theme == 0)
                 Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
-            else 
+            else
                 Theme.SetSkin(this, HandyControl.Data.SkinType.Default);
         }
 
@@ -50,10 +50,7 @@ namespace DateTimer.View
         {
             await Task.Run(async () =>
             {
-                Dispatcher.Invoke(() =>
-                {
-                    LoadFile();
-                });
+                Dispatcher.Invoke(() => { LoadFile(); });
                 await Task.Delay(5000);
             });
         }
@@ -65,7 +62,8 @@ namespace DateTimer.View
             foreach (Note note in CurNote.notes)
                 viewModel.Entries.Add(Note2Entry(note));
             GetUndoneList();
-            (Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow).Home.NoteCnt.Text = (todayNote == 0) ? "今日无待办" : $"今日有 {todayNote} 项待办";
+            (Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow)
+                .Home.NoteCnt.Text = (todayNote == 0) ? "今日无待办" : $"今日有 {todayNote} 项待办";
         }
 
         private void NewNoteButton_Click(object sender, RoutedEventArgs e)
@@ -178,6 +176,7 @@ namespace DateTimer.View
                 TimeSpan timeSpan = (note1.span == "default") ? TimeSpan.Zero : TimeConverter.Str2Time(note1.span);
                 if (Convert.ToInt32(note1.weekday) % 7 == Convert.ToInt32(DateTime.Today.DayOfWeek))
                 {
+                    todayNote++;
                     UndoneNotes.Insert(0, new UndoneNoteEntry
                     {
                         Date = TimeTable.GetWeekday(note1.weekday),

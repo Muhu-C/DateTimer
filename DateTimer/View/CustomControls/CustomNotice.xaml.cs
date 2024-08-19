@@ -62,7 +62,7 @@ namespace DateTimer.View.CustomControls
             BeginAnimation(TopProperty, animation);
 
             // 关闭窗口
-            await Task.Run(async() => { await Task.Delay(5000); });
+            await Task.Run(async () => { await Task.Delay(5000); });
             Close();
         }
 
@@ -88,7 +88,7 @@ namespace DateTimer.View.CustomControls
 
 
 
-        public class BindContent : INotifyPropertyChanged // 通过 Foreground Binding 实时设置页面文本颜色
+        public class BindContent : INotifyPropertyChanged
         {
             private Brush ntxt2fore;
             public Brush NT2Fore

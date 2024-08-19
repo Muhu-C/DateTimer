@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using HandyControl.Themes;
+using Newtonsoft.Json;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using HandyControl;
-using HandyControl.Themes;
-using Newtonsoft.Json;
 using static DateTimer.Utils;
 
 namespace DateTimer.View.CustomControls
@@ -23,11 +19,11 @@ namespace DateTimer.View.CustomControls
             InitializeComponent();
             NewNote = new NotePage.Note
             {
-                date="default",
-                note="default",
-                span="default",
-                weekday="default",
-                title=string.Empty
+                date = "default",
+                note = "default",
+                span = "default",
+                weekday = "default",
+                title = string.Empty
             };
             if (App.ConfigData.Theme == 0) Theme.SetSkin(this, HandyControl.Data.SkinType.Dark);
             else Theme.SetSkin(this, HandyControl.Data.SkinType.Default);

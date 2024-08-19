@@ -1,17 +1,17 @@
-﻿using System;
+﻿using HandyControl.Themes;
+using HandyControl.Tools.Extension;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.IO;
-using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using MsgBox = HandyControl.Controls.MessageBox;
-using HandyControl.Themes;
-using System.Collections.ObjectModel;
-using Newtonsoft.Json;
-using System.Linq;
-using HandyControl.Tools.Extension;
-using System.Threading.Tasks;
-using System.Data;
+using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 
 namespace DateTimer.View
 {
@@ -23,7 +23,7 @@ namespace DateTimer.View
         #region TimerPage变量定义
         private static DateTime LastChange = DateTime.MinValue;
 
-        public List<Utils.TimeTable.Timetables> timetables = new List<Utils.TimeTable.Timetables> ();
+        public List<Utils.TimeTable.Timetables> timetables = new List<Utils.TimeTable.Timetables>();
 
         public List<Utils.TimeTable.Table> tables = new List<Utils.TimeTable.Table>(); // 选中的时间表
 
@@ -42,7 +42,7 @@ namespace DateTimer.View
 
         #region TimerPage加载
 
-        public TimerPage() 
+        public TimerPage()
         {
             LogTool.WriteLog("编辑时间表 -> 初始化", LogTool.LogType.Info);
             InitializeComponent();
@@ -51,7 +51,7 @@ namespace DateTimer.View
             LoadFile(false);
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e) 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             LogTool.WriteLog("编辑时间表 -> 加载", LogTool.LogType.Info);
             Theme.SetSkin(this, Theme.GetSkin(Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow));
@@ -97,7 +97,7 @@ namespace DateTimer.View
             else EditGrid.Show();
 
             // 获取时间表
-            try 
+            try
             {
                 Utils.TimeTable.TimeTableFile a = Utils.TimeTable.GetTimetables(TimeTableFilePath);
                 // 设置时间表
@@ -145,9 +145,9 @@ namespace DateTimer.View
                 foreach (Utils.TimeTable.Timetables table in timetables)
                 {
                     ComboBoxItem item = new ComboBoxItem();
-                    if (table.date != "GENERAL") 
+                    if (table.date != "GENERAL")
                         item.Content = table.date;
-                    else 
+                    else
                         item.Content = Utils.TimeTable.GetWeekday(table.weekday);
                     item.Tag = i;
                     TimeSel.Items.Add(item);
@@ -165,7 +165,7 @@ namespace DateTimer.View
         {
             // 设置开始时间
             string starttime = TPStart.SelectedTime.Value.ToString("HH mm");
-            try 
+            try
             {
                 if (TimeSel.SelectedIndex >= 0 && TPStart.IsEnabled)
                 {
@@ -178,7 +178,7 @@ namespace DateTimer.View
                     TimeList.SelectedIndex = SelInd;
                 }
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true);
             }
@@ -189,7 +189,7 @@ namespace DateTimer.View
         {
             // 设置结束时间
             string endtime = TPEnd.SelectedTime.Value.ToString("HH mm");
-            try 
+            try
             {
                 if (TimeSel.SelectedIndex >= 0 && TPEnd.IsEnabled)
                 {
@@ -202,7 +202,7 @@ namespace DateTimer.View
                     TimeList.SelectedIndex = SelInd;
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true);
             }
@@ -213,7 +213,7 @@ namespace DateTimer.View
         {
             // 设置事件名
             string text = ElementTb.Text;
-            try 
+            try
             {
                 if (TimeSel.SelectedIndex >= 0 && ElementTb.IsEnabled)
                 {
@@ -221,7 +221,7 @@ namespace DateTimer.View
                     changes.Add(new ViewUtils.ChangeEvent { ChangeClass = "name", ChangeContent = text, ChangeDate = TimeSel.SelectedIndex, ChangeTime = TimeList.SelectedIndex });
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 App.Error("即将关闭程序", App.ErrorType.UnknownError, ex, true);
             }
@@ -260,7 +260,7 @@ namespace DateTimer.View
             newTime.Show();
 
             // 异步等待
-            await Task.Run(async () => 
+            await Task.Run(async () =>
             {
                 while (isPickDateOpen) await Task.Delay(200);
                 return;
@@ -290,11 +290,11 @@ namespace DateTimer.View
                 lastend = timetables[TimeSel.SelectedIndex].tables[timetables[TimeSel.SelectedIndex].tables.Count - 1].end;
                 TimeSpan newend = Utils.TimeConverter.Str2Time(lastend);
                 if (App.ConfigData.Front_Min <= 8) newend += TimeSpan.FromMinutes(30);
-                else if(App.ConfigData.Front_Min <= 20) newend += TimeSpan.FromHours(1);
+                else if (App.ConfigData.Front_Min <= 20) newend += TimeSpan.FromHours(1);
                 else newend += TimeSpan.FromMinutes(90);
                 newendstr = $"{newend.Hours:00} {newend.Minutes:00}";
             }
-            
+
             timetables[TimeSel.SelectedIndex].tables.Add(new Utils.TimeTable.Table { name = "无", notice = "NULL", start = lastend, end = newendstr });
             InitUI();
             TimeSel.SelectedIndex = selind;
@@ -376,14 +376,14 @@ namespace DateTimer.View
             tables = timetables[TimeSel.SelectedIndex].tables;
 
             // 显示日期或时间
-            string date = timetables[TimeSel.SelectedIndex].date; 
+            string date = timetables[TimeSel.SelectedIndex].date;
             string wday = Utils.TimeTable.GetWeekday(timetables[TimeSel.SelectedIndex].weekday);
             if (date != "GENERAL") SelectedTb.Text = date;
             else SelectedTb.Text = wday;
 
             // 转换与显示时间表
             foreach (Utils.TimeTable.Table t in tables) { converted.Add(Utils.TimeTable.Table2Entry(t)); }
-            HomePage.viewModel.TableEntries = converted; 
+            HomePage.viewModel.TableEntries = converted;
         }
 
         #endregion

@@ -93,9 +93,9 @@ namespace DateTimer.View.CustomControls
                 MsgBox.Error("未选择日期或时间！", "警告");
                 return;
             }
-            if (New.Mode == true) 
+            if (New.Mode == true)
             {
-                if(MsgBox.Show($"星期日: { Utils.TimeTable.GetWeekday(New.WDay) }", "请核对信息是否正确", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (MsgBox.Show($"星期日: {Utils.TimeTable.GetWeekday(New.WDay)}", "请核对信息是否正确", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     (Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow)
                         .TimerPg.timetables.Add(new Utils.TimeTable.Timetables { date = "GENERAL", weekday = New.WDay, tables = new List<Utils.TimeTable.Table>() });

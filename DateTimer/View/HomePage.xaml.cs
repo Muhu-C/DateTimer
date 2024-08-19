@@ -1,13 +1,12 @@
-﻿using System;
-using System.Windows;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using HandyControl.Themes;
-using MsgBox = HandyControl.Controls.MessageBox;
+﻿using HandyControl.Themes;
+using System;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 
 namespace DateTimer.View
 {
@@ -39,7 +38,7 @@ namespace DateTimer.View
             Theme.SetSkin(this, Theme.GetSkin(mw));
 
             // 设置主题
-            viewModel.TextColor = Brushes.Black; 
+            viewModel.TextColor = Brushes.Black;
             if (Theme.GetSkin(mw) == HandyControl.Data.SkinType.Dark) viewModel.TextColor = Brushes.White; // 检测主题并更改文字颜色
 
             // 加载配置文件
@@ -50,11 +49,11 @@ namespace DateTimer.View
         {
             LogTool.WriteLog("主页 -> 获取配置", LogTool.LogType.Info);
             // 获取目标时间
-            try 
+            try
             {
                 TargetText.Text = DateTime.ParseExact(App.ConfigData.Target_Time, "yyyy MM dd", null).ToString("yyyy/MM/dd");
             }
-            catch (FormatException) 
+            catch (FormatException)
             {
                 TargetText.Text = "未配置";
             }
