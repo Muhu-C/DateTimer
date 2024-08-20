@@ -1,15 +1,4 @@
-<img src="https://muhu-c-images.pages.dev/file/be403233da8505daff26c.png" align="left" height=186 />  
-  
-# DateTimer 木沪时间表 (已完结)  
-
-查看、管理时间表以及设置倒计时  
-  
-![License](https://img.shields.io/github/license/Muhu-C/DateTimer?style=flat-square)
-![Lang](https://img.shields.io/badge/Language-C%23_.NET_Framework_4.8.1-blue?style=flat-square)  
-![Issues](https://img.shields.io/github/issues/Muhu-C/DateTimer?style=flat-square)
-![GitHub](https://img.shields.io/github/downloads/Muhu-C/DateTimer/total?style=flat-square)  
-![GitHub](https://img.shields.io/badge/Latest-1.2.0-red?style=flat-square)  
-  
+![DateTimer](https://socialify.git.ci/Muhu-C/DateTimer/image?description=1&font=Inter&issues=1&language=1&logo=https%3A%2F%2Fgithub.com%2FMuhu-C%2FDateTimer%2Fraw%2Fmaster%2FImage%2Fdatetimer.svg&name=1&owner=1&pattern=Brick%20Wall&theme=Auto)
 -------  
   
 ## 为什么要做这个程序？  
