@@ -1,14 +1,16 @@
-<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+<svg width="400" height="500" xmlns="http://www.w3.org/2000/svg">
 
  <g>
   <title>Layer 1</title>
-  <rect id="svg_2" height="500" width="400" y="50" x="200" stroke="#fff" fill="#333333"/>
-  <rect id="svg_6" height="489" width="368" y="55" x="226" stroke="#fff" fill="#c9c9c9"/>
-  <rect stroke-width="0" stroke="#fff" id="svg_7" height="19" width="122" y="150" x="348" fill="#666666"/>
-  <rect stroke-width="0" stroke="#fff" id="svg_9" height="61" width="24" y="150" x="397" fill="#666666"/>
-  <ellipse stroke-width="0" stroke="#fff" ry="115" rx="115" id="svg_10" cy="312" cx="411" fill="#999999"/>
-  <ellipse stroke-width="0" ry="99.5" rx="99.5" id="svg_12" cy="311.5" cx="410.5" stroke="#fff" fill="#e5e5e5"/>
-  <ellipse stroke="#fff" ry="15.5" rx="15.5" id="svg_15" cy="306.5" cx="409.5" stroke-width="0" fill="#000000"/>
-  <rect id="svg_16" height="64" width="12" y="234" x="404" stroke-width="0" stroke="#fff" fill="#000000"/>
+  <g id="svg_18">
+   <rect id="svg_2" height="500" width="400" y="0" x="0" stroke="#fff" fill="#333333"/>
+   <rect id="svg_6" height="489" width="368" y="5" x="26" stroke="#fff" fill="#c9c9c9"/>
+   <rect stroke-width="0" stroke="#fff" id="svg_7" height="19" width="122" y="100" x="148" fill="#666666"/>
+   <rect stroke-width="0" stroke="#fff" id="svg_9" height="61" width="24" y="100" x="197" fill="#666666"/>
+   <ellipse stroke-width="0" stroke="#fff" ry="115" rx="115" id="svg_10" cy="262" cx="211" fill="#999999"/>
+   <ellipse stroke-width="0" ry="99.5" rx="99.5" id="svg_12" cy="261.5" cx="210.5" stroke="#fff" fill="#e5e5e5"/>
+   <ellipse stroke="#fff" ry="15.5" rx="15.5" id="svg_15" cy="256.5" cx="209.5" stroke-width="0" fill="#000000"/>
+   <rect id="svg_16" height="64" width="12" y="184" x="204" stroke-width="0" stroke="#fff" fill="#000000"/>
+  </g>
  </g>
 </svg>
